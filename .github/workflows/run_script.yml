@@ -29,13 +29,17 @@ jobs:
         pip install nbconvert  # Install nbconvert to run Jupyter notebooks
 
     # Step 4: Run the Jupyter notebook using nbconvert
-    - name: Run the Jupyter notebook
+    - name: Run OHLC notebook
       env:
         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
         jupyter nbconvert --to notebook --execute PricesScript.ipynb --output result.ipynb
-
+  
+   - name: Run Volume notebook
+        run: |
+          jupyter nbconvert --to notebook --execute VolumeTraded.ipynb --output volume_output.ipynb
+          
     # Optional: Step 5: Cleanup (e.g., remove any temporary files)
     - name: Cleanup
       run: |
