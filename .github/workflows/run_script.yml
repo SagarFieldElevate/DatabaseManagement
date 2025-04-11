@@ -37,6 +37,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           jupyter nbconvert --to notebook --execute VolumeTraded.ipynb --output volume_output.ipynb
+          
+      - name: Run Trading Range notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          jupyter nbconvert --to notebook --execute "24h Volatility & Trading Range.ipynb" --output volume_output.ipynb
 
       - name: Cleanup
         run: |
