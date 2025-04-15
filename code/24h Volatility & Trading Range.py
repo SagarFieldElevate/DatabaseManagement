@@ -50,7 +50,7 @@ for symbol, coin_id in coins.items():
 df = pd.DataFrame(data)
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"historical_volatility_trading_range_365_days_{timestamp}.xlsx"
-df.to_excel(filename, index=False)
+# df.to_excel(filename, index=False)
 
 # === Airtable + GitHub Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
