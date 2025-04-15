@@ -42,32 +42,39 @@ def update_airtable(record_id, raw_url, filename, airtable_url, airtable_token):
         }
     }
     patch_url = f"{airtable_url}/{record_id}"
-    airtable_resp = requests.patch(patch_url, headers=airtable_headers, json=patch_payload)
-    if airtable_resp.status_code != 200:
-        raise Exception(f"❌ Airtable upload failed: {airtable_resp.status_code} - {airtable_resp.text}")
-
+    response = requests.patch(patch_url, headers=airtable_headers, json=patch_payload)
+    if response.status_code != 200:
+        raise Exception(f"❌ Airtable update failed: {response.status_code} - {response.text}")
+    
 def create_airtable_record(name, raw_url, filename, airtable_url, airtable_token, additional_fields=None):
     airtable_headers = {
         "Authorization": f"Bearer {airtable_token}",
         "Content-Type": "application/json"
     }
-    fields = {
+
+    # Core required fields
+    record_fields = {
         "Name": name,
-        "Database Attachment": [
-            {
-                "url": raw_url,
-                "filename": filename
-            }
-        ]
+        "Database Attachment": [{
+            "url": raw_url,
+            "filename": filename
+        }]
     }
+
+    # Add any extra fields if they're provided
     if additional_fields:
-        fields.update(additional_fields)
+        record_fields.update(additional_fields)
 
     post_payload = {
-        "records": [{"fields": fields}]
+        "records": [{
+            "fields": record_fields
+        }]
     }
+
     airtable_resp = requests.post(airtable_url, headers=airtable_headers, json=post_payload)
     if airtable_resp.status_code != 200:
+        raise Exception(f"❌ Airtable record creation failed: {airtable_resp.status_code} - {airtable_resp.text}")
+
         raise Exception(f"❌ Airtable record creation failed: {airtable_resp.status_code} - {airtable_resp.text}")
 
 def delete_file_from_github(filename, repo_name, branch, upload_path, token, sha):
