@@ -1,68 +1,74 @@
-import requests
+from pycoingecko import CoinGeckoAPI
 import pandas as pd
-from datetime import datetime, timezone
-import base64
+from datetime import datetime
 import os
-from data_upload_utils import upload_to_github, create_airtable_record, delete_file_from_github
+import requests
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
-# ======== CONFIG ========
-BRANCH = "main"
-GITHUB_REPO = "SagarFieldElevate/Trial"
-UPLOAD_PATH = "uploads"
+# Initialize CoinGecko
+cg = CoinGeckoAPI()
 
-# Pull secrets from GitHub Actions
-GITHUB_TOKEN = os.getenv("GH_TOKEN")
-AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
-BASE_ID = "appFww2fieWK3mKwi"
-TABLE_NAME = "Database"
-
-# === Fetch trending coins from CoinGecko ===
+# Fetch trending coins from CoinGecko
 print("🔍 Fetching trending coins from CoinGecko...")
-url = "https://api.coingecko.com/api/v3/search/trending"
-resp = requests.get(url)
-resp.raise_for_status()
-trending_data = resp.json().get("coins", [])
+trending_data = cg.get_search_trending()
 
-# === Prepare data for DataFrame ===
+# Prepare the data
 coin_list = []
-for coin_info in trending_data:
-    coin = coin_info.get("item", {})
-    data = coin.get("data", {})
-    price_change_24h = data.get("price_change_percentage_24h", {})
-
+for coin_info in trending_data['coins']:
+    coin = coin_info.get('item', {})
     coin_list.append({
-        "Name": coin.get("name"),
-        "Symbol": coin.get("symbol"),
-        "ID": coin.get("id"),
-        "Market Cap Rank": coin.get("market_cap_rank"),
-        "Price (BTC)": coin.get("price_btc"),
-        "Score": coin.get("score"),
-        "Total Volume": data.get("total_volume"),
-        "24h Change (%) USD": price_change_24h.get("usd"),
+        'Name': coin.get('name'),
+        'Symbol': coin.get('symbol'),
+        'ID': coin.get('id'),
+        'Market Cap Rank': coin.get('market_cap_rank'),
+        'Score': coin.get('score'),
     })
 
+# Create DataFrame and export to Excel
 df = pd.DataFrame(coin_list)
-
-# === Save to Excel ===
-timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H-%M-%S")
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"trending_coins_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
-# === Upload to GitHub ===
+# === Airtable + GitHub Config ===
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+BASE_ID = "appFww2fieWK3mKwi"  # Replace with your actual Airtable Base ID
+TABLE_NAME = "Database"
+airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+
+GITHUB_REPO = "SagarFieldElevate/Trial"  # Replace with your actual GitHub repository
+BRANCH = "main"
+UPLOAD_PATH = "uploads"
+GITHUB_TOKEN = os.getenv("GH_TOKEN")
+
+# Upload to GitHub
 print("📤 Uploading file to GitHub...")
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
-# === Send to Airtable ===
-print("📬 Sending GitHub file URL to Airtable...")
-create_airtable_record(timestamp, raw_url, filename, BASE_ID, TABLE_NAME, AIRTABLE_API_KEY)
+# Check if record exists
+airtable_headers = {
+    "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+    "Content-Type": "application/json"
+}
+response = requests.get(airtable_url, headers=airtable_headers)
+response.raise_for_status()
+data_airtable = response.json()
 
-# === Delete file from GitHub ===
-print("🧹 Deleting file from GitHub...")
+existing_records = [
+    rec for rec in data_airtable['records']
+    if rec['fields'].get('Name') == "Trending Coins"
+]
+record_id = existing_records[0]['id'] if existing_records else None
+
+# Always replace attachment — either update or create
+if record_id:
+    update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+else:
+    create_airtable_record("Trending Coins", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+
+# Clean-up
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
-
-# === Delete local file ===
 os.remove(filename)
-print("🧽 Local file deleted.")
-print("✅ Workflow complete.")
+print("✅ All done! Airtable attachment replaced and cleanup complete.")
