@@ -1,5 +1,3 @@
-# === ✅ UPDATED COMMON UTILITIES ===
-
 import os
 import base64
 import requests
