@@ -2,11 +2,7 @@ import requests
 import pandas as pd
 from datetime import datetime
 import os
-from utils.data_upload_utils import (
-    upload_file_to_github,
-    update_airtable_record_with_attachment,
-    delete_file_from_github
-)
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === CONFIG ===
 EXCEL_FILENAME = "CoinDesk_News.xlsx"
