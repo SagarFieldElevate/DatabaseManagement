@@ -32,11 +32,11 @@ df.to_excel(filename, index=False)
 
 # === Airtable + GitHub Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
-BASE_ID = "appFww2fieWK3mKwi"  # Replace with your actual Airtable Base ID
+BASE_ID = "appnssPRD9yeYJJe5"  # Replace with your actual Airtable Base ID
 TABLE_NAME = "Database"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
-GITHUB_REPO = "SagarFieldElevate/Trial"  # Replace with your actual GitHub repository
+GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"  # Replace with your actual GitHub repository
 BRANCH = "main"
 UPLOAD_PATH = "uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
