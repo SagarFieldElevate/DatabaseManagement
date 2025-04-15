@@ -7,8 +7,8 @@ from fredapi import Fred
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
-FRED_API_KEY = os.getenv("FRED_API_KEY")
-fred = Fred(api_key=FRED_API_KEY)
+# FRED_API_KEY = os.getenv("FRED_API_KEY")
+fred = Fred(api_key="a71667076e4525c9c1a0dfbf4ef47770")
 
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
