@@ -20,7 +20,7 @@ jobs:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           COINDESK_API_KEY: ${{ secrets.COINDESK_API_KEY }}
-        run: python "code/CoinDeskSentiment.py
+        run: python "code/CoinDeskSentiment.py"
   
   # run_inflation:
   #   runs-on: ubuntu-latest
