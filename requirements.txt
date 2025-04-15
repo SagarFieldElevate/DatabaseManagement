@@ -4,3 +4,4 @@ pycoingecko
 openpyxl
 jupyter
 nbconvert
+fredapi
