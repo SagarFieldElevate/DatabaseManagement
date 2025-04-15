@@ -6,7 +6,7 @@ on:
   workflow_dispatch:  # Allows manual trigger via GitHub UI
 
 jobs:
-  run_notebook:
+  run_notebooks:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,36 +22,36 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install nbconvert  # Needed to run Jupyter notebooks
+          pip install nbconvert
 
       - name: Run OHLC notebook
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          jupyter nbconvert --to notebook --execute PricesScript.ipynb --output ohlc_output.ipynb
+          jupyter nbconvert --to notebook --execute code/PricesScript.ipynb --output ohlc_output.ipynb
 
       - name: Run Volume notebook
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          jupyter nbconvert --to notebook --execute VolumeTraded.ipynb --output volume_output.ipynb
+          jupyter nbconvert --to notebook --execute code/VolumeTraded.ipynb --output volume_output.ipynb
           
       - name: Run Trading Range notebook
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          jupyter nbconvert --to notebook --execute "24h Volatility & Trading Range.ipynb" --output volume_output.ipynb
+          jupyter nbconvert --to notebook --execute "code/24h Volatility & Trading Range.ipynb" --output trading_range_output.ipynb
           
       - name: Run Market Cap notebook
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          jupyter nbconvert --to notebook --execute "MarketCap.ipynb" --output volume_output.ipynb
+          jupyter nbconvert --to notebook --execute code/MarketCap.ipynb --output marketcap_output.ipynb
 
       - name: Cleanup
         run: |
-          rm -rf __pycache__ .pytest_cache
+          rm -rf __pycache__ .pytest_cache *.ipynb
