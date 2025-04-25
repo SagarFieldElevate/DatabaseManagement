@@ -27,7 +27,7 @@ def get_retail_consumption():
 # === Main Script ===
 df = get_retail_consumption()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"us_retail_consumption_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
