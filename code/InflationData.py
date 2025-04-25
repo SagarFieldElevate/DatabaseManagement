@@ -23,7 +23,9 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 # === Indicator Fetch Function ===
 def get_inflation():
     data = fred.get_series('CPIAUCSL')
-    return pd.DataFrame({'Date': data.index, 'CPI': data.values})
+    df = pd.DataFrame({'Date': data.index, 'CPI': data.values})
+    df['Date'] = pd.to_datetime(df['Date'])  # Ensure full timestamp format
+    return df
 
 # === Main Script ===
 df = get_inflation()
