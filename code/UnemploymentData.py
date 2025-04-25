@@ -28,7 +28,7 @@ def get_unemployment():
 # === Main Script ===
 df = get_unemployment()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"us_unemployment_data_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
