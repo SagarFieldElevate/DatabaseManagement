@@ -28,7 +28,7 @@ def get_consumer_confidence():
 # === Main Script ===
 df = get_consumer_confidence()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"US_Consumer_Confidence_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
