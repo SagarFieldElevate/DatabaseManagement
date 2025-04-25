@@ -23,7 +23,9 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 # === Indicator Fetch Function ===
 def get_global_gdp():
     data = fred.get_series('NYGDPMKTPCDWLD')
-    return pd.DataFrame({'Date': data.index, 'World_GDP': data.values})
+    df = pd.DataFrame({'Date': data.index, 'World_GDP': data.values})
+    df['Date'] = pd.to_datetime(df['Date'])  # Convert to full timestamp
+    return df
 
 # === Main Script ===
 df = get_global_gdp()
