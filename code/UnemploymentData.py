@@ -23,7 +23,9 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 # === Indicator Fetch Function ===
 def get_unemployment():
     data = fred.get_series('UNRATE')
-    return pd.DataFrame({'Date': data.index, 'Unemployment_Rate': data.values})
+    df = pd.DataFrame({'Date': data.index, 'Unemployment_Rate': data.values})
+    df['Date'] = pd.to_datetime(df['Date'])  # Ensure consistent datetime format
+    return df
 
 # === Main Script ===
 df = get_unemployment()
