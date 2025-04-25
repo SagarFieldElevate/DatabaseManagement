@@ -22,12 +22,14 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 def get_labor_force_participation():
     data = fred.get_series('CIVPART')
-    return pd.DataFrame({'Date': data.index, 'Labor_Force_Participation': data.values})
+    df = pd.DataFrame({'Date': data.index, 'Labor_Force_Participation': data.values})
+    df['Date'] = pd.to_datetime(df['Date'])  # Ensure datetime format
+    return df
 
 # === Main Script ===
 df = get_labor_force_participation()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_laborforce_participation_{timestamp}.xlsx"
+filename = f"us_labor_force_participation_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
