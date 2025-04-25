@@ -23,7 +23,9 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 # === Indicator Fetch Function ===
 def get_consumer_confidence():
     data = fred.get_series('UMCSENT')
-    return pd.DataFrame({'Date': data.index, 'Consumer_Confidence': data.values})
+    df = pd.DataFrame({'Date': data.index, 'Consumer_Confidence': data.values})
+    df['Date'] = pd.to_datetime(df['Date'])  # Ensure it's datetime type
+    return df
 
 # === Main Script ===
 df = get_consumer_confidence()
