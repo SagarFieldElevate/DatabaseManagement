@@ -62,7 +62,7 @@ df = pd.DataFrame([{
     "upvotes": a.get("UPVOTES"),
     "downvotes": a.get("DOWNVOTES"),
     "keywords": a.get("KEYWORDS"),
-    "published_on": datetime.utcfromtimestamp(a.get("PUBLISHED_ON")).strftime('%Y-%m-%d %H:%M:%S') if a.get("PUBLISHED_ON") else None,
+    "Date": datetime.utcfromtimestamp(a.get("PUBLISHED_ON")).strftime('%Y-%m-%d %H:%M:%S') if a.get("PUBLISHED_ON") else None,
     "source_type": a.get("SOURCE_DATA", {}).get("SOURCE_TYPE"),
     "source_name": a.get("SOURCE_DATA", {}).get("NAME"),
     "benchmark_score": a.get("SOURCE_DATA", {}).get("BENCHMARK_SCORE"),
