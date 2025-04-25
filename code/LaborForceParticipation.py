@@ -27,7 +27,7 @@ def get_labor_force_participation():
 # === Main Script ===
 df = get_labor_force_participation()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"us_laborforce_participation_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
