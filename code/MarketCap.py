@@ -34,7 +34,7 @@ for symbol, coin_id in coins.items():
     
     # Prepare DataFrame with timestamp, price, volume, and market cap
     df = pd.DataFrame(price_data, columns=['timestamp', 'price'])
-    df['date'] = pd.to_datetime(df['timestamp'], unit='ms').dt.date
+    df['Date'] = pd.to_datetime(df['timestamp'], unit='ms').dt.date
     df.drop(columns=['timestamp'], inplace=True)
     
     # Add volume and calculate market cap
