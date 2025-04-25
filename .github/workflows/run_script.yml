@@ -20,265 +20,265 @@ jobs:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: python "code/BitcoinHalving.py"
-  # run_coindesk_news:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #     - name: Run CoinDesk News Script
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #         COINDESK_API_KEY: ${{ secrets.COINDESK_API_KEY }}
-  #       run: python "code/CoinDeskSentiment.py"
+  run_coindesk_news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+      - name: Run CoinDesk News Script
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          COINDESK_API_KEY: ${{ secrets.COINDESK_API_KEY }}
+        run: python "code/CoinDeskSentiment.py"
   
-  # run_inflation:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Inflation Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #       run: python "code/InflationData.py"
+  run_inflation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Inflation Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python "code/InflationData.py"
 
-  # run_ConsumerConfidence:
-  #   needs: run_inflation
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Consumer Confidence Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #       run: python "code/ConsumerConfidence.py"
+  run_ConsumerConfidence:
+    needs: run_inflation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Consumer Confidence Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python "code/ConsumerConfidence.py"
 
-  # run_global_gdp:
-  #   needs: run_ConsumerConfidence
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Global GDP Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #       run: python "code/GlobalGDP.py"
+  run_global_gdp:
+    needs: run_ConsumerConfidence
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Global GDP Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python "code/GlobalGDP.py"
 
-  # run_interest_rate:
-  #   needs: run_global_gdp
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Interest Rate Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #       run: python "code/InterestRate.py"
+  run_interest_rate:
+    needs: run_global_gdp
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Interest Rate Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python "code/InterestRate.py"
 
-  # run_currency_exchange:
-  #   needs: run_interest_rate
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Currency Exchange Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python "code/CurrencyExchange.py"
+  run_currency_exchange:
+    needs: run_interest_rate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Currency Exchange Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python "code/CurrencyExchange.py"
 
-  # run_unemployment:
-  #   needs: run_currency_exchange
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Unemployment Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #       run: python "code/UnemploymentData.py"
+  run_unemployment:
+    needs: run_currency_exchange
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Unemployment Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python "code/UnemploymentData.py"
 
-  # run_labor_force:
-  #   needs: run_unemployment
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Labor Force Participation Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python code/LaborForceParticipation.py
+  run_labor_force:
+    needs: run_unemployment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Labor Force Participation Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python code/LaborForceParticipation.py
 
-  # run_retail_consumption:
-  #   needs: run_labor_force
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Retail Consumption Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python code/retailConsumption.py
+  run_retail_consumption:
+    needs: run_labor_force
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Retail Consumption Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python code/retailConsumption.py
 
-  # run_gdp:
-  #   needs: run_retail_consumption
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run GDP Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python code/GDPData.py
+  run_gdp:
+    needs: run_retail_consumption
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run GDP Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python code/GDPData.py
 
 
-  # === CRYPTO JOBS (still commented out for future use) ===
-  # run_ohlc:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run OHLC Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python code/PricesScript.py
+  === CRYPTO JOBS (still commented out for future use) ===
+  run_ohlc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run OHLC Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python code/PricesScript.py
 
-  # run_volume:
-  #   needs: run_ohlc
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Volume Notebook
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python "code/VolumeTraded.py"
+  run_volume:
+    needs: run_ohlc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Volume Notebook
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python "code/VolumeTraded.py"
 
-  # run_trading_range:
-  #   needs: run_volume
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Trading Range
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python "code/24h Volatility & Trading Range.py"
+  run_trading_range:
+    needs: run_volume
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Trading Range
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python "code/24h Volatility & Trading Range.py"
 
-  # run_trendingSearch:
-  #   needs: run_trading_range
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Trending Search
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python "code/GoogleTrending.py"
+  run_trendingSearch:
+    needs: run_trading_range
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Trending Search
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python "code/GoogleTrending.py"
 
-  # run_marketcap:
-  #   needs: run_trendingSearch
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.x'
-  #     - run: |
-  #         pip install -r requirements.txt
-  #         pip install nbconvert
-  #     - name: Run Market Cap
-  #       env:
-  #         AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #       run: python "code/MarketCap.py"
+  run_marketcap:
+    needs: run_trendingSearch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Market Cap
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: python "code/MarketCap.py"
