@@ -22,7 +22,9 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 def get_interest_rate():
     data = fred.get_series('FEDFUNDS')
-    return pd.DataFrame({'Date': data.index, 'Fed_Funds_Rate': data.values})
+    df = pd.DataFrame({'Date': data.index, 'Fed_Funds_Rate': data.values})
+    df['Date'] = pd.to_datetime(df['Date'])  # Convert to datetime
+    return df
 
 # === Main Script ===
 df = get_interest_rate()
@@ -59,4 +61,4 @@ else:
 # Cleanup
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Fed Interest Ratea: Airtable updated and GitHub cleaned up.")
+print("✅ Fed Interest Rate: Airtable updated and GitHub cleaned up.")
