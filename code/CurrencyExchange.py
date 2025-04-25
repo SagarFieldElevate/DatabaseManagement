@@ -35,7 +35,7 @@ def get_currency_exchange():
 # === Main Script ===
 df = get_currency_exchange()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"us_currency_exchange{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
