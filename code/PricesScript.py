@@ -49,7 +49,7 @@ for symbol, coin_id in coins.items():
 # === Save to Excel ===
 df = pd.DataFrame(data)
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"historical_volatility_trading_range_365_days_{timestamp}.xlsx"
+filename = f"coin_price_script_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # === Config ===
