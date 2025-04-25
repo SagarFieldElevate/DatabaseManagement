@@ -39,7 +39,7 @@ for symbol, coin_id in coins.items():
         
         data.append({
             'symbol': symbol,
-            'timestamp': datetime.utcfromtimestamp(current_timestamp / 1000).isoformat(),
+            'Date': datetime.utcfromtimestamp(current_timestamp / 1000).isoformat(),
             'high_24h_usd': high,
             'low_24h_usd': low,
             'volatility_24h_%': round(volatility, 2),
