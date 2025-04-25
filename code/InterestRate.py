@@ -27,7 +27,7 @@ def get_interest_rate():
 # === Main Script ===
 df = get_interest_rate()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"us_interest_rate_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
