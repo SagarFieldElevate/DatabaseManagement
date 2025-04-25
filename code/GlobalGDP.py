@@ -28,7 +28,7 @@ def get_global_gdp():
 # === Main Script ===
 df = get_global_gdp()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"global_gdp_data_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
