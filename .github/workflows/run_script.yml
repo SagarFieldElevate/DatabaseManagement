@@ -244,7 +244,7 @@ jobs:
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: python "code/TradingRange.py"
+        run: python "code/24h Volatility & Trading Range.py"
 
   run-trending-search:
     needs: run-trading-range
