@@ -25,17 +25,19 @@ def get_currency_exchange():
     cny = fred.get_series('DEXCHUS')
     eur = fred.get_series('DEXUSEU')
     jpy = fred.get_series('DEXJPUS')
-    return pd.DataFrame({
+    df = pd.DataFrame({
         'Date': cny.index,
         'USD_CNY': cny.values,
         'USD_EUR': eur.reindex(cny.index).values,
         'USD_JPY': jpy.reindex(cny.index).values
     })
+    df['Date'] = pd.to_datetime(df['Date'])  # Convert to full timestamp
+    return df
 
 # === Main Script ===
 df = get_currency_exchange()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_currency_exchange{timestamp}.xlsx"
+filename = f"us_currency_exchange_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
