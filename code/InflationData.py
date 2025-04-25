@@ -28,7 +28,7 @@ def get_inflation():
 # === Main Script ===
 df = get_inflation()
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = f"us_inflation_data_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
