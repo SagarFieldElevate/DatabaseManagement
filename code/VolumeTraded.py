@@ -27,7 +27,7 @@ for symbol, coin_id in coins.items():
     for timestamp_ms, volume in volume_data:
         data.append({
             'symbol': symbol,
-            'date': datetime.utcfromtimestamp(timestamp_ms / 1000).date().isoformat(),
+            'Date': datetime.utcfromtimestamp(timestamp_ms / 1000).date().isoformat(),
             'volume_usd': volume
         })
 
