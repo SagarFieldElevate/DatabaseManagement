@@ -74,4 +74,4 @@ else:
 # === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ US Housing Permits: Airtable updated and GitHu
+print("✅ US Housing Permits: Airtable updated and GitHub")
