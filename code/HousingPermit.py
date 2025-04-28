@@ -19,13 +19,14 @@ FRED_API_KEY = os.getenv("FRED_API_KEY")
 FRED_SERIES_ID = "PERMIT"  # US Housing Permits series ID
 
 # === Fetch Housing Permits Data from FRED ===
-def fetch_housing_permits_data(fred_api_key, series_id):
+def fetch_housing_permits_data(fred_api_key, series_id, start_date="2015-01-01"):
     url = "https://api.stlouisfed.org/fred/series/observations"
     params = {
         "series_id": series_id,
         "api_key": fred_api_key,
         "file_type": "json",
         "frequency": "m",  # Monthly
+        "start_date": start_date,  # Start from 2015
     }
     response = requests.get(url, params=params)
     response.raise_for_status()
@@ -74,4 +75,4 @@ else:
 # === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ US Housing Permits: Airtable updated and GitHub")
+print("✅ US Housing Permits: Airtable updated and GitHub cleaned up.")
