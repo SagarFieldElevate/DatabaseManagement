@@ -298,6 +298,19 @@ jobs:
       - name: Run Unemployment Data Notebook
         run: python "code/UnemploymentData.py"
 
-  run-retail-consumption:
     runs-on: ubuntu-latest
-    needs: run
+    needs: run-volume-traded
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Retail Consumption Notebook
+        run: python "code/retailConsumption.py"
