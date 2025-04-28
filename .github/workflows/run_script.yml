@@ -11,274 +11,433 @@ env:
   FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
 
 jobs:
-  run-ohlc:
+  run-24h-volatility:
     runs-on: ubuntu-latest
-    continue-on-error: true  # Continue even if this job fails
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
-
-      - name: Run OHLC Notebook
-        run: python "code/PricesScript.py"
-
-  run-volume:
-    runs-on: ubuntu-latest
-    needs: run-ohlc
-    continue-on-error: true  # Continue even if this job fails
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install nbconvert
-
-      - name: Run VolumeTraded Notebook
-        run: python "code/VolumeTraded.py"
-
-  run-trading-range:
-    runs-on: ubuntu-latest
-    needs: run-volume
-    continue-on-error: true  # Continue even if this job fails
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install nbconvert
-
-      - name: Run Trading Range Notebook
+      - name: Run 24h Volatility & Trading Range Notebook
         run: python "code/24h Volatility & Trading Range.py"
 
-  run-trending-search:
+  run-btc-price-daily:
     runs-on: ubuntu-latest
-    needs: run-trading-range
-    continue-on-error: true  # Continue even if this job fails
+    needs: run-24h-volatility
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
-
-      - name: Run Google Trending Notebook
-        run: python "code/GoogleTrending.py"
+      - name: Run BTC Price Daily Notebook
+        run: python "code/BTCPriceDaily.py"
 
   run-bitcoin-halving:
     runs-on: ubuntu-latest
-    needs: run-trending-search
-    continue-on-error: true  # Continue even if this job fails
+    needs: run-btc-price-daily
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
-
       - name: Run Bitcoin Halving Notebook
         run: python "code/BitcoinHalving.py"
 
-  run-gold-price:
+  run-coindesk-sentiment:
     runs-on: ubuntu-latest
     needs: run-bitcoin-halving
-    continue-on-error: true  # Continue even if this job fails
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
+      - name: Run CoinDesk Sentiment Notebook
+        run: python "code/CoinDeskSentiment.py"
 
-      - name: Run Gold Price Notebook
+  run-consumer-confidence:
+    runs-on: ubuntu-latest
+    needs: run-coindesk-sentiment
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Consumer Confidence Notebook
+        run: python "code/ConsumerConfidence.py"
+
+  run-currency-exchange:
+    runs-on: ubuntu-latest
+    needs: run-consumer-confidence
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Currency Exchange Notebook
+        run: python "code/CurrencyExchange.py"
+
+  run-gdp-data:
+    runs-on: ubuntu-latest
+    needs: run-currency-exchange
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run GDP Data Notebook
+        run: python "code/GDPData.py"
+
+  run-global-gdp:
+    runs-on: ubuntu-latest
+    needs: run-gdp-data
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Global GDP Notebook
+        run: python "code/GlobalGDP.py"
+
+  run-gold-daily-price:
+    runs-on: ubuntu-latest
+    needs: run-global-gdp
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Gold Daily Price Notebook
         run: python "code/GoldDailyPrice.py"
+
+  run-google-trending:
+    runs-on: ubuntu-latest
+    needs: run-gold-daily-price
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Google Trending Notebook
+        run: python "code/GoogleTrending.py"
 
   run-housing-permit:
     runs-on: ubuntu-latest
-    needs: run-gold-price
-    continue-on-error: true  # Continue even if this job fails
+    needs: run-google-trending
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
-
       - name: Run Housing Permit Notebook
         run: python "code/HousingPermit.py"
 
-  run-m2-data:
+  run-inflation-data:
     runs-on: ubuntu-latest
     needs: run-housing-permit
-    continue-on-error: true  # Continue even if this job fails
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
+      - name: Run Inflation Data Notebook
+        run: python "code/InflationData.py"
 
+  run-interest-rate:
+    runs-on: ubuntu-latest
+    needs: run-inflation-data
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Interest Rate Notebook
+        run: python "code/InterestRate.py"
+
+  run-labor-force-participation:
+    runs-on: ubuntu-latest
+    needs: run-interest-rate
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Labor Force Participation Notebook
+        run: python "code/LaborForceParticipation.py"
+
+  run-m2-data:
+    runs-on: ubuntu-latest
+    needs: run-labor-force-participation
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
       - name: Run M2 Data Notebook
         run: python "code/M2Data.py"
 
-  run-qqq-data:
+  run-market-cap:
     runs-on: ubuntu-latest
     needs: run-m2-data
-    continue-on-error: true  # Continue even if this job fails
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
+      - name: Run Market Cap Notebook
+        run: python "code/MarketCap.py"
 
+  run-prices-script:
+    runs-on: ubuntu-latest
+    needs: run-market-cap
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Prices Script Notebook
+        run: python "code/PricesScript.py"
+
+  run-qqq-data:
+    runs-on: ubuntu-latest
+    needs: run-prices-script
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
       - name: Run QQQ Data Notebook
         run: python "code/QQQData.py"
 
   run-spy-data:
     runs-on: ubuntu-latest
     needs: run-qqq-data
-    continue-on-error: true  # Continue even if this job fails
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
-
       - name: Run SPY Data Notebook
         run: python "code/SPYData.py"
 
   run-usd-index:
     runs-on: ubuntu-latest
     needs: run-spy-data
-    continue-on-error: true  # Continue even if this job fails
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
-
       - name: Run USD Index Notebook
         run: python "code/USDollarIndex.py"
 
-  run-unemployment:
+  run-unemployment-data:
     runs-on: ubuntu-latest
     needs: run-usd-index
-    continue-on-error: true  # Continue even if this job fails
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
-
       - name: Run Unemployment Data Notebook
         run: python "code/UnemploymentData.py"
 
-  run-retail-consumption:
+  run-volume-traded:
     runs-on: ubuntu-latest
-    needs: run-unemployment
-    continue-on-error: true  # Continue even if this job fails
+    needs: run-unemployment-data
+    continue-on-error: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
           pip install nbconvert
+      - name: Run Volume Traded Notebook
+        run: python "code/VolumeTraded.py"
 
+  run-data-upload-utils:
+    runs-on: ubuntu-latest
+    needs: run-volume-traded
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run Data Upload Utils Script
+        run: python "code/data_upload_utils.py"
+
+  run-retail-consumption:
+    runs-on: ubuntu-latest
+    needs: run-data-upload-utils
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nbconvert
       - name: Run Retail Consumption Notebook
         run: python "code/retailConsumption.py"
