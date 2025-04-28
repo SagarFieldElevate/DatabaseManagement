@@ -22,7 +22,7 @@ indicator_name = "SPY Daily Close Price"
 # === Fetch SPY Close Price Data (from Jan 1, 2015) ===
 def get_spy_close_data(start_date="2015-01-01"):
     df = yf.download(symbol, start=start_date)[['Close']].reset_index()
-    df.columns = ['Date', 'close_price_usd']  # Capital 'D' for Date
+    df.columns = ['Date', 'close_price']  # Capital 'D' for Date
     return df
 
 df = get_spy_close_data(start_date="2015-01-01")
