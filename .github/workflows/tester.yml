@@ -1,0 +1,76 @@
+name: Run Economic Indicator Scripts
+
+on:
+  schedule:
+    # This will run every day at midnight
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  run_scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # You can change the Python version if needed
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Assuming you have a requirements.txt with necessary libraries
+
+      - name: Run Google Trending and Halving Scripts
+        run: |
+          python GoogleTrending.py
+          python BitcoinHalving.py
+
+      - name: Run Housing Permits and Consumer Confidence Scripts
+        run: |
+          python HousingPermit.py
+          python ConsumerConfidence.py
+
+      - name: Run Currency Exchange and GDP Data Scripts
+        run: |
+          python CurrencyExchange.py
+          python GDPData.py
+
+      - name: Run Global GDP and Gold Daily Price Scripts
+        run: |
+          python GlobalGDP.py
+          python GoldDailyPrice.py
+
+      - name: Run Inflation Data and Interest Rates Scripts
+        run: |
+          python InflationData.py
+          python InterestRate.py
+
+      - name: Run Labor Force Participation and M2 Data Scripts
+        run: |
+          python LaborForceParticipation.py
+          python M2Data.py
+
+      - name: Run QQQ and SPY Data Scripts
+        run: |
+          python QQQData.py
+          python SPYData.py
+
+      - name: Run USD Dollar Index and Unemployment Data Scripts
+        run: |
+          python USDollarIndex.py
+          python UnemploymentData.py
+
+      - name: Run Retail Consumption Script
+        run: |
+          python retailConsumption.py
+
+      - name: Final Cleanup and Push Changes to GitHub
+        run: |
+          git add .
+          git commit -m "Update economic data and indicators"
+          git push origin main
+
