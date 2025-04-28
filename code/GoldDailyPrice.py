@@ -21,7 +21,7 @@ symbol = "GC=F"
 df = yf.download(symbol, start="2015-01-01")[['Close']].reset_index()
 
 # Format columns
-df.columns = ['Date', 'close_price_usd']
+df.columns = ['Date', 'close_price']
 df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
 
 # === Save to Excel ===
