@@ -1,4 +1,3 @@
-# === SPY Daily Close Price to GitHub & Airtable ===
 import os
 import pandas as pd
 import yfinance as yf
@@ -20,13 +19,13 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 symbol = "SPY"
 indicator_name = "SPY Daily Close Price"
 
-# === Fetch SPY Close Price Data ===
-def get_spy_close_data():
-    df = yf.download(symbol, period="max")[['Close']].reset_index()
+# === Fetch SPY Close Price Data (from Jan 1, 2015) ===
+def get_spy_close_data(start_date="2015-01-01"):
+    df = yf.download(symbol, start=start_date)[['Close']].reset_index()
     df.columns = ['Date', 'close_price_usd']  # Capital 'D' for Date
     return df
 
-df = get_spy_close_data()
+df = get_spy_close_data(start_date="2015-01-01")
 
 # === Save to Excel ===
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
