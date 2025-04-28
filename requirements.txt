@@ -3,5 +3,6 @@ requests
 pycoingecko
 openpyxl
 jupyter
+yfinance
 nbconvert
 fredapi
