@@ -33,6 +33,7 @@ jobs:
   run-volume:
     runs-on: ubuntu-latest
     needs: run-ohlc
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -53,6 +54,7 @@ jobs:
   run-trading-range:
     runs-on: ubuntu-latest
     needs: run-ohlc
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -73,6 +75,7 @@ jobs:
   run-trending-search:
     runs-on: ubuntu-latest
     needs: run-ohlc
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -93,6 +96,7 @@ jobs:
   run-bitcoin-halving:
     runs-on: ubuntu-latest
     needs: run-ohlc
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -113,6 +117,7 @@ jobs:
   run-consumer-confidence:
     runs-on: ubuntu-latest
     needs: run-ohlc
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -133,6 +138,7 @@ jobs:
   run-currency-exchange:
     runs-on: ubuntu-latest
     needs: run-ohlc
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -153,6 +159,7 @@ jobs:
   run-gdp-data:
     runs-on: ubuntu-latest
     needs: run-ohlc
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -173,6 +180,7 @@ jobs:
   run-global-gdp:
     runs-on: ubuntu-latest
     needs: run-gdp-data
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -193,6 +201,7 @@ jobs:
   run-gold-daily-price:
     runs-on: ubuntu-latest
     needs: run-global-gdp
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -213,6 +222,7 @@ jobs:
   run-housing-permit:
     runs-on: ubuntu-latest
     needs: run-gold-daily-price
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -233,6 +243,7 @@ jobs:
   run-inflation-data:
     runs-on: ubuntu-latest
     needs: run-housing-permit
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -253,6 +264,7 @@ jobs:
   run-interest-rate:
     runs-on: ubuntu-latest
     needs: run-inflation-data
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -273,6 +285,7 @@ jobs:
   run-labor-force-participation:
     runs-on: ubuntu-latest
     needs: run-interest-rate
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -293,6 +306,7 @@ jobs:
   run-m2-data:
     runs-on: ubuntu-latest
     needs: run-labor-force-participation
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -313,6 +327,7 @@ jobs:
   run-market-cap:
     runs-on: ubuntu-latest
     needs: run-m2-data
+    continue-on-error: true  # Continue even if this job fails
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
