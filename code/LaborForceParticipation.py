@@ -1,4 +1,3 @@
-# Template for each economic indicator
 import pandas as pd
 from datetime import datetime
 import os
@@ -20,14 +19,15 @@ BRANCH = "main"
 UPLOAD_PATH = "uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-def get_labor_force_participation():
-    data = fred.get_series('CIVPART')
+# === Indicator Fetch Function ===
+def get_labor_force_participation(start_date="2015-01-01"):
+    data = fred.get_series('CIVPART', start_date=start_date)
     df = pd.DataFrame({'Date': data.index, 'Labor_Force_Participation': data.values})
     df['Date'] = pd.to_datetime(df['Date'])  # Ensure datetime format
     return df
 
 # === Main Script ===
-df = get_labor_force_participation()
+df = get_labor_force_participation(start_date="2015-01-01")
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"us_labor_force_participation_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
