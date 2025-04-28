@@ -1,4 +1,3 @@
-# === QQQ Daily Close Price to GitHub & Airtable ===
 import os
 import pandas as pd
 import yfinance as yf
@@ -20,13 +19,13 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 symbol = "QQQ"
 indicator_name = "QQQ Daily Close Price"
 
-# === Fetch QQQ Close Price Data ===
-def get_qqq_close_data():
-    df = yf.download(symbol, period="max")[['Close']].reset_index()
+# === Fetch QQQ Close Price Data (from Jan 1, 2015) ===
+def get_qqq_close_data(start_date="2015-01-01"):
+    df = yf.download(symbol, start=start_date)[['Close']].reset_index()
     df.columns = ['Date', 'close_price_usd']  # Capital 'D' for Date
     return df
 
-df = get_qqq_close_data()
+df = get_qqq_close_data(start_date="2015-01-01")
 
 # === Save to Excel ===
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
