@@ -1,4 +1,3 @@
-# Template for each economic indicator
 import pandas as pd
 from datetime import datetime
 import os
@@ -22,9 +21,20 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_consumer_confidence():
-    data = fred.get_series('UMCSENT')
+    # Fetch data from FRED from 2015 to the current date
+    start_date = "2015-01-01"
+    data = fred.get_series('UMCSENT', start_date=start_date)
+    
+    # Create DataFrame
     df = pd.DataFrame({'Date': data.index, 'Consumer_Confidence': data.values})
-    df['Date'] = pd.to_datetime(df['Date'])  # Ensure it's datetime type
+    
+    # Ensure the 'Date' column is in datetime format
+    df['Date'] = pd.to_datetime(df['Date'])
+    
+    # Filter data to only include rows from 2015 to the current date
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    df = df[df['Date'] <= current_date]
+    
     return df
 
 # === Main Script ===
