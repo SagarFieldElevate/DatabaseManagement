@@ -1,4 +1,3 @@
-# Template for each economic indicator
 import pandas as pd
 from datetime import datetime
 import os
@@ -22,16 +21,26 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_currency_exchange():
-    cny = fred.get_series('DEXCHUS')
-    eur = fred.get_series('DEXUSEU')
-    jpy = fred.get_series('DEXJPUS')
+    start_date = "2015-01-01"
+    cny = fred.get_series('DEXCHUS', start_date=start_date)
+    eur = fred.get_series('DEXUSEU', start_date=start_date)
+    jpy = fred.get_series('DEXJPUS', start_date=start_date)
+    
+    # Create DataFrame
     df = pd.DataFrame({
         'Date': cny.index,
         'USD_CNY': cny.values,
         'USD_EUR': eur.reindex(cny.index).values,
         'USD_JPY': jpy.reindex(cny.index).values
     })
-    df['Date'] = pd.to_datetime(df['Date'])  # Convert to full timestamp
+    
+    # Ensure 'Date' is in datetime format
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    # Filter data from 2015 to the current date
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    df = df[df['Date'] <= current_date]
+    
     return df
 
 # === Main Script ===
