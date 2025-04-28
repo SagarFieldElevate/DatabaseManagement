@@ -1,4 +1,3 @@
-# Template for each economic indicator
 import pandas as pd
 from datetime import datetime
 import os
@@ -20,25 +19,25 @@ BRANCH = "main"
 UPLOAD_PATH = "uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-# === Indicator Fetch Function ===
-def get_unemployment():
-    data = fred.get_series('UNRATE')
+# === Indicator Fetch Function (from Jan 1, 2015) ===
+def get_unemployment(start_date="2015-01-01"):
+    data = fred.get_series('UNRATE', start_date=start_date)
     df = pd.DataFrame({'Date': data.index, 'Unemployment_Rate': data.values})
     df['Date'] = pd.to_datetime(df['Date'])  # Ensure consistent datetime format
     return df
 
 # === Main Script ===
-df = get_unemployment()
+df = get_unemployment(start_date="2015-01-01")
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"us_unemployment_data_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
-# Upload to GitHub
+# === Upload to GitHub ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
-raw_url = github_response['content']['raw_url']
+raw_url = github_response['content']['download_url']
 file_sha = github_response['content']['sha']
 
-# Airtable Check
+# === Airtable Check ===
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
@@ -53,13 +52,13 @@ existing_records = [
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
-# Upload to Airtable
+# === Upload to Airtable ===
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
     create_airtable_record("US Unemployment", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
-# Cleanup
+# === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
 print("✅ US Unemployment Data: Airtable updated and GitHub cleaned up.")
