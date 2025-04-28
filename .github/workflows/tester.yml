@@ -1,54 +1,83 @@
-name: Run Data Scripts
+name: Run All Scripts Sequentially
 
 on:
-  push:
-    branches:
-      - main  # You can set this to trigger on specific branches or other events like `schedule` or `workflow_dispatch`
+  schedule:
+    - cron: "0 * * * *"  # Every hour
+  workflow_dispatch:
+
+env:
+  AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
 
 jobs:
-  run_data_scripts:
-    runs-on: ubuntu-latest  # You can change this to a different runner if needed
-
+  run-qqq-data:
+    runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
-
-      # Step 2: Set up Python environment
-      - name: Set up Python 3.x
+      - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
-      # Step 3: Install dependencies
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Assuming you have a requirements.txt in your repo for dependencies
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run QQQData.py Script
+        run: python "code/QQQData.py"
 
-      # Step 4: Run QQQData.py
-      - name: Run QQQData.py
+  run-spy-data:
+    runs-on: ubuntu-latest
+    needs: run-qqq-data
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
         run: |
-          python QQQData.py  # Make sure to adjust path if needed
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run SPYData.py Script
+        run: python "code/SPYData.py"
 
-      # Step 5: Run SPYData.py
-      - name: Run SPYData.py
+  run-usdollar-index:
+    runs-on: ubuntu-latest
+    needs: run-spy-data
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
         run: |
-          python SPYData.py  # Make sure to adjust path if needed
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run USDollarIndex.py Script
+        run: python "code/USDollarIndex.py"
 
-      # Step 6: Run USDollarIndex.py
-      - name: Run USDollarIndex.py
+  run-gold-daily-price:
+    runs-on: ubuntu-latest
+    needs: run-usdollar-index
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
         run: |
-          python USDollarIndex.py  # Make sure to adjust path if needed
-
-      # Step 7: Run GoldDailyPrice.py
-      - name: Run GoldDailyPrice.py
-        run: |
-          python GoldDailyPrice.py  # Make sure to adjust path if needed
-
-      # Step 8: (Optional) Upload output results or save them in a specific location
-      # - name: Upload output to GitHub artifacts (optional)
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: results
-      #     path: ./results/  # Adjust path if your results are saved in a folder like 'results'
+          pip install -r requirements.txt
+          pip install nbconvert
+      - name: Run GoldDailyPrice.py Script
+        run: python "code/GoldDailyPrice.py"
