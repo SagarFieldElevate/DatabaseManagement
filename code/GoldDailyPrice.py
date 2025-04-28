@@ -16,9 +16,9 @@ BRANCH = "main"
 UPLOAD_PATH = "uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-# === Fetch GLD Daily Close Price ===
+# === Fetch GLD Daily Close Price from 2015 onwards ===
 symbol = "GLD"
-df = yf.download(symbol, period="max")[['Close']].reset_index()
+df = yf.download(symbol, start="2015-01-01")[['Close']].reset_index()
 
 # Format columns
 df.columns = ['Date', 'close_price_usd']
