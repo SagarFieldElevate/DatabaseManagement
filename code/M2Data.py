@@ -1,4 +1,3 @@
-# === US M2 Data to GitHub & Airtable ===
 import pandas as pd
 from datetime import datetime
 import os
@@ -21,15 +20,15 @@ FRED_API_KEY = os.getenv("FRED_API_KEY")
 fred = Fred(api_key=FRED_API_KEY)
 
 # === Fetch US M2 Data ===
-def get_us_m2():
-    data = fred.get_series('M2SL')
+def get_us_m2(start_date="2015-01-01"):
+    data = fred.get_series('M2SL', start_date=start_date)
     df = pd.DataFrame({
         'Date': data.index.strftime('%Y-%m-%d'),  # Capitalized 'Date'
         'us_m2': data.values
     })
     return df
 
-df = get_us_m2()
+df = get_us_m2(start_date="2015-01-01")
 
 # === Save to Excel ===
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
