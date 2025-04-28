@@ -48,10 +48,13 @@ def calculate_halving_progress():
 # === Run & Save ===
 halving_data = calculate_halving_progress()
 df = pd.DataFrame([halving_data])
+
+# Add today's date as a new column
+df['Date'] = datetime.now().strftime("%Y-%m-%d")
+
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"Bitcoin_Halving_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
-
 # === Upload to GitHub ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['download_url']
