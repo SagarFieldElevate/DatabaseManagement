@@ -1,4 +1,3 @@
-# Template for each economic indicator
 import pandas as pd
 from datetime import datetime
 import os
@@ -21,14 +20,14 @@ UPLOAD_PATH = "uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
-def get_inflation():
-    data = fred.get_series('CPIAUCSL')
+def get_inflation(start_date="2015-01-01"):
+    data = fred.get_series('CPIAUCSL', start_date=start_date)
     df = pd.DataFrame({'Date': data.index, 'CPI': data.values})
     df['Date'] = pd.to_datetime(df['Date'])  # Ensure full timestamp format
     return df
 
 # === Main Script ===
-df = get_inflation()
+df = get_inflation(start_date="2015-01-01")
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"us_inflation_data_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
