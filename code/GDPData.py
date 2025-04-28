@@ -1,4 +1,3 @@
-# Template for each economic indicator
 import pandas as pd
 from datetime import datetime
 import os
@@ -22,9 +21,14 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_gdp():
-    data = fred.get_series('GDP')
+    start_date = "2015-01-01"  # Start from January 1, 2015
+    data = fred.get_series('GDP', start_date=start_date)
     df = pd.DataFrame({'Date': data.index, 'US_GDP': data.values})
     df['Date'] = pd.to_datetime(df['Date'])  # Convert to full timestamp format
+    
+    # Filter data from 2015 to today
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    df = df[df['Date'] <= current_date]
     return df
 
 # === Main Script ===
