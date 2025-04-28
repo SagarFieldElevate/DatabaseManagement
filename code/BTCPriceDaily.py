@@ -21,8 +21,8 @@ symbol = "BTC-USD"
 df = yf.download(symbol, period="max")[['Close']].reset_index()
 
 # Format columns
-df.columns = ['date', 'close_price_usd']
-df['date'] = df['date'].dt.strftime('%Y-%m-%d')
+df.columns = ['Date', 'close_price_usd']
+df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
 
 # === Save to Excel ===
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
