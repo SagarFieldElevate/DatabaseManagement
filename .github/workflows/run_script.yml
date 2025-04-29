@@ -408,7 +408,7 @@ jobs:
 
   run-retail-consumption:
     runs-on: ubuntu-latest
-    needs: run-data-upload-utils
+    needs: run-volume-traded
     continue-on-error: true
     steps:
       - name: Checkout Repository
