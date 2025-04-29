@@ -21,12 +21,13 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_currency_exchange():
+    """Fetch and process currency exchange data from FRED (2015 onwards)."""
     start_date = "2015-01-01"
     cny = fred.get_series('DEXCHUS', start_date=start_date)
     eur = fred.get_series('DEXUSEU', start_date=start_date)
     jpy = fred.get_series('DEXJPUS', start_date=start_date)
     
-    # Create DataFrame
+    # Create DataFrame with proper index and columns
     df = pd.DataFrame({
         'Date': cny.index,
         'USD_CNY': cny.values,
@@ -37,6 +38,9 @@ def get_currency_exchange():
     # Ensure 'Date' is in datetime format
     df['Date'] = pd.to_datetime(df['Date'])
 
+    # Fill missing values using forward fill (can be adjusted to your needs)
+    df.fillna(method='ffill', inplace=True)
+
     # Filter data from 2015 to the current date
     current_date = datetime.now().strftime('%Y-%m-%d')
     df = df[df['Date'] <= current_date]
@@ -44,38 +48,51 @@ def get_currency_exchange():
     return df
 
 # === Main Script ===
-df = get_currency_exchange()
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_currency_exchange_{timestamp}.xlsx"
-df.to_excel(filename, index=False)
+try:
+    # Fetch data
+    df = get_currency_exchange()
+    
+    # Prepare the filename with timestamp
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    filename = f"us_currency_exchange_{timestamp}.xlsx"
+    
+    # Save data to Excel
+    df.to_excel(filename, index=False)
 
-# Upload to GitHub
-github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
-raw_url = github_response['content']['raw_url']
-file_sha = github_response['content']['sha']
+    # Upload to GitHub
+    github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
+    raw_url = github_response['content']['raw_url']
+    file_sha = github_response['content']['sha']
 
-# Airtable Check
-airtable_headers = {
-    "Authorization": f"Bearer {AIRTABLE_API_KEY}",
-    "Content-Type": "application/json"
-}
-response = requests.get(airtable_url, headers=airtable_headers)
-response.raise_for_status()
-data_airtable = response.json()
+    # Airtable Check
+    airtable_headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    response = requests.get(airtable_url, headers=airtable_headers)
+    response.raise_for_status()  # Ensure no failure in API request
+    data_airtable = response.json()
 
-existing_records = [
-    rec for rec in data_airtable['records']
-    if rec['fields'].get('Name') == "Currency Exchange"
-]
-record_id = existing_records[0]['id'] if existing_records else None
+    # Check for existing record
+    existing_records = [
+        rec for rec in data_airtable['records']
+        if rec['fields'].get('Name') == "Currency Exchange"
+    ]
+    record_id = existing_records[0]['id'] if existing_records else None
 
-# Upload to Airtable
-if record_id:
-    update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
-else:
-    create_airtable_record("Currency Exchange", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    # Upload to Airtable
+    if record_id:
+        update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    else:
+        create_airtable_record("Currency Exchange", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
-# Cleanup
-delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
-os.remove(filename)
-print("✅ Currency Exchange Data: Airtable updated and GitHub cleaned up.")
+    # Cleanup
+    delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
+    os.remove(filename)
+    
+    print("✅ Currency Exchange Data: Airtable updated and GitHub cleaned up.")
+
+except requests.exceptions.RequestException as e:
+    print(f"Error in API request: {e}")
+except Exception as e:
+    print(f"An error occurred: {e}")
