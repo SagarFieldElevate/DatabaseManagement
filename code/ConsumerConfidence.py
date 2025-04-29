@@ -21,19 +21,22 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_consumer_confidence():
-    # Fetch data from FRED from 2015 to the current date
+    """Fetch Consumer Confidence data from FRED (from 2015 onwards)."""
     start_date = "2015-01-01"
     data = fred.get_series('UMCSENT', start_date=start_date)
     
-    # Create DataFrame
-    df = pd.DataFrame({'Date': data.index, 'Consumer_Confidence': data.values})
+    # Create DataFrame with formatted date and data
+    df = pd.DataFrame({
+        'Date (YYYY-MM-DD)': data.index, 
+        'Consumer Confidence (Index)': data.values
+    })
     
     # Ensure the 'Date' column is in datetime format
-    df['Date'] = pd.to_datetime(df['Date'])
+    df['Date (YYYY-MM-DD)'] = pd.to_datetime(df['Date (YYYY-MM-DD)'])
     
-    # Filter data to only include rows from 2015 to the current date
+    # Filter to include only rows up to today's date
     current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date'] <= current_date]
+    df = df[df['Date (YYYY-MM-DD)'] <= current_date]
     
     return df
 
@@ -43,33 +46,34 @@ timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename = f"US_Consumer_Confidence_{timestamp}.xlsx"
 df.to_excel(filename, index=False)
 
-# Upload to GitHub
+# === Upload to GitHub ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
-# Airtable Check
+# === Airtable Check ===
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
 }
 response = requests.get(airtable_url, headers=airtable_headers)
-response.raise_for_status()
+response.raise_for_status()  # Raise error if request fails
 data_airtable = response.json()
 
+# Check for existing record
 existing_records = [
     rec for rec in data_airtable['records']
     if rec['fields'].get('Name') == "Consumer Confidence"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
-# Upload to Airtable
+# === Upload to Airtable ===
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
     create_airtable_record("Consumer Confidence", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
-# Cleanup
+# === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
 print("✅ US Consumer Confidence Data: Airtable updated and GitHub cleaned up.")
