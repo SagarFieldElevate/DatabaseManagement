@@ -32,15 +32,20 @@ for symbol, coin_id in coins.items():
     price_data = market_data['prices']
     volume_data = market_data['total_volumes']
     
-    # Prepare DataFrame with timestamp, price, volume, and market cap
-    df = pd.DataFrame(price_data, columns=['timestamp', 'price'])
-    df['Date'] = pd.to_datetime(df['timestamp'], unit='ms').dt.date
+    # Prepare DataFrame with date, price, volume, and market cap
+    df = pd.DataFrame(price_data, columns=['timestamp', f'{symbol} Price (USD)'])
+    df['Date'] = pd.to_datetime(df['timestamp'], unit='ms').dt.strftime('%Y-%m-%d')
     df.drop(columns=['timestamp'], inplace=True)
     
     # Add volume and calculate market cap
-    df['volume'] = [volume[1] for volume in volume_data]
-    df['market_cap'] = df['price'] * circulating_supply
-    df['symbol'] = symbol
+    df[f'{symbol} Volume (USD)'] = [volume[1] for volume in volume_data]
+    df[f'{symbol} Market Cap (USD)'] = df[f'{symbol} Price (USD)'] * circulating_supply
+    df['Cryptocurrency Symbol'] = symbol
+    
+    # Round numerical values
+    df[f'{symbol} Price (USD)'] = df[f'{symbol} Price (USD)'].round(2)
+    df[f'{symbol} Volume (USD)'] = df[f'{symbol} Volume (USD)'].round(2)
+    df[f'{symbol} Market Cap (USD)'] = df[f'{symbol} Market Cap (USD)'].round(2)
     
     # Append data for this coin
     data.append(df)
@@ -49,8 +54,7 @@ for symbol, coin_id in coins.items():
 combined_df = pd.concat(data, ignore_index=True)
 
 # === Save to Excel ===
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"historical_market_cap_{timestamp}.xlsx"
+filename = "crypto_market_cap_365d.xlsx"
 combined_df.to_excel(filename, index=False)
 
 # === Config for Airtable + GitHub ===
@@ -61,7 +65,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Upload to GitHub ===
@@ -80,7 +84,7 @@ records = response.json().get('records', [])
 
 existing_records = [
     rec for rec in records
-    if rec['fields'].get('Name') == "Historical Market Cap Data"
+    if rec['fields'].get('Name') == "Cryptocurrency Market Cap (365 Days)"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -88,9 +92,9 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("Historical Market Cap Data", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("Cryptocurrency Market Cap (365 Days)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # === Clean-up ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Market cap data uploaded to GitHub, Airtable updated, and files cleaned up.")
+print("✅ Cryptocurrency market cap data uploaded to GitHub, Airtable updated, and files cleaned up.")
