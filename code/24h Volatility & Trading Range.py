@@ -23,33 +23,40 @@ data = []
 for symbol, coin_id in coins.items():
     market_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd', days=365)
     ohlc_data = market_data['prices']
-    
+
     for i in range(1, len(ohlc_data)):
-        prev_day = ohlc_data[i-1]
+        prev_day = ohlc_data[i - 1]
         current_day = ohlc_data[i]
-        
+
         prev_timestamp, prev_price = prev_day
         current_timestamp, current_price = current_day
-        
+
         high = max(prev_price, current_price)
         low = min(prev_price, current_price)
-        
+
         volatility = ((high - low) / low) * 100 if low > 0 else 0
         trading_range = high - low
-        
+
         data.append({
-            'symbol': symbol,
-            'Date': datetime.utcfromtimestamp(current_timestamp / 1000).isoformat(),
-            'high_24h_usd': high,
-            'low_24h_usd': low,
-            'volatility_24h_%': round(volatility, 2),
-            'trading_range_24h_usd': round(trading_range, 2)
+            'Date (YYYY-MM-DD)': datetime.utcfromtimestamp(current_timestamp / 1000).strftime('%Y-%m-%d'),
+            f'{symbol} Close Price (USD)': round(current_price, 2),
+            f'{symbol} High Price (USD)': round(high, 2),
+            f'{symbol} Low Price (USD)': round(low, 2),
+            f'{symbol} Volatility (24h %)': round(volatility, 2),
+            f'{symbol} Trading Range (24h USD)': round(trading_range, 2)
         })
 
-# Create DataFrame and export to Excel
+# Normalize so each row is per coin per date (not one row with multiple coins)
 df = pd.DataFrame(data)
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"historical_volatility_trading_range_365_days_{timestamp}.xlsx"
+df = df.melt(id_vars=['Date (YYYY-MM-DD)'], var_name='Metric', value_name='Value')
+
+# Reshape to a long format for easier LLM ingestion
+df = df.sort_values(['Date (YYYY-MM-DD)', 'Metric'])
+
+# Create structured filename
+coin_symbols = "_".join(coins.keys())
+today_str = datetime.today().strftime('%Y-%m-%d')
+filename = f"Volatility_TradingRange_365Days_{coin_symbols}_{today_str}.xlsx"
 df.to_excel(filename, index=False)
 
 # === Airtable + GitHub Config ===
