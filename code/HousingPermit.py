@@ -12,7 +12,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 FRED_API_KEY = os.getenv("FRED_API_KEY")
@@ -33,17 +33,15 @@ def fetch_housing_permits_data(fred_api_key, series_id, start_date="2015-01-01")
     data = response.json()
     
     df = pd.DataFrame(data['observations'])
-    df['Date'] = pd.to_datetime(df['date'])
-    df['housing_permits'] = pd.to_numeric(df['value'], errors='coerce')
-    df = df[['Date', 'housing_permits']]
-
+    df['Date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d')
+    df['US Housing Permits (Units)'] = pd.to_numeric(df['value'], errors='coerce').round(0)
+    df = df[['Date', 'US Housing Permits (Units)']]
+    
     return df
 
+# === Main Script ===
 df = fetch_housing_permits_data(FRED_API_KEY, FRED_SERIES_ID)
-
-# === Save to Excel ===
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"Housing_Permits_{timestamp}.xlsx"
+filename = "us_housing_permits.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
@@ -62,7 +60,7 @@ records = response.json()["records"]
 
 existing_records = [
     rec for rec in records
-    if rec['fields'].get('Name') == "US Housing Permits"
+    if rec['fields'].get('Name') == "US Housing Permits (Units)"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -70,9 +68,9 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("US Housing Permits", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("US Housing Permits (Units)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ US Housing Permits: Airtable updated and GitHub cleaned up.")
+print("✅ US Housing Permits (Units): Airtable updated and GitHub cleaned up.")
