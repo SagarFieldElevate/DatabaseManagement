@@ -6,6 +6,9 @@ from fredapi import Fred
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
+FRED_API_KEY = os.getenv("FRED_API_KEY")
+fred = Fred(api_key=FRED_API_KEY)
+
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "Database"
@@ -13,26 +16,29 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
-
-FRED_API_KEY = os.getenv("FRED_API_KEY")
-fred = Fred(api_key=FRED_API_KEY)
 
 # === Fetch US M2 Data ===
 def get_us_m2(start_date="2015-01-01"):
     data = fred.get_series('M2SL', start_date=start_date)
     df = pd.DataFrame({
-        'Date': data.index.strftime('%Y-%m-%d'),  # Capitalized 'Date'
-        'us_m2': data.values
+        'Date': data.index.strftime('%Y-%m-%d'),
+        'US M2 Money Supply (Billions USD)': data.values
     })
+    
+    # Filter data from 2015 to today
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    df = df[df['Date'] <= current_date]
+    
+    # Round M2 values to 2 decimal places
+    df['US M2 Money Supply (Billions USD)'] = df['US M2 Money Supply (Billions USD)'].round(2)
+    
     return df
 
+# === Main Script ===
 df = get_us_m2(start_date="2015-01-01")
-
-# === Save to Excel ===
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"US_M2_{timestamp}.xlsx"
+filename = "us_m2_money_supply.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
