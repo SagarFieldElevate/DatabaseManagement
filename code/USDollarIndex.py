@@ -13,7 +13,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 symbol = "DX-Y.NYB"
@@ -22,14 +22,14 @@ indicator_name = "DXY Daily Close Price"
 # === Fetch DXY Close Price Data (from Jan 1, 2015) ===
 def get_dxy_close_data(start_date="2015-01-01"):
     df = yf.download(symbol, start=start_date)[['Close']].reset_index()
-    df.columns = ['Date', 'close_price']  # Capital 'D' for Date
+    df.columns = ['Date', 'DXY Close Price (USD)']
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
+    df['DXY Close Price (USD)'] = df['DXY Close Price (USD)'].round(2)
     return df
 
+# === Main Script ===
 df = get_dxy_close_data(start_date="2015-01-01")
-
-# === Save to Excel ===
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"DXY_Daily_Close_{timestamp}.xlsx"
+filename = "dxy_daily_close_price.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
