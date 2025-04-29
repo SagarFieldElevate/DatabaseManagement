@@ -17,29 +17,28 @@ coin_list = []
 for coin_info in trending_data['coins']:
     coin = coin_info.get('item', {})
     coin_list.append({
-        'Name': coin.get('name'),
-        'Symbol': coin.get('symbol'),
-        'ID': coin.get('id'),
+        'Cryptocurrency Name': coin.get('name'),
+        'Cryptocurrency Symbol': coin.get('symbol'),
+        'Cryptocurrency ID': coin.get('id'),
         'Market Cap Rank': coin.get('market_cap_rank'),
-        'Score': coin.get('score'),
+        'Trending Score': coin.get('score'),
     })
 
 # Create DataFrame and export to Excel
 df = pd.DataFrame(coin_list)
 df['Date'] = datetime.now().strftime("%Y-%m-%d")
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"trending_coins_{timestamp}.xlsx"
+filename = "trending_cryptocurrencies.xlsx"
 df.to_excel(filename, index=False)
 
 # === Airtable + GitHub Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
-BASE_ID = "appnssPRD9yeYJJe5"  # Replace with your actual Airtable Base ID
+BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "Database"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
-GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"  # Replace with your actual GitHub repository
+GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # Upload to GitHub
@@ -59,7 +58,7 @@ data_airtable = response.json()
 
 existing_records = [
     rec for rec in data_airtable['records']
-    if rec['fields'].get('Name') == "Trending Coins"
+    if rec['fields'].get('Name') == "Trending Cryptocurrencies"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -67,7 +66,7 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("Trending Coins", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("Trending Cryptocurrencies", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # Clean-up
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
