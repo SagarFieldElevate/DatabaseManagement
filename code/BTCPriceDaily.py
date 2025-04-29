@@ -25,8 +25,8 @@ df.columns = ['Date (YYYY-MM-DD)', 'Bitcoin Close Price (USD)']
 df['Date (YYYY-MM-DD)'] = df['Date (YYYY-MM-DD)'].dt.strftime('%Y-%m-%d')
 
 # === Save to Excel ===
-today_str = datetime.today().strftime('%Y-%m-%d')
-filename = f"Bitcoin_Daily_Close_Price_{today_str}.xlsx"
+coin_symbol = "BTC"
+filename = f"Bitcoin_Daily_Close_Price_{coin_symbol}_365Days.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
