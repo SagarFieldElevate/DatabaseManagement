@@ -38,18 +38,17 @@ for symbol, coin_id in coins.items():
         trading_range = high - low
         
         data.append({
-            'symbol': symbol,
-            'Date': datetime.utcfromtimestamp(current_timestamp / 1000).isoformat(),
-            'high_24h_usd': high,
-            'low_24h_usd': low,
-            'volatility_24h_%': round(volatility, 2),
-            'trading_range_24h_usd': round(trading_range, 2)
+            'Date': datetime.utcfromtimestamp(current_timestamp / 1000).strftime('%Y-%m-%d'),
+            'Cryptocurrency Symbol': symbol,
+            f'{symbol} High Price 24h (USD)': round(high, 2),
+            f'{symbol} Low Price 24h (USD)': round(low, 2),
+            f'{symbol} Volatility 24h (%)': round(volatility, 2),
+            f'{symbol} Trading Range 24h (USD)': round(trading_range, 2)
         })
 
 # === Save to Excel ===
 df = pd.DataFrame(data)
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"coin_price_script_{timestamp}.xlsx"
+filename = "crypto_volatility_trading_range_365d.xlsx"
 df.to_excel(filename, index=False)
 
 # === Config ===
@@ -60,7 +59,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Upload to GitHub ===
@@ -79,7 +78,7 @@ records = response.json().get('records', [])
 
 existing_records = [
     rec for rec in records
-    if rec['fields'].get('Name') == "365-Day Volatility and Range"
+    if rec['fields'].get('Name') == "Cryptocurrency Volatility and Trading Range (365 Days)"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -87,7 +86,7 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("365-Day Volatility and Range", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("Cryptocurrency Volatility and Trading Range (365 Days)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
