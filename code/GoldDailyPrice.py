@@ -13,7 +13,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Fetch GLD Daily Close Price from 2015 onwards ===
@@ -21,12 +21,12 @@ symbol = "GC=F"
 df = yf.download(symbol, start="2015-01-01")[['Close']].reset_index()
 
 # Format columns
-df.columns = ['Date', 'close_price']
+df.columns = ['Date', 'Gold Close Price (USD)']
 df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+df['Gold Close Price (USD)'] = df['Gold Close Price (USD)'].round(2)
 
 # === Save to Excel ===
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"GLD_Daily_Close_{timestamp}.xlsx"
+filename = "gold_daily_close_price.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
@@ -45,7 +45,7 @@ records = response.json()["records"]
 
 existing_records = [
     rec for rec in records
-    if rec['fields'].get('Name') == "GLD Daily Close Price"
+    if rec['fields'].get('Name') == "Gold Daily Close Price"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -53,9 +53,9 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("GLD Daily Close Price", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("Gold Daily Close Price", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ GLD Daily Close Price: Airtable updated and GitHub cleaned up.")
+print("✅ Gold Daily Close Price: Airtable updated and GitHub cleaned up.")
