@@ -13,7 +13,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 symbol = "SPY"
@@ -22,14 +22,14 @@ indicator_name = "SPY Daily Close Price"
 # === Fetch SPY Close Price Data (from Jan 1, 2015) ===
 def get_spy_close_data(start_date="2015-01-01"):
     df = yf.download(symbol, start=start_date)[['Close']].reset_index()
-    df.columns = ['Date', 'close_price']  # Capital 'D' for Date
+    df.columns = ['Date', 'SPY Close Price (USD)']
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
+    df['SPY Close Price (USD)'] = df['SPY Close Price (USD)'].round(2)
     return df
 
+# === Main Script ===
 df = get_spy_close_data(start_date="2015-01-01")
-
-# === Save to Excel ===
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"SPY_Daily_Close_{timestamp}.xlsx"
+filename = "spy_daily_close_price.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
