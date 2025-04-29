@@ -16,25 +16,33 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_gdp():
     start_date = "2015-01-01"  # Start from January 1, 2015
     data = fred.get_series('GDP', start_date=start_date)
-    df = pd.DataFrame({'Date': data.index, 'US_GDP': data.values})
-    df['Date'] = pd.to_datetime(df['Date'])  # Convert to full timestamp format
+    df = pd.DataFrame({
+        'Date': data.index,
+        'US GDP (Billions USD)': data.values
+    })
+    
+    # Convert 'Date' to date-only string format
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
     
     # Filter data from 2015 to today
     current_date = datetime.now().strftime('%Y-%m-%d')
     df = df[df['Date'] <= current_date]
+    
+    # Round GDP values to 2 decimal places
+    df['US GDP (Billions USD)'] = df['US GDP (Billions USD)'].round(2)
+    
     return df
 
 # === Main Script ===
 df = get_gdp()
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"us_gdp_data_{timestamp}.xlsx"
+filename = "us_gdp_billions.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
@@ -53,7 +61,7 @@ data_airtable = response.json()
 
 existing_records = [
     rec for rec in data_airtable['records']
-    if rec['fields'].get('Name') == "US GDP"
+    if rec['fields'].get('Name') == "US GDP (Billions USD)"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -61,9 +69,9 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("US GDP", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("US GDP (Billions USD)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # Cleanup
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ US GDP Data: Airtable updated and GitHub cleaned up.")
+print("✅ US GDP (Billions USD): Airtable updated and GitHub cleaned up.")
