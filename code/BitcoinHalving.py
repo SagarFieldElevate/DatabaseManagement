@@ -52,9 +52,8 @@ df = pd.DataFrame([halving_data])
 # Add today's date as a new column
 df['Date (YYYY-MM-DD)'] = datetime.now().strftime("%Y-%m-%d")
 
-# Structured filename
-today_str = datetime.today().strftime('%Y-%m-%d')
-filename = f"Bitcoin_Halving_Progress_{today_str}.xlsx"
+# Structured filename (relevant name without irrelevant additions)
+filename = "Bitcoin_Halving_Progress.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
