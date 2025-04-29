@@ -13,20 +13,20 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Fetch BTC Daily Close Price ===
 symbol = "BTC-USD"
 df = yf.download(symbol, period="max")[['Close']].reset_index()
 
-# Format columns and make names more descriptive
-df.columns = ['Date (YYYY-MM-DD)', 'Bitcoin Close Price (USD)']
-df['Date (YYYY-MM-DD)'] = df['Date (YYYY-MM-DD)'].dt.strftime('%Y-%m-%d')
+# Format columns
+df.columns = ['Date', 'Bitcoin Close Price (USD)']
+df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+df['Bitcoin Close Price (USD)'] = df['Bitcoin Close Price (USD)'].round(2)
 
 # === Save to Excel ===
-coin_symbol = "BTC"
-filename = f"Bitcoin_Daily_Close_Price.xlsx"
+filename = "bitcoin_daily_close_price.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
