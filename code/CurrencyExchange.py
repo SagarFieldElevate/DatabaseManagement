@@ -16,83 +16,70 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_currency_exchange():
-    """Fetch and process currency exchange data from FRED (2015 onwards)."""
     start_date = "2015-01-01"
     cny = fred.get_series('DEXCHUS', start_date=start_date)
     eur = fred.get_series('DEXUSEU', start_date=start_date)
     jpy = fred.get_series('DEXJPUS', start_date=start_date)
     
-    # Create DataFrame with proper index and columns
+    # Create DataFrame
     df = pd.DataFrame({
         'Date': cny.index,
-        'USD_CNY': cny.values,
-        'USD_EUR': eur.reindex(cny.index).values,
-        'USD_JPY': jpy.reindex(cny.index).values
+        'USD to CNY Exchange Rate': cny.values,
+        'USD to EUR Exchange Rate': eur.reindex(cny.index).values,
+        'USD to JPY Exchange Rate': jpy.reindex(cny.index).values
     })
     
-    # Ensure 'Date' is in datetime format
-    df['Date'] = pd.to_datetime(df['Date'])
-
-    # Fill missing values using forward fill (can be adjusted to your needs)
-    df.fillna(method='ffill', inplace=True)
-
+    # Convert 'Date' to date-only string format
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
+    
     # Filter data from 2015 to the current date
     current_date = datetime.now().strftime('%Y-%m-%d')
     df = df[df['Date'] <= current_date]
     
+    # Round exchange rates to 4 decimal places
+    df['USD to CNY Exchange Rate'] = df['USD to CNY Exchange Rate'].round(4)
+    df['USD to EUR Exchange Rate'] = df['USD to EUR Exchange Rate'].round(4)
+    df['USD to JPY Exchange Rate'] = df['USD to JPY Exchange Rate'].round(4)
+    
     return df
 
 # === Main Script ===
-try:
-    # Fetch data
-    df = get_currency_exchange()
-    
-    # Prepare the filename with timestamp
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f"us_currency_exchange_{timestamp}.xlsx"
-    
-    # Save data to Excel
-    df.to_excel(filename, index=False)
+df = get_currency_exchange()
+filename = "usd_currency_exchange_rates.xlsx"
+df.to_excel(filename, index=False)
 
-    # Upload to GitHub
-    github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
-    raw_url = github_response['content']['raw_url']
-    file_sha = github_response['content']['sha']
+# Upload to GitHub
+github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
+raw_url = github_response['content']['raw_url']
+file_sha = github_response['content']['sha']
 
-    # Airtable Check
-    airtable_headers = {
-        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    response = requests.get(airtable_url, headers=airtable_headers)
-    response.raise_for_status()  # Ensure no failure in API request
-    data_airtable = response.json()
+# Airtable Check
+airtable_headers = {
+    "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+    "Content-Type": "application/json"
+}
+response = requests.get(airtable_url, headers=airtable_headers)
+response.raise_for_status()
+data_airtable = response.json()
 
-    # Check for existing record
-    existing_records = [
-        rec for rec in data_airtable['records']
-        if rec['fields'].get('Name') == "Currency Exchange"
-    ]
-    record_id = existing_records[0]['id'] if existing_records else None
+existing_records = [
+    rec for rec in data_airtable['records']
+    if rec['fields'].get('Name') == "USD Currency Exchange Rates"
+]
+record_id = existing_records[0]['id'] if existing_records else None
 
-    # Upload to Airtable
-    if record_id:
-        update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
-    else:
-        create_airtable_record("Currency Exchange", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+# Upload to Airtable
+if record_id:
+    update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+else:
+    create_airtable_record("USD Currency Exchange Rates", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
-    # Cleanup
-    delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
-    os.remove(filename)
-    
-    print("✅ Currency Exchange Data: Airtable updated and GitHub cleaned up.")
-
-except requests.exceptions.RequestException as e:
-    print(f"Error in API request: {e}")
-except Exception as e:
-    print(f"An error occurred: {e}")
+# Cleanup
+delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
+os.remove(filename)
+print("✅ USD Currency Exchange Rates: Airtable updated and GitHub cleaned up.")
