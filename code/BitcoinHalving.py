@@ -12,7 +12,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Halving Constants ===
@@ -37,23 +37,20 @@ def calculate_halving_progress():
     est_halving_date = datetime.now() + timedelta(days=time_remaining_days)
 
     return {
-        "Date (YYYY-MM-DD)": datetime.now().strftime("%Y-%m-%d"),
-        "Current Block Height": current_block,
-        "Blocks Remaining": blocks_remaining,
-        "Days Remaining Until Halving": round(time_remaining_days, 1),
-        "Halving Progress (%)": round(progress_percent, 1),
-        "Estimated Halving Date (YYYY-MM-DD)": est_halving_date.strftime("%Y-%m-%d")
+        "Date": datetime.now().strftime("%Y-%m-%d"),
+        "Bitcoin Current Block Height": current_block,
+        "Bitcoin Blocks Remaining to Halving": blocks_remaining,
+        "Bitcoin Days Remaining to Halving": round(time_remaining_days, 1),
+        "Bitcoin Halving Progress (%)": round(progress_percent, 1),
+        "Bitcoin Estimated Halving Date": est_halving_date.strftime("%Y-%m-%d")
     }
 
 # === Run & Save ===
 halving_data = calculate_halving_progress()
 df = pd.DataFrame([halving_data])
 
-# Add today's date as a new column
-df['Date (YYYY-MM-DD)'] = datetime.now().strftime("%Y-%m-%d")
-
-# Structured filename (relevant name without irrelevant additions)
-filename = "Bitcoin_Halving_Progress.xlsx"
+# === Save to Excel ===
+filename = "bitcoin_halving_progress.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
@@ -72,7 +69,7 @@ records = response.json()["records"]
 
 existing_records = [
     rec for rec in records
-    if rec['fields'].get('Name') == "Bitcoin Halving"
+    if rec['fields'].get('Name') == "Bitcoin Halving Progress"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -80,9 +77,9 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("Bitcoin Halving", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("Bitcoin Halving Progress", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # === Clean up ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Bitcoin Halving: Airtable updated and GitHub cleaned up.")
+print("✅ Bitcoin Halving Progress: Airtable updated and GitHub cleaned up.")
