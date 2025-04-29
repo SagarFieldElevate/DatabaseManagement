@@ -16,64 +16,65 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
-UPLOAD_PATH = "uploads"
+UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_consumer_confidence():
-    """Fetch Consumer Confidence data from FRED (from 2015 onwards)."""
+    # Fetch data from FRED from 2015 to the current date
     start_date = "2015-01-01"
     data = fred.get_series('UMCSENT', start_date=start_date)
     
-    # Create DataFrame with formatted date and data
+    # Create DataFrame
     df = pd.DataFrame({
-        'Date (YYYY-MM-DD)': data.index, 
-        'Consumer Confidence (Index)': data.values
+        'Date': data.index,
+        'US Consumer Confidence Index': data.values
     })
     
-    # Ensure the 'Date' column is in datetime format
-    df['Date (YYYY-MM-DD)'] = pd.to_datetime(df['Date (YYYY-MM-DD)'])
+    # Convert 'Date' to date-only string format
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
     
-    # Filter to include only rows up to today's date
+    # Filter data to only include rows from 2015 to the current date
     current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date (YYYY-MM-DD)'] <= current_date]
+    df = df[df['Date'] <= current_date]
+    
+    # Round the index values to 1 decimal place
+    df['US Consumer Confidence Index'] = df['US Consumer Confidence Index'].round(1)
     
     return df
 
 # === Main Script ===
 df = get_consumer_confidence()
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"US_Consumer_Confidence_{timestamp}.xlsx"
+filename = "us_consumer_confidence_index.xlsx"
 df.to_excel(filename, index=False)
 
-# === Upload to GitHub ===
+# Upload to GitHub
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
-# === Airtable Check ===
+# Airtable Check
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
 }
 response = requests.get(airtable_url, headers=airtable_headers)
-response.raise_for_status()  # Raise error if request fails
+response.raise_for_status()
 data_airtable = response.json()
 
-# Check for existing record
 existing_records = [
     rec for rec in data_airtable['records']
-    if rec['fields'].get('Name') == "Consumer Confidence"
+    if rec['fields'].get('Name') == "US Consumer Confidence Index"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
-# === Upload to Airtable ===
+# Upload to Airtable
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("Consumer Confidence", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("US Consumer Confidence Index", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
-# === Cleanup ===
+# Cleanup
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ US Consumer Confidence Data: Airtable updated and GitHub cleaned up.")
+print("✅ US Consumer Confidence Index: Airtable updated and GitHub cleaned up.")
