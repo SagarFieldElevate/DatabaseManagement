@@ -37,12 +37,12 @@ def calculate_halving_progress():
     est_halving_date = datetime.now() + timedelta(days=time_remaining_days)
 
     return {
-        "date": datetime.now().strftime("%Y-%m-%d"),
-        "current_block": current_block,
-        "blocks_remaining": blocks_remaining,
-        "days_remaining": round(time_remaining_days, 1),
-        "progress_percent": round(progress_percent, 1),
-        "est_halving_date": est_halving_date.strftime("%Y-%m-%d")
+        "Date (YYYY-MM-DD)": datetime.now().strftime("%Y-%m-%d"),
+        "Current Block Height": current_block,
+        "Blocks Remaining": blocks_remaining,
+        "Days Remaining Until Halving": round(time_remaining_days, 1),
+        "Halving Progress (%)": round(progress_percent, 1),
+        "Estimated Halving Date (YYYY-MM-DD)": est_halving_date.strftime("%Y-%m-%d")
     }
 
 # === Run & Save ===
@@ -50,11 +50,13 @@ halving_data = calculate_halving_progress()
 df = pd.DataFrame([halving_data])
 
 # Add today's date as a new column
-df['Date'] = datetime.now().strftime("%Y-%m-%d")
+df['Date (YYYY-MM-DD)'] = datetime.now().strftime("%Y-%m-%d")
 
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-filename = f"Bitcoin_Halving_{timestamp}.xlsx"
+# Structured filename
+today_str = datetime.today().strftime('%Y-%m-%d')
+filename = f"Bitcoin_Halving_Progress_{today_str}.xlsx"
 df.to_excel(filename, index=False)
+
 # === Upload to GitHub ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['download_url']
