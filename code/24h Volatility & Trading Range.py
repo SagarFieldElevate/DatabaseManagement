@@ -8,55 +8,50 @@ from data_upload_utils import upload_to_github, create_airtable_record, update_a
 # Initialize CoinGecko
 cg = CoinGeckoAPI()
 
-# Define coins and metadata
+# Define coins
 coins = {
-    'BTC': {'id': 'bitcoin', 'name': 'Bitcoin'},
-    'ETH': {'id': 'ethereum', 'name': 'Ethereum'},
-    'ADA': {'id': 'cardano', 'name': 'Cardano'},
-    'SOL': {'id': 'solana', 'name': 'Solana'},
-    'DOT': {'id': 'polkadot', 'name': 'Polkadot'},
-    'AVAX': {'id': 'avalanche-2', 'name': 'Avalanche'}
+    'BTC': 'bitcoin',
+    'ETH': 'ethereum',
+    'ADA': 'cardano',
+    'SOL': 'solana',
+    'DOT': 'polkadot',
+    'AVAX': 'avalanche-2'
 }
 
+# Fetch 365 days of OHLC data and compute metrics
 data = []
-for symbol, info in coins.items():
-    coin_id = info['id']
-    coin_name = info['name']
+for symbol, coin_id in coins.items():
     market_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd', days=365)
-    prices = market_data['prices']
+    ohlc_data = market_data['prices']
     
-    for i in range(1, len(prices)):
-        prev_ts, prev_price = prices[i - 1]
-        current_ts, current_price = prices[i]
+    for i in range(1, len(ohlc_data)):
+        prev_day = ohlc_data[i-1]
+        current_day = ohlc_data[i]
+        
+        prev_timestamp, prev_price = prev_day
+        current_timestamp, current_price = current_day
         
         high = max(prev_price, current_price)
         low = min(prev_price, current_price)
+        
         volatility = ((high - low) / low) * 100 if low > 0 else 0
         trading_range = high - low
-        date = datetime.utcfromtimestamp(current_ts / 1000).date().isoformat()
         
-        # Append full metadata per row
+        # Use date only, no timestamp
+        date_only = datetime.utcfromtimestamp(current_timestamp / 1000).date().isoformat()
+        
         data.append({
-            'Date': date,
-            'Crypto_Asset': coin_name,
-            'Close_Price_USD': round(current_price, 2),
-            'High_Price_24h_USD': round(high, 2),
-            'Low_Price_24h_USD': round(low, 2),
-            'Volatility_24h_Percent': round(volatility, 2),
-            'Trading_Range_24h_USD': round(trading_range, 2),
-            'Metric': f"{coin_name} 24h Volatility and Trading Range",
-            'Description': f"Daily volatility and price range for {coin_name} over the past 24 hours. "
-                           f"Volatility is computed as (High - Low) / Low * 100. "
-                           f"Range is computed as High - Low. All prices are in USD.",
-            'Unit': 'USD / Percent',
-            'Source': 'CoinGecko API'
+            'Date': date_only,
+            f'{symbol} Close Price (USD)': round(current_price, 2),
+            f'{symbol} High Price 24h (USD)': round(high, 2),
+            f'{symbol} Low Price 24h (USD)': round(low, 2),
+            f'{symbol} Volatility 24h (%)': round(volatility, 2),
+            f'{symbol} Trading Range 24h (USD)': round(trading_range, 2)
         })
 
-# Create tagged DataFrame
+# Create DataFrame and export to Excel
 df = pd.DataFrame(data)
-
-# Export to Excel
-filename = "crypto_365d_volatility_trading_range_tagged.xlsx"
+filename = "crypto_365d_volatility_trading_range.xlsx"
 df.to_excel(filename, index=False)
 
 # === Airtable + GitHub Config ===
@@ -75,7 +70,7 @@ github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, G
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
-# Check if Airtable record exists
+# Check if record exists
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
@@ -90,13 +85,13 @@ existing_records = [
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
-# Upload to Airtable
+# Always replace attachment — either update or create
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
     create_airtable_record("365-Day Crypto Volatility and Range", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
-# Cleanup
+# Clean-up
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Tagged file uploaded and cleaned up.")
+print("✅ All done! Airtable attachment replaced and cleanup complete.")
