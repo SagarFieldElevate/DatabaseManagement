@@ -21,33 +21,33 @@ coins = {
 # === Fetch 365 days of market cap data ===
 data = []
 for symbol, coin_id in coins.items():
+    print(f"Fetching data for {symbol}...")
+    
     # Fetch market data (price and volume) for the last 365 days
     market_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency='usd', days=365)
 
-    # Fetch circulating supply (constant for each coin)
+    # Fetch circulating supply (static or slow-changing)
     coin_data = cg.get_coin_by_id(id=coin_id, localization=False)
     circulating_supply = coin_data['market_data']['circulating_supply']
     
-    # Process price and volume data
+    # Prepare base DataFrame
     price_data = market_data['prices']
     volume_data = market_data['total_volumes']
     
-    # Prepare DataFrame with date, price, volume, and market cap
-    df = pd.DataFrame(price_data, columns=['timestamp', f'{symbol} Price (USD)'])
+    df = pd.DataFrame(price_data, columns=['timestamp', 'price'])
     df['Date'] = pd.to_datetime(df['timestamp'], unit='ms').dt.strftime('%Y-%m-%d')
-    df.drop(columns=['timestamp'], inplace=True)
-    
-    # Add volume and calculate market cap
-    df[f'{symbol} Volume (USD)'] = [volume[1] for volume in volume_data]
-    df[f'{symbol} Market Cap (USD)'] = df[f'{symbol} Price (USD)'] * circulating_supply
+    df['Volume (USD)'] = [v[1] for v in volume_data]
+    df['Market Cap (USD)'] = df['price'] * circulating_supply
     df['Cryptocurrency Symbol'] = symbol
+
+    # Round values
+    df['Price (USD)'] = df['price'].round(2)
+    df['Volume (USD)'] = df['Volume (USD)'].round(2)
+    df['Market Cap (USD)'] = df['Market Cap (USD)'].round(2)
     
-    # Round numerical values
-    df[f'{symbol} Price (USD)'] = df[f'{symbol} Price (USD)'].round(2)
-    df[f'{symbol} Volume (USD)'] = df[f'{symbol} Volume (USD)'].round(2)
-    df[f'{symbol} Market Cap (USD)'] = df[f'{symbol} Market Cap (USD)'].round(2)
+    # Keep only the relevant columns
+    df = df[['Date', 'Cryptocurrency Symbol', 'Price (USD)', 'Volume (USD)', 'Market Cap (USD)']]
     
-    # Append data for this coin
     data.append(df)
 
 # === Combine data into one DataFrame ===
@@ -70,7 +70,7 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Upload to GitHub ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
-raw_url = github_response['content']['raw_url']
+raw_url = github_response['content']['download_url']
 file_sha = github_response['content']['sha']
 
 # === Check for existing record in Airtable ===
