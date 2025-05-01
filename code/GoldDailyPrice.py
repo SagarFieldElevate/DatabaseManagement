@@ -44,7 +44,7 @@ response.raise_for_status()
 data_airtable = response.json()
 
 existing_records = [
-    rec for rec in records
+    rec for rec in data_airtable['records']
     if rec['fields'].get('Name') == "Gold Daily Close Price"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
