@@ -26,5 +26,5 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert
       - name: Run QQQData.py Script
-        run: python "code/MarketCap.py"
+        run: python "code/GoldDailyPrice.py"
 
