@@ -29,7 +29,7 @@ def get_gold_close_data(start_date="2015-01-01"):
 
 # === Main Script ===
 df = get_gold_close_data(start_date="2015-01-01")
-filename = "dxy_daily_close_price.xlsx"
+filename = "gold_daily_close_price.xlsx"
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===
