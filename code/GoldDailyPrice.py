@@ -41,7 +41,7 @@ airtable_headers = {
 }
 response = requests.get(airtable_url, headers=airtable_headers)
 response.raise_for_status()
-records = response.json()["records"]
+data_airtable = response.json()
 
 existing_records = [
     rec for rec in records
