@@ -1,8 +1,8 @@
-import yfinance as yf
-import pandas as pd
-from datetime import datetime
 import os
+import pandas as pd
+import yfinance as yf
 import requests
+from datetime import datetime
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
@@ -16,48 +16,49 @@ BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-# === Fetch Gold Futures Data (GC=F) ===
-def get_gold_data():
-    gold = yf.download("GC=F", start="2015-01-01", progress=False)
-    gold = gold[['Close']].copy()
-    gold.reset_index(inplace=True)
-    gold.columns = ['Date', 'Gold Price (USD)']  # Flatten columns
-    gold['Date'] = gold['Date'].dt.strftime('%Y-%m-%d')
-    gold['Gold Price (USD)'] = gold['Gold Price (USD)'].round(2)
-    return gold
+symbol = "GC=F"
+indicator_name = "Gold Daily Close Price"
+
+# === Fetch DXY Close Price Data (from Jan 1, 2015) ===
+def get_gold_close_data(start_date="2015-01-01"):
+    df = yf.download(symbol, start=start_date)[['Close']].reset_index()
+    df.columns = ['Date', 'Gold Close Price (USD)']
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
+    df['Gold Close Price (USD)'] = df['Gold Close Price (USD)'].round(2)
+    return df
 
 # === Main Script ===
-df = get_gold_data()
-filename = "gold_price_usd.xlsx"
+df = get_gold_close_data(start_date="2015-01-01")
+filename = "dxy_daily_close_price.xlsx"
 df.to_excel(filename, index=False)
 
-# Upload to GitHub
+# === Upload to GitHub ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
-raw_url = github_response['content']['raw_url']
+raw_url = github_response['content']['download_url']
 file_sha = github_response['content']['sha']
 
-# Airtable Check
+# === Airtable Check ===
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
 }
 response = requests.get(airtable_url, headers=airtable_headers)
 response.raise_for_status()
-data_airtable = response.json()
+records = response.json()["records"]
 
 existing_records = [
-    rec for rec in data_airtable['records']
-    if rec['fields'].get('Name') == "Gold Price (USD)"
+    rec for rec in records
+    if rec['fields'].get('Name') == indicator_name
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
-# Upload to Airtable
+# === Upload to Airtable ===
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("Gold Price (USD)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record(indicator_name, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
-# Cleanup
+# === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Gold Price (USD): Airtable updated and GitHub cleaned up.")
+print(f"✅ {indicator_name}: Airtable updated and GitHub cleaned up.")
