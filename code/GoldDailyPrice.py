@@ -18,10 +18,11 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Fetch Gold Futures Data (GC=F) ===
 def get_gold_data():
-    gold = yf.download("GC=F", start="2015-01-01")
+    gold = yf.download("GC=F", start="2015-01-01", progress=False)
+    gold = gold[['Close']].copy()
     gold.reset_index(inplace=True)
+    gold.columns = ['Date', 'Gold Price (USD)']  # Flatten columns
     gold['Date'] = gold['Date'].dt.strftime('%Y-%m-%d')
-    gold = gold[['Date', 'Close']].rename(columns={"Close": "Gold Price (USD)"})
     gold['Gold Price (USD)'] = gold['Gold Price (USD)'].round(2)
     return gold
 
