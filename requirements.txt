@@ -6,5 +6,6 @@ jupyter
 yfinance
 dune_client
 nbconvert
+numpy<2.0
 pandas_ta
 fredapi
