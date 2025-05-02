@@ -27,5 +27,5 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert
       - name: Run QQQData.py Script
-        run: python "code/QQQData.py"
+        run: python "code/Technicals.py"
 
