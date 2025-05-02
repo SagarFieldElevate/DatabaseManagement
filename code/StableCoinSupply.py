@@ -19,6 +19,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 stablecoins = {
     'USDT': '1',
     'USDC': '2',
+    'DAI': '3',
     'BUSD': '4',
     'TUSD': '5',
     'PAX': '6'
@@ -62,14 +63,20 @@ for coin, coin_id in stablecoins.items():
     coin_df = fetch_stablecoin_by_id(coin_id, symbol_hint=coin)
     df_all_stablecoins = pd.concat([df_all_stablecoins, coin_df])
 
-# Group by date and sum across stablecoins
+# Group by date and symbol, then sum across stablecoins
 df_grouped = df_all_stablecoins.groupby(['date', 'symbol'])['circulating_usd'].sum().reset_index()
+
+# Add a column for the sum of circulating supply across all stablecoins
+df_grouped['total_circulating_usd'] = df_grouped.groupby('date')['circulating_usd'].transform('sum')
 
 # Pivot the data for easier plotting
 df_pivoted = df_grouped.pivot(index='date', columns='symbol', values='circulating_usd')
 
+# Add the total circulating supply to the pivoted dataframe
+df_pivoted['Total'] = df_grouped.groupby('date')['total_circulating_usd'].first()
+
 # Save the data to Excel file
-filename = "stablecoin_circulating_supply.xlsx"
+filename = "stablecoin_circulating_supply_with_sum.xlsx"
 df_pivoted.to_excel(filename)
 
 # Upload to GitHub
@@ -102,4 +109,4 @@ else:
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
 
-print("✅ Stablecoin Circulating Supply: Airtable updated and GitHub cleaned up.")
+print("✅ Stablecoin Circulating Supply with Total: Airtable updated and GitHub cleaned up.")
