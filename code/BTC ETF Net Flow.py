@@ -22,6 +22,9 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 query_id = 5073067
 query_result = dune.get_latest_result(query_id)
 df = pd.DataFrame(query_result.result.rows)
+time_col = [col for col in df.columns if 'time' in col.lower() or 'date' in col.lower()][0]
+df.rename(columns={time_col: 'Date'}, inplace=True)
+df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
 
 filename = "btc_etf_net_flow.xlsx"
 df.to_excel(filename, index=False)
