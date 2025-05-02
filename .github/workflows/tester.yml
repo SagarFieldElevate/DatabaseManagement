@@ -9,6 +9,7 @@ env:
   AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+  DUNE_API_KEY: ${{ secrets.DUNE_API_KEY }}
 
 jobs:
   run-qqq-data:
@@ -26,5 +27,5 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert
       - name: Run QQQData.py Script
-        run: python "code/GoldDailyPrice.py"
+        run: python "code/BTC ETF Net Flow.py"
 
