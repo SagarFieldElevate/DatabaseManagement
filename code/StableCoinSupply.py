@@ -1,6 +1,5 @@
 import requests
 import pandas as pd
-import matplotlib.pyplot as plt
 from datetime import datetime
 import os
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
@@ -102,18 +101,5 @@ else:
 # Cleanup
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-
-# Plot the stablecoin data
-plt.figure(figsize=(14, 7))
-for coin in stablecoins.keys():
-    plt.plot(df_pivoted.index, df_pivoted[coin] / 1e9, label=coin)  # Dividing by 1e9 for billions of USD
-
-plt.title("Circulating Supply of Major Stablecoins Over Time (USD)")
-plt.xlabel("Date")
-plt.ylabel("Circulating Supply (Billion USD)")
-plt.legend(title='Stablecoin')
-plt.grid(True)
-plt.tight_layout()
-plt.show()
 
 print("✅ Stablecoin Circulating Supply: Airtable updated and GitHub cleaned up.")
