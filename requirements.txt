@@ -4,5 +4,6 @@ pycoingecko
 openpyxl
 jupyter
 yfinance
+dune_client
 nbconvert
 fredapi
