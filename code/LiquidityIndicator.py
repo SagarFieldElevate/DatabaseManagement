@@ -91,21 +91,9 @@ forecast_df['Strength (scaled -1 to 1)'] = np.round(scaled_strength, 2)
 # --- Finalize ---
 forecast_df = forecast_df[['Forecast_Date', 'Direction', 'Strength (scaled -1 to 1)', 'Expected_Move_%']]
 
-# --- Apply Color Coding to Direction Column ---
-def color_direction(val, strength):
-    if strength > 0.7:
-        return 'background-color: green' if val == 'Positive' else 'background-color: red'
-    elif strength < -0.7:
-        return 'background-color: red' if val == 'Negative' else 'background-color: green'
-    else:
-        return 'background-color: yellow'
-
-# Apply color formatting to the Direction column based on Strength
-forecast_df_styled = forecast_df.style.applymap(lambda val: color_direction(val, forecast_df['Strength (scaled -1 to 1)']), subset=['Direction'])
-
 # --- Export to Excel with color coding ---
 filename = f'BTC_Liquidity_Forecast_{today}.xlsx'
-forecast_df_styled.to_excel(filename, index=False, engine='openpyxl')
+forecast_df.to_excel(filename, index=False, engine='openpyxl')
 
 # Upload to GitHub
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
