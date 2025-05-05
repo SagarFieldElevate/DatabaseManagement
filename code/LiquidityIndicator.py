@@ -21,6 +21,7 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 sma_len = 20
 prediction_weeks = 10
 lag_weeks = 10  # Assume BTC reacts with 10-week lag
+strength_threshold = 0.5  # Adjust threshold to define strong signals
 
 # --- Fetch Weekly Data ---
 tickers = {
@@ -87,6 +88,21 @@ vals = forecast_df['Lagged_Liquidity_Proxy'].values
 abs_max = np.max(np.abs(vals))
 scaled_strength = vals / abs_max  # scale to -1 to 1 range
 forecast_df['Strength (scaled -1 to 1)'] = np.round(scaled_strength, 2)
+
+# --- Modify direction logic based on Strength ---
+def classify_direction(row):
+    if -strength_threshold <= row['Strength (scaled -1 to 1)'] <= strength_threshold:
+        # If strength is within threshold, decide based on future return
+        if row['Expected_Move_%'] > 0:
+            return 'Positive'
+        else:
+            return 'Negative'
+    elif row['Strength (scaled -1 to 1)'] > strength_threshold:
+        return 'Positive'
+    else:
+        return 'Negative'
+
+forecast_df['Direction'] = forecast_df.apply(classify_direction, axis=1)
 
 # --- Finalize ---
 forecast_df = forecast_df[['Forecast_Date', 'Direction', 'Strength (scaled -1 to 1)', 'Expected_Move_%']]
