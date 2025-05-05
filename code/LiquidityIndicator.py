@@ -1,5 +1,4 @@
 import pandas as pd
-import yfinance as yf
 import numpy as np
 from datetime import datetime, timedelta
 import os
@@ -21,9 +20,10 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 sma_len = 20
 prediction_weeks = 10
 lag_weeks = 10  # Assume BTC reacts with 10-week lag
-strength_threshold = 0.5  # Adjust threshold to define strong signals
 
 # --- Fetch Weekly Data ---
+import yfinance as yf
+
 tickers = {
     'BTC': 'BTC-USD',
     'DXY': 'DX-Y.NYB',
@@ -75,8 +75,6 @@ for i in range(prediction_weeks):
 
     forecast_rows.append({
         'Forecast_Date': forecast_date,
-        'Direction': 'Positive' if proxy_val > 0 else 'Negative',
-        'Strength (scaled -1 to 1)': None,  # filled later
         'Lagged_Liquidity_Proxy': round(proxy_val, 2),
         'Expected_Move_%': round(expected_return, 2),
     })
@@ -89,27 +87,17 @@ abs_max = np.max(np.abs(vals))
 scaled_strength = vals / abs_max  # scale to -1 to 1 range
 forecast_df['Strength (scaled -1 to 1)'] = np.round(scaled_strength, 2)
 
-# --- Modify direction logic based on Strength ---
-def classify_direction(row):
-    if -strength_threshold <= row['Strength (scaled -1 to 1)'] <= strength_threshold:
-        # If strength is within threshold, decide based on future return
-        if row['Expected_Move_%'] > 0:
-            return 'Positive'
-        else:
-            return 'Negative'
-    elif row['Strength (scaled -1 to 1)'] > strength_threshold:
-        return 'Positive'
-    else:
-        return 'Negative'
-
-forecast_df['Direction'] = forecast_df.apply(classify_direction, axis=1)
+# --- Set Direction based on strength ---
+forecast_df['Direction'] = forecast_df['Strength (scaled -1 to 1)'].apply(
+    lambda x: 'Neutral' if -0.5 <= x <= 0.5 else ('Positive' if x > 0.5 else 'Negative')
+)
 
 # --- Finalize ---
 forecast_df = forecast_df[['Forecast_Date', 'Direction', 'Strength (scaled -1 to 1)', 'Expected_Move_%']]
 
-# --- Export to Excel with color coding ---
+# Save the forecast as Excel
 filename = f'BTC_Liquidity_Forecast_{today}.xlsx'
-forecast_df.to_excel(filename, index=False, engine='openpyxl')
+forecast_df.to_excel(filename, index=False)
 
 # Upload to GitHub
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
@@ -127,7 +115,7 @@ data_airtable = response.json()
 
 existing_records = [
     rec for rec in data_airtable['records']
-    if rec['fields'].get('Name') == f"BTC Liquidity Forecast - {today}"
+    if rec['fields'].get('Name') == "BTC Liquidity Forecast"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -135,9 +123,9 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record(f"BTC Liquidity Forecast - {today}", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("BTC Liquidity Forecast", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # Cleanup
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print(f"✅ BTC Liquidity Forecast: Airtable updated and GitHub cleaned up.")
+print("✅ BTC Liquidity Forecast: Airtable updated and GitHub cleaned up.")
