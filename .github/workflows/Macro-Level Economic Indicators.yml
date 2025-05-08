@@ -1,0 +1,372 @@
+name: Run All Economic Indicator Scripts Sequentially
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # Every hour
+  workflow_dispatch:
+
+env:
+  AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+  TRADING_ECONOMICS_API_KEY: ${{ secrets.TRADING_ECONOMICS_API_KEY }}
+
+jobs:
+  run-gross-domestic-product:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Gross Domestic Product Script
+        run: python "code/Gross Domestic Product.py"
+
+  run-gdp-growth-rate:
+    runs-on: ubuntu-latest
+    needs: run-gross-domestic-product
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run GDP Growth Rate Script
+        run: python "code/GDP Growth Rate.py"
+
+  run-inflation-rate-cpi:
+    runs-on: ubuntu-latest
+    needs: run-gdp-growth-rate
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Inflation Rate (CPI) Script
+        run: python "code/Inflation Rate (CPI).py"
+
+  run-unemployment-rate:
+    runs-on: ubuntu-latest
+    needs: run-inflation-rate-cpi
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Unemployment Rate Script
+        run: python "code/Unemployment Rate.py"
+
+  run-interest-rates:
+    runs-on: ubuntu-latest
+    needs: run-unemployment-rate
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Interest Rates (Federal Funds Rate) Script
+        run: python "code/Interest Rates (Federal Funds Rate).py"
+
+  run-money-supply-m2:
+    runs-on: ubuntu-latest
+    needs: run-interest-rates
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Money Supply (M2) Script
+        run: python "code/Money Supply (M2).py"
+
+  run-consumer-confidence:
+    runs-on: ubuntu-latest
+    needs: run-money-supply-m2
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Consumer Confidence Index Script
+        run: python "code/Consumer Confidence Index.py"
+
+  run-business-confidence:
+    runs-on: ubuntu-latest
+    needs: run-consumer-confidence
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Business Confidence Index Script
+        run: python "code/Business Confidence Index.py"
+
+  run-retail-sales:
+    runs-on: ubuntu-latest
+    needs: run-business-confidence
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Retail Sales Script
+        run: python "code/Retail Sales.py"
+
+  run-industrial-production:
+    runs-on: ubuntu-latest
+    needs: run-retail-sales
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Industrial Production Script
+        run: python "code/Industrial Production.py"
+
+  run-capacity-utilization:
+    runs-on: ubuntu-latest
+    needs: run-industrial-production
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Capacity Utilization Script
+        run: python "code/Capacity Utilization.py"
+
+  run-pmi:
+    runs-on: ubuntu-latest
+    needs: run-capacity-utilization
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Purchasing Managers' Index (PMI) Script
+        run: python "code/Purchasing Managers' Index (PMI).py"
+
+  run-housing-starts:
+    runs-on: ubuntu-latest
+    needs: run-pmi
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Housing Starts Script
+        run: python "code/Housing Starts.py"
+
+  run-building-permits:
+    runs-on: ubuntu-latest
+    needs: run-housing-starts
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Building Permits Script
+        run: python "code/Building Permits.py"
+
+  run-trade-balance:
+    runs-on: ubuntu-latest
+    needs: run-building-permits
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Trade Balance Script
+        run: python "code/Trade Balance.py"
+
+  run-current-account-balance:
+    runs-on: ubuntu-latest
+    needs: run-trade-balance
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Current Account Balance (OECD) Script
+        run: python "code/Current Account Balance (OECD).py"
+
+  run-fdi:
+    runs-on: ubuntu-latest
+    needs: run-current-account-balance
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Foreign Direct Investment (FDI) (UNCTAD) Script
+        run: python "code/Foreign Direct Investment (FDI) (UNCTAD).py"
+
+  run-government-budget-balance:
+    runs-on: ubuntu-latest
+    needs: run-fdi
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Government Budget Balance (OECD) Script
+        run: python "code/Government Budget Balance (OECD).py"
+
+  run-public-debt-levels:
+    runs-on: ubuntu-latest
+    needs: run-government-budget-balance
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Public Debt Levels (IMF) Script
+        run: python "code/Public Debt Levels (IMF).py"
+
+  run-exchange-rates:
+    runs-on: ubuntu-latest
+    needs: run-public-debt-levels
+    continue-on-error: true
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
+      - name: Run Exchange Rates (Investing.com) Script
+        run: python "code/Exchange Rates (Investing.com).py"
