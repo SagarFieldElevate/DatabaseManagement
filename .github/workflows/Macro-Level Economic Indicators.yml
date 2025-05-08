@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Gross Domestic Product Script
-        run: python "code/Gross Domestic Product.py"
+        run: python "code/Macro-Level economic indicators/Gross Domestic Product.py"
 
   run-gdp-growth-rate:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run GDP Growth Rate Script
-        run: python "code/GDP Growth Rate.py"
+        run: python "code/Macro-Level economic indicators/GDP Growth Rate.py"
 
   run-inflation-rate-cpi:
     runs-on: ubuntu-latest
@@ -63,7 +63,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Inflation Rate (CPI) Script
-        run: python "code/Inflation Rate (CPI).py"
+        run: python "code/Macro-Level economic indicators/Inflation Rate (CPI).py"
 
   run-unemployment-rate:
     runs-on: ubuntu-latest
@@ -81,7 +81,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Unemployment Rate Script
-        run: python "code/Unemployment Rate.py"
+        run: python "code/Macro-Level economic indicators/Unemployment Rate.py"
 
   run-interest-rates:
     runs-on: ubuntu-latest
@@ -99,7 +99,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Interest Rates (Federal Funds Rate) Script
-        run: python "code/Interest Rates (Federal Funds Rate).py"
+        run: python "code/Macro-Level economic indicators/Interest Rates (Federal Funds Rate).py"
 
   run-money-supply-m2:
     runs-on: ubuntu-latest
@@ -117,7 +117,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Money Supply (M2) Script
-        run: python "code/Money Supply (M2).py"
+        run: python "code/Macro-Level economic indicators/Money Supply (M2).py"
 
   run-consumer-confidence:
     runs-on: ubuntu-latest
@@ -135,7 +135,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Consumer Confidence Index Script
-        run: python "code/Consumer Confidence Index.py"
+        run: python "code/Macro-Level economic indicators/Consumer Confidence Index.py"
 
   run-business-confidence:
     runs-on: ubuntu-latest
@@ -153,7 +153,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Business Confidence Index Script
-        run: python "code/Business Confidence Index.py"
+        run: python "code/Macro-Level economic indicators/Business Confidence Index.py"
 
   run-retail-sales:
     runs-on: ubuntu-latest
@@ -171,7 +171,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Retail Sales Script
-        run: python "code/Retail Sales.py"
+        run: python "code/Macro-Level economic indicators/Retail Sales.py"
 
   run-industrial-production:
     runs-on: ubuntu-latest
@@ -189,7 +189,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Industrial Production Script
-        run: python "code/Industrial Production.py"
+        run: python "code/Macro-Level economic indicators//Industrial Production.py"
 
   run-capacity-utilization:
     runs-on: ubuntu-latest
@@ -207,7 +207,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Capacity Utilization Script
-        run: python "code/Capacity Utilization.py"
+        run: python "code/Macro-Level economic indicators/Capacity Utilization.py"
 
   run-pmi:
     runs-on: ubuntu-latest
@@ -225,7 +225,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Purchasing Managers' Index (PMI) Script
-        run: python "code/Purchasing Managers' Index (PMI).py"
+        run: python "code/Macro-Level economic indicators/Purchasing Managers' Index (PMI).py"
 
   run-housing-starts:
     runs-on: ubuntu-latest
@@ -243,7 +243,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Housing Starts Script
-        run: python "code/Housing Starts.py"
+        run: python "code/Macro-Level economic indicators/Housing Starts.py"
 
   run-building-permits:
     runs-on: ubuntu-latest
@@ -261,7 +261,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Building Permits Script
-        run: python "code/Building Permits.py"
+        run: python "code/Macro-Level economic indicators/Building Permits.py"
 
   run-trade-balance:
     runs-on: ubuntu-latest
@@ -279,7 +279,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Trade Balance Script
-        run: python "code/Trade Balance.py"
+        run: python "code/Macro-Level economic indicators/Trade Balance.py"
 
   run-current-account-balance:
     runs-on: ubuntu-latest
@@ -297,7 +297,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Current Account Balance (OECD) Script
-        run: python "code/Current Account Balance (OECD).py"
+        run: python "code/Macro-Level economic indicators/Current Account Balance (OECD).py"
 
   run-fdi:
     runs-on: ubuntu-latest
@@ -315,7 +315,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Foreign Direct Investment (FDI) (UNCTAD) Script
-        run: python "code/Foreign Direct Investment (FDI) (UNCTAD).py"
+        run: python "code/Macro-Level economic indicators/Foreign Direct Investment (FDI) (UNCTAD).py"
 
   run-government-budget-balance:
     runs-on: ubuntu-latest
@@ -333,7 +333,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Government Budget Balance (OECD) Script
-        run: python "code/Government Budget Balance (OECD).py"
+        run: python "code/Macro-Level economic indicators/Government Budget Balance (OECD).py"
 
   run-public-debt-levels:
     runs-on: ubuntu-latest
@@ -351,7 +351,7 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Public Debt Levels (IMF) Script
-        run: python "code/Public Debt Levels (IMF).py"
+        run: python "code/Macro-Level economic indicators/Public Debt Levels (IMF).py"
 
   run-exchange-rates:
     runs-on: ubuntu-latest
@@ -369,4 +369,4 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader tradingeconomics
       - name: Run Exchange Rates (Investing.com) Script
-        run: python "code/Exchange Rates (Investing.com).py"
+        run: python "code/Macro-Level economic indicators/Exchange Rates (Investing.com).py"
