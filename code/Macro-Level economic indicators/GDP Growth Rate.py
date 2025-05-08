@@ -17,7 +17,7 @@ airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
 UPLOAD_PATH = "Uploads"
-GITHUB_TOKEN = os.getenv("GH supone_TOKEN")
+GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_gdp_growth(start_date="2015-01-01"):
