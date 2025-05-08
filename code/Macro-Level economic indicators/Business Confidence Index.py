@@ -2,13 +2,10 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-import tradingeconomics as te
+from pandas_datareader import data as pdr
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
-TE_API_KEY = os.getenv("TRADING_ECONOMICS_API_KEY")
-te.login(TE_API_KEY)
-
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "Database"
@@ -21,13 +18,11 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_business_confidence(start_date="2015-01-01"):
-    data = te.getHistoricalData(country='united states', indicator='business confidence', initDate=start_date)
-    df = pd.DataFrame(data)
-    
-    # Rename and format columns
-    df = df[['DateTime', 'Value']].rename(columns={
-        'DateTime': 'Date',
-        'Value': 'US Business Confidence Index'
+    # Fetch OECD Business Confidence Index (BCI) for the US
+    data = pdr.get_data_oecd('BCI.USA.M')  # Business Confidence Index, USA, Monthly
+    df = pd.DataFrame({
+        'Date': data.index,
+        'US Business Confidence Index': data['Value']
     })
     
     # Convert 'Date' to date-only string format
@@ -35,6 +30,7 @@ def get_business_confidence(start_date="2015-01-01"):
     
     # Filter data from 2015 to today
     current_date = datetime.now().strftime('%Y-%m-%d')
+    df = df[df['Date'] >= start_date]
     df = df[df['Date'] <= current_date]
     
     # Round values to 2 decimal places
@@ -69,7 +65,7 @@ record_id = existing_records[0]['id'] if existing_records else None
 
 # Upload to Airtable
 if record_id:
-    update_artable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
     create_airtable_record("US Business Confidence Index", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
