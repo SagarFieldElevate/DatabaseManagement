@@ -2,7 +2,7 @@ name: Run All Financial Market Indicator Scripts in Parallel
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Every hour
+    - cron: "0 0 * * *"  # Every hour
   workflow_dispatch:
 
 env:
