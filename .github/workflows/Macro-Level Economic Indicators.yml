@@ -36,4 +36,4 @@ jobs:
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
 
       - name: Run All Scripts
-        run: python run_all_scripts.py
+        run: python "code/Macro-Level economic indicators/run_all_scripts.py"
