@@ -9,7 +9,8 @@ import traceback
 code_dir = Path(__file__).parent
 sys.path.append(str(code_dir))
 
-# Log the Python path and directory contents for debugging
+# Log working directory, Python path, and directory contents for debugging
+print(f"Working directory: {os.getcwd()}")
 print(f"Python path: {sys.path}")
 print(f"Files in code_dir ({code_dir}): {os.listdir(code_dir)}")
 
@@ -41,6 +42,10 @@ def run_all_scripts():
     success_count = 0
     failed_scripts = []
     
+    # Dynamically discover .py files for cross-checking
+    available_files = [f.name for f in code_dir.glob("*.py") if f.name != "run_all_scripts.py" and f.name != "data_upload_utils.py"]
+    print(f"Available .py files: {available_files}")
+    
     for script_name in scripts:
         start_time = time.time()
         # Remove .py for display purposes in logs
@@ -64,7 +69,7 @@ def run_all_scripts():
         try:
             # Convert script name to module name (remove .py, replace spaces and special chars)
             module_name = script_name.replace(".py", "").replace(" ", "_").replace("'", "").replace("(", "").replace(")", "").replace(".", "")
-            print(f"Attempting to import module: {module_name}")
+            print(f"Attempting to import module: {module_name} from {script_path}")
             # Import the module
             module = importlib.import_module(module_name)
             # Scripts execute their main logic on import
