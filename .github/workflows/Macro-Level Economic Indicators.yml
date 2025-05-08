@@ -2,7 +2,7 @@ name: Run All Economic Indicator Scripts
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Every hour
+    - cron: "0 0 * * *"  # Every hour
   workflow_dispatch:
 
 env:
@@ -16,6 +16,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: List Directory Contents
+        run: |
+          ls -1 code/Macro-Level\ economic\ indicators/
+          pwd
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -36,4 +41,5 @@ jobs:
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
 
       - name: Run All Scripts
-        run: python "code/Macro-Level economic indicators/run_all_scripts.py"
+        working-directory: ./
+        run: python code/Macro-Level\ economic\ indicators/run_all_scripts.py
