@@ -11,4 +11,3 @@ pandas_ta
 fredapi
 beautifulsoup4
 pandas-datareader
-tradingeconomics
