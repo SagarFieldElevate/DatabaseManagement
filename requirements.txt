@@ -9,3 +9,6 @@ nbconvert
 numpy<2.0
 pandas_ta
 fredapi
+beautifulsoup4
+pandas-datareader
+tradingeconomics
