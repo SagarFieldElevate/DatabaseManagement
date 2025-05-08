@@ -5,12 +5,13 @@ import time
 from pathlib import Path
 import traceback
 
-# Add current directory (where run_all_scripts.py is located) to Python path
+# Add current directory (code/Macro-Level economic indicators/) to Python path
 code_dir = Path(__file__).parent
 sys.path.append(str(code_dir))
 
-# Log the Python path for debugging
+# Log the Python path and directory contents for debugging
 print(f"Python path: {sys.path}")
+print(f"Files in code_dir ({code_dir}): {os.listdir(code_dir)}")
 
 # List of script names (with .py extension)
 scripts = [
@@ -45,6 +46,21 @@ def run_all_scripts():
         # Remove .py for display purposes in logs
         display_name = script_name.replace(".py", "")
         print(f"\n[START] Running {display_name}...")
+        
+        # Check if the script file exists
+        script_path = code_dir / script_name
+        if not script_path.exists():
+            error_message = f"[ERROR] Script file not found: {script_path}"
+            print(error_message)
+            failed_scripts.append((display_name, f"File not found: {script_path}", ""))
+            continue
+        
+        # Try case-insensitive matching
+        actual_file = next((f for f in code_dir.glob("*.py") if f.name.lower() == script_name.lower()), None)
+        if actual_file and actual_file.name != script_name:
+            print(f"[WARNING] File name case mismatch: expected '{script_name}', found '{actual_file.name}'. Using '{actual_file.name}'.")
+            script_name = actual_file.name
+        
         try:
             # Convert script name to module name (remove .py, replace spaces and special chars)
             module_name = script_name.replace(".py", "").replace(" ", "_").replace("'", "").replace("(", "").replace(")", "").replace(".", "")
