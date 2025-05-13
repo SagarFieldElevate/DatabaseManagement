@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import yfinance as yf
+import requests
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
