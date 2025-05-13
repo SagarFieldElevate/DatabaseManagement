@@ -1,8 +1,7 @@
 import pandas as pd
 from datetime import datetime
 import os
-import requests
-from bs4 import BeautifulSoup
+import yfinance as yf
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
@@ -18,29 +17,11 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_vix(start_date="2015-01-01"):
-    url = "https://www.cboe.com/us/indices/vix_historical_data/"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    
-    soup = BeautifulSoup(response.content, 'html.parser')
-    data = []
-    # Hypothetical selector; adjust based on actual HTML structure
-    for row in soup.select('.historical-data-table tbody tr'):
-        try:
-            date = row.select_one('.date').text.strip()
-            close = row.select_one('.close').text.strip()
-            date = pd.to_datetime(date).strftime('%Y-%m-%d')
-            if date >= start_date:
-                data.append([date, float(close)])
-        except:
-            continue
-    
-    df = pd.DataFrame(data, columns=['Date', 'CBOE Volatility Index (VIX)'])
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date'] <= current_date]
+    vix = yf.download("^VIX", start=start_date)
+    df = vix.reset_index()[['Date', 'Close']]
+    df.columns = ['Date', 'CBOE Volatility Index (VIX)']
+    df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
     df['CBOE Volatility Index (VIX)'] = df['CBOE Volatility Index (VIX)'].round(2)
-    
     return df
 
 # === Main Script ===
