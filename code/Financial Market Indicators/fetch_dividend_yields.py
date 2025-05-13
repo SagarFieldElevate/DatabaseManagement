@@ -19,11 +19,18 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 def get_dividend_yield_from_csv(file_path, start_date="2015-01-01"):
     df = pd.read_csv(file_path)
 
+    # Print out the columns to debug
+    print("Columns in the CSV file:", df.columns)
+
     # Attempt to auto-detect column names
     df.columns = [col.strip() for col in df.columns]
-    
-    # Assume the columns are like ['Date', 'Value'] or similar
-    date_col = [col for col in df.columns if 'date' in col.lower()][0]
+
+    # Attempt to find date and value columns
+    date_col = [col for col in df.columns if 'date' in col.lower()]
+    if not date_col:
+        raise ValueError("No date column found.")
+    date_col = date_col[0]
+
     value_col = [col for col in df.columns if col != date_col][0]
 
     df = df[[date_col, value_col]].rename(columns={
