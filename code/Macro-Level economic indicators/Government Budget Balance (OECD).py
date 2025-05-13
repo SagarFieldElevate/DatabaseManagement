@@ -2,11 +2,12 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from pandas_datareader import data as pdr
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+FRED_API_KEY = os.getenv("FRED_API_KEY")
+
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "Macro Level Economic Indicators"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
@@ -18,24 +19,27 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_government_budget_balance(start_date="2015-01-01"):
-    # Fetch OECD Government Financial Balances (% of GDP) for the US
-    data = pdr.get_data_oecd('GGFL.USA.Q')  # General Government Financial Balances, % of GDP, Quarterly
-    df = pd.DataFrame({
-        'Date': data.index,
-        'US Government Budget Balance (% of GDP)': data['Value']
-    })
-    
-    # Convert 'Date' to date-only string format
-    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
-    
-    # Filter data from 2015 to today
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date'] >= start_date]
-    df = df[df['Date'] <= current_date]
-    
-    # Round values to 2 decimal places
-    df['US Government Budget Balance (% of GDP)'] = df['US Government Budget Balance (% of GDP)'].round(2)
-    
+    url = "https://api.stlouisfed.org/fred/series/observations"
+    params = {
+        "series_id": "FYFSGDA188S",  # Federal Surplus or Deficit [-] as Percent of GDP
+        "api_key": FRED_API_KEY,
+        "file_type": "json",
+        "observation_start": start_date
+    }
+
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    observations = response.json()["observations"]
+
+    data = [
+        [obs["date"], float(obs["value"])]
+        for obs in observations if obs["value"] != "."
+    ]
+
+    df = pd.DataFrame(data, columns=["Date", "US Government Budget Balance (% of GDP)"])
+    df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
+    df["US Government Budget Balance (% of GDP)"] = df["US Government Budget Balance (% of GDP)"].round(2)
+
     return df
 
 # === Main Script ===
