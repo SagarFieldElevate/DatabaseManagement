@@ -1,8 +1,8 @@
 import pandas as pd
 from datetime import datetime
 import os
+import yfinance as yf
 import requests
-from bs4 import BeautifulSoup
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
@@ -18,30 +18,14 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_equity_market_cap(start_date="2015-01-01"):
-    url = "https://data.worldbank.org/indicator/CM.MKT.LCAP.CD?locations=US"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    
-    soup = BeautifulSoup(response.content, 'html.parser')
-    data = []
-    # Hypothetical selector; adjust based on actual HTML structure
-    for row in soup.select('.data-table tbody tr'):
-        try:
-            date = row.select_one('.year').text.strip()
-            value = row.select_one('.value').text.strip().replace(',', '')
-            date = pd.to_datetime(date + '-12-31').strftime('%Y-%m-%d')
-            if date >= start_date:
-                data.append([date, float(value) / 1e9])  # Convert to billions USD
-        except:
-            continue
-    
-    df = pd.DataFrame(data, columns=['Date', 'US Equity Market Capitalization (Billions USD)'])
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date'] <= current_date]
-    df['US Equity Market Capitalization (Billions USD)'] = df['US Equity Market Capitalization (Billions USD)'].round(2)
-    
-    return df
+    ticker = "^W5000"
+    data = yf.download(ticker, start=start_date, interval="1mo")
+    data = data.reset_index()[['Date', 'Close']]
+    data.dropna(inplace=True)
+    data.rename(columns={'Close': 'US Equity Market Capitalization (Billions USD)'}, inplace=True)
+    data['Date'] = pd.to_datetime(data['Date']).dt.strftime('%Y-%m-%d')
+    data['US Equity Market Capitalization (Billions USD)'] = data['US Equity Market Capitalization (Billions USD)'].round(2)
+    return data
 
 # === Main Script ===
 df = get_equity_market_cap(start_date="2015-01-01")
