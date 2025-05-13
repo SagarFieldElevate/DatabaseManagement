@@ -25,7 +25,6 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-          pip install nbconvert
       - name: Run QQQData.py Script
-        run: python "code/FInancial Market Indicators/fetch_margin_debt.py"
+        run: python "code/Financial Market Indicators/fetch_margin_debt.py"
 
