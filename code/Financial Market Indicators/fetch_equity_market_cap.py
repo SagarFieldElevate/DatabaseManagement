@@ -17,9 +17,9 @@ UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
-def get_equity_market_cap(start_date="2015-01-01"):
+def get_equity_market_cap_daily(start_date="2015-01-01"):
     ticker = "^W5000"
-    data = yf.download(ticker, start=start_date, interval="1mo")
+    data = yf.download(ticker, start=start_date, interval="1d")
     data = data.reset_index()[['Date', 'Close']]
     data.dropna(inplace=True)
     data.rename(columns={'Close': 'US Equity Market Capitalization (Billions USD)'}, inplace=True)
@@ -28,14 +28,16 @@ def get_equity_market_cap(start_date="2015-01-01"):
     return data
 
 # === Main Script ===
-df = get_equity_market_cap(start_date="2015-01-01")
-filename = "equity_market_cap.xlsx"
+df = get_equity_market_cap_daily(start_date="2015-01-01")
+filename = "equity_market_cap_daily.xlsx"
 df.to_excel(filename, index=False)
 
+# Upload to GitHub
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
+# Check existing Airtable record
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
@@ -50,11 +52,13 @@ existing_records = [
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
+# Update or create Airtable record
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
     create_airtable_record("US Equity Market Capitalization (Billions USD)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
+# Cleanup
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ US Equity Market Capitalization (Billions USD): Airtable updated and GitHub cleaned up.")
+print("✅ US Equity Market Capitalization (Billions USD) — Daily: Airtable updated and GitHub cleaned up.")
