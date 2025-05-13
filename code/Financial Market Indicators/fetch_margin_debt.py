@@ -17,16 +17,20 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 # === Step 1: Download Excel File from GitHub ===
 raw_input_url = "https://raw.githubusercontent.com/SagarFieldElevate/DatabaseManagement/main/Uploads/margin-statistics.xlsx"
 input_filename = "margin-statistics.xlsx"
-output_filename = "margin_debt.xlsx"
+output_filename = "margin_debt_from_2015.xlsx"
 
 response = requests.get(raw_input_url)
 with open(input_filename, 'wb') as f:
     f.write(response.content)
 
-# === Step 2: Rename Column and Save Transformed File ===
+# === Step 2: Process and Filter Data from 2015 Onwards ===
 df = pd.read_excel(input_filename)
 if 'Year-Month' in df.columns:
     df.rename(columns={'Year-Month': 'Date'}, inplace=True)
+
+# Filter out data before 2015
+df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m')
+df = df[df['Date'] >= pd.Timestamp('2015-01-01')]
 
 df.to_excel(output_filename, index=False)
 os.remove(input_filename)  # Clean up original downloaded file
@@ -60,4 +64,4 @@ else:
 delete_file_from_github(output_filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(output_filename)
 
-print("✅ US Margin Debt (Millions USD): Transformed file pushed to Airtable and GitHub cleaned up.")
+print("✅ US Margin Debt (Millions USD): Data from 2015 onwards pushed to Airtable and GitHub cleaned up.")
