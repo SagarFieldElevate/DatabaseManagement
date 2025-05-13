@@ -26,5 +26,5 @@ jobs:
         run: |
           pip install -r requirements.txt
       - name: Run QQQData.py Script
-        run: python "code/Financial Market Indicators/fetch_margin_debt.py"
+        run: python "code/Financial Market Indicators/fetch_equity_market_cap.py"
 
