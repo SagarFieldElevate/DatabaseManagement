@@ -2,12 +2,10 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from fredapi import Fred
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
-FRED_API_KEY = os.getenv("FRED_API_KEY")  # <-- Add your FRED API key to GitHub Secrets
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "Financial Market Indicators"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
@@ -17,28 +15,45 @@ BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-# === Indicator Fetch Function ===
-def get_dividend_yields(start_date="2015-01-01"):
-    fred = Fred(api_key=FRED_API_KEY)
-    series = fred.get_series("SP500DY")
-    df = series.reset_index()
-    df.columns = ['Date', 'S&P 500 Dividend Yield (%)']
+# === Load & Clean Local CSV ===
+def get_dividend_yield_from_csv(file_path, start_date="2015-01-01"):
+    df = pd.read_csv(file_path)
+
+    # Attempt to auto-detect column names
+    df.columns = [col.strip() for col in df.columns]
     
-    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
-    df = df[df['Date'] >= start_date]
-    df['S&P 500 Dividend Yield (%)'] = df['S&P 500 Dividend Yield (%)'].round(2)
-    
+    # Assume the columns are like ['Date', 'Value'] or similar
+    date_col = [col for col in df.columns if 'date' in col.lower()][0]
+    value_col = [col for col in df.columns if col != date_col][0]
+
+    df = df[[date_col, value_col]].rename(columns={
+        date_col: 'Date',
+        value_col: 'S&P 500 Dividend Yield (%)'
+    })
+
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+    df = df.dropna(subset=['Date'])
+
+    df = df[df['Date'] >= pd.to_datetime(start_date)]
+    df = df[df['Date'] <= datetime.now()]
+    df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+    df['S&P 500 Dividend Yield (%)'] = pd.to_numeric(df['S&P 500 Dividend Yield (%)'], errors='coerce').round(2)
+    df = df.dropna()
+
     return df
 
 # === Main Script ===
-df = get_dividend_yields(start_date="2015-01-01")
+local_file_path = "uploads/MULTPL_SP500_DIV_YIELD_MONTH, 1D.csv"
+df = get_dividend_yield_from_csv(local_file_path, start_date="2015-01-01")
 filename = "sp500_dividend_yield.xlsx"
 df.to_excel(filename, index=False)
 
+# === GitHub Upload ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
+# === Airtable Update/Create ===
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
@@ -58,6 +73,7 @@ if record_id:
 else:
     create_airtable_record("S&P 500 Dividend Yield (%)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
+# === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
 print("✅ S&P 500 Dividend Yield (%): Airtable updated and GitHub cleaned up.")
