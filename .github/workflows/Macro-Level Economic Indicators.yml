@@ -1,4 +1,4 @@
-name: Run All Economic Indicator Scripts in Parallel
+name: Run All Economic Indicator Scripts in Batches
 
 on:
   schedule:
@@ -11,6 +11,7 @@ env:
   FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
 
 jobs:
+  # Batch 1: 5 jobs running in parallel
   run-gross-domestic-product:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -121,9 +122,16 @@ jobs:
         run: python "code/Macro-Level economic indicators/Interest Rates (Federal Funds Rate).py"
         continue-on-error: true
 
+  # Batch 2: 5 jobs running in parallel, dependent on Batch 1
   run-money-supply-m2:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-gross-domestic-product
+      - run-gdp-growth-rate
+      - run-inflation-rate-cpi
+      - run-unemployment-rate
+      - run-interest-rates
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -146,6 +154,12 @@ jobs:
   run-consumer-confidence:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-gross-domestic-product
+      - run-gdp-growth-rate
+      - run-inflation-rate-cpi
+      - run-unemployment-rate
+      - run-interest-rates
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -168,6 +182,12 @@ jobs:
   run-business-confidence:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-gross-domestic-product
+      - run-gdp-growth-rate
+      - run-inflation-rate-cpi
+      - run-unemployment-rate
+      - run-interest-rates
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -190,6 +210,12 @@ jobs:
   run-retail-sales:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-gross-domestic-product
+      - run-gdp-growth-rate
+      - run-inflation-rate-cpi
+      - run-unemployment-rate
+      - run-interest-rates
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -212,6 +238,12 @@ jobs:
   run-industrial-production:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-gross-domestic-product
+      - run-gdp-growth-rate
+      - run-inflation-rate-cpi
+      - run-unemployment-rate
+      - run-interest-rates
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -222,7 +254,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-data-reader
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Industrial Production Script
         run: python "code/Macro-Level economic indicators/Industrial Production.py"
         continue-on-error: true
@@ -231,9 +263,16 @@ jobs:
         run: python "code/Macro-Level economic indicators/Industrial Production.py"
         continue-on-error: true
 
+  # Batch 3: 5 jobs running in parallel, dependent on Batch 2
   run-capacity-utilization:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-money-supply-m2
+      - run-consumer-confidence
+      - run-business-confidence
+      - run-retail-sales
+      - run-industrial-production
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -256,6 +295,12 @@ jobs:
   run-pmi:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-money-supply-m2
+      - run-consumer-confidence
+      - run-business-confidence
+      - run-retail-sales
+      - run-industrial-production
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -278,6 +323,12 @@ jobs:
   run-housing-starts:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-money-supply-m2
+      - run-consumer-confidence
+      - run-business-confidence
+      - run-retail-sales
+      - run-industrial-production
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -300,6 +351,12 @@ jobs:
   run-building-permits:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-money-supply-m2
+      - run-consumer-confidence
+      - run-business-confidence
+      - run-retail-sales
+      - run-industrial-production
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -322,6 +379,12 @@ jobs:
   run-trade-balance:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-money-supply-m2
+      - run-consumer-confidence
+      - run-business-confidence
+      - run-retail-sales
+      - run-industrial-production
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -341,9 +404,16 @@ jobs:
         run: python "code/Macro-Level economic indicators/Trade Balance.py"
         continue-on-error: true
 
+  # Batch 4: 5 jobs running in parallel, dependent on Batch 3
   run-current-account-balance:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-capacity-utilization
+      - run-pmi
+      - run-housing-starts
+      - run-building-permits
+      - run-trade-balance
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -354,7 +424,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-data-reader
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Current Account Balance (OECD) Script
         run: python "code/Macro-Level economic indicators/Current Account Balance (OECD).py"
         continue-on-error: true
@@ -366,6 +436,12 @@ jobs:
   run-fdi:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-capacity-utilization
+      - run-pmi
+      - run-housing-starts
+      - run-building-permits
+      - run-trade-balance
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -388,6 +464,12 @@ jobs:
   run-government-budget-balance:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-capacity-utilization
+      - run-pmi
+      - run-housing-starts
+      - run-building-permits
+      - run-trade-balance
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -410,6 +492,12 @@ jobs:
   run-public-debt-levels:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-capacity-utilization
+      - run-pmi
+      - run-housing-starts
+      - run-building-permits
+      - run-trade-balance
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -432,6 +520,12 @@ jobs:
   run-exchange-rates:
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs:
+      - run-capacity-utilization
+      - run-pmi
+      - run-housing-starts
+      - run-building-permits
+      - run-trade-balance
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
