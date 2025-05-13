@@ -2,11 +2,12 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from bs4 import BeautifulSoup
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+FRED_API_KEY = os.getenv("FRED_API_KEY")
+
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "Macro Level Economic Indicators"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
@@ -16,40 +17,32 @@ BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-# === Indicator Fetch Function ===
-def get_exchange_rates(start_date="2015-01-01"):
-    # Scrape USD/EUR exchange rates from Investing.com
-    url = "https://www.investing.com/currencies/usd-eur-historical-data"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers)
+# === Fetch USD/EUR Exchange Rate from FRED ===
+def get_fred_usdeur(start_date="2015-01-01"):
+    url = f"https://api.stlouisfed.org/fred/series/observations"
+    params = {
+        "series_id": "DEXUSEU",
+        "api_key": FRED_API_KEY,
+        "file_type": "json",
+        "observation_start": start_date,
+    }
+
+    response = requests.get(url, params=params)
     response.raise_for_status()
-    
-    soup = BeautifulSoup(response.content, 'html.parser')
-    data = []
-    # Hypothetical selector for historical data table
-    for row in soup.select('.historical-data-table tbody tr'):
-        date = row.select_one('.first').text.strip()
-        rate = row.select_one('.text-right').text.strip()
-        try:
-            date = pd.to_datetime(date).strftime('%Y-%m-%d')
-            if date >= start_date:
-                data.append([date, float(rate)])
-        except:
-            continue
-    
-    df = pd.DataFrame(data, columns=['Date', 'USD/EUR Exchange Rate'])
-    
-    # Filter data from 2015 to today
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date'] <= current_date]
-    
-    # Round values to 4 decimal places (standard for exchange rates)
-    df['USD/EUR Exchange Rate'] = df['USD/EUR Exchange Rate'].round(4)
-    
+    observations = response.json()["observations"]
+
+    data = [
+        [obs["date"], float(obs["value"])]
+        for obs in observations if obs["value"] != "."
+    ]
+
+    df = pd.DataFrame(data, columns=["Date", "USD/EUR Exchange Rate"])
+    df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
+    df["USD/EUR Exchange Rate"] = df["USD/EUR Exchange Rate"].round(4)
     return df
 
 # === Main Script ===
-df = get_exchange_rates(start_date="2015-01-01")
+df = get_fred_usdeur(start_date="2015-01-01")
 filename = "usdeur_exchange_rates.xlsx"
 df.to_excel(filename, index=False)
 
