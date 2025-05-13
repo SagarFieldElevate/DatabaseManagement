@@ -2,11 +2,12 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from bs4 import BeautifulSoup
+from fredapi import Fred
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+FRED_API_KEY = os.getenv("FRED_API_KEY")  # <-- Add your FRED API key to GitHub Secrets
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "Financial Market Indicators"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
@@ -18,27 +19,13 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_dividend_yields(start_date="2015-01-01"):
-    url = "https://www.multpl.com/s-p-500-dividend-yield/table"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
+    fred = Fred(api_key=FRED_API_KEY)
+    series = fred.get_series("SP500DY")
+    df = series.reset_index()
+    df.columns = ['Date', 'S&P 500 Dividend Yield (%)']
     
-    soup = BeautifulSoup(response.content, 'html.parser')
-    data = []
-    # Hypothetical selector; adjust based on actual HTML structure
-    for row in soup.select('.data-table tbody tr'):
-        try:
-            date = row.select_one('.date').text.strip()
-            value = row.select_one('.value').text.strip().replace('%', '')
-            date = pd.to_datetime(date).strftime('%Y-%m-%d')
-            if date >= start_date:
-                data.append([date, float(value)])
-        except:
-            continue
-    
-    df = pd.DataFrame(data, columns=['Date', 'S&P 500 Dividend Yield (%)'])
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date'] <= current_date]
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
+    df = df[df['Date'] >= start_date]
     df['S&P 500 Dividend Yield (%)'] = df['S&P 500 Dividend Yield (%)'].round(2)
     
     return df
