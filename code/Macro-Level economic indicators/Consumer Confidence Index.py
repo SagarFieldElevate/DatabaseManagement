@@ -2,13 +2,16 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from bs4 import BeautifulSoup
+from fredapi import Fred
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
+FRED_API_KEY = os.getenv("FRED_API_KEY")
+fred = Fred(api_key=FRED_API_KEY)
+
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
-TABLE_NAME = "Macro Level Economic Indicators"
+TABLE_NAME = "Database"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
@@ -17,40 +20,32 @@ UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
-def get_consumer_confidence(start_date="2015-01-01"):
-    url = "https://www.conference-board.org/topics/consumer-confidence"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
+def get_consumer_confidence():
+    # Fetch data from FRED from 2015 to the current date
+    start_date = "2015-01-01"
+    data = fred.get_series('UMCSENT', start_date=start_date)
     
-    soup = BeautifulSoup(response.content, 'html.parser')
-    # Note: This scraping logic may need adjustment based on actual site structure
-    data = []
-    # Example: Adjust based on actual HTML structure (inspect the website)
-    for item in soup.select('.data-table tr'):  # Hypothetical selector
-        date = item.select_one('.date').text.strip()
-        value = item.select_one('.value').text.strip()
-        try:
-            date = pd.to_datetime(date).strftime('%Y-%m-%d')
-            if date >= start_date:
-                data.append([date, float(value)])
-        except:
-            continue
+    # Create DataFrame
+    df = pd.DataFrame({
+        'Date': data.index,
+        'US Consumer Confidence Index': data.values
+    })
     
-    df = pd.DataFrame(data, columns=['Date', 'US Consumer Confidence Index'])
+    # Convert 'Date' to date-only string format
+    df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
     
-    # Filter data from 2015 to today
+    # Filter data to only include rows from 2015 to the current date
     current_date = datetime.now().strftime('%Y-%m-%d')
     df = df[df['Date'] <= current_date]
     
-    # Round values to 2 decimal places
-    df['US Consumer Confidence Index'] = df['US Consumer Confidence Index'].round(2)
+    # Round the index values to 1 decimal place
+    df['US Consumer Confidence Index'] = df['US Consumer Confidence Index'].round(1)
     
     return df
 
 # === Main Script ===
-df = get_consumer_confidence(start_date="2015-01-01")
-filename = "us_consumer_confidence.xlsx"
+df = get_consumer_confidence()
+filename = "us_consumer_confidence_index.xlsx"
 df.to_excel(filename, index=False)
 
 # Upload to GitHub
