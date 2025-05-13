@@ -1,8 +1,6 @@
 import pandas as pd
-from datetime import datetime
 import os
 import requests
-from bs4 import BeautifulSoup
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
@@ -16,42 +14,29 @@ BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-# === Indicator Fetch Function ===
-def get_margin_debt(start_date="2015-01-01"):
-    url = "https://www.finra.org/investors/learn-to-invest/advanced-investing/margin-statistics"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    
-    soup = BeautifulSoup(response.content, 'html.parser')
-    data = []
-    # Hypothetical selector; adjust based on actual HTML structure
-    for row in soup.select('.margin-data-table tbody tr'):
-        try:
-            date = row.select_one('.date').text.strip()
-            value = row.select_one('.value').text.strip().replace(',', '')
-            date = pd.to_datetime(date).strftime('%Y-%m-%d')
-            if date >= start_date:
-                data.append([date, float(value) / 1e6])  # Convert to millions USD
-        except:
-            continue
-    
-    df = pd.DataFrame(data, columns=['Date', 'US Margin Debt (Millions USD)'])
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    df = df[df['Date'] <= current_date]
-    df['US Margin Debt (Millions USD)'] = df['US Margin Debt (Millions USD)'].round(2)
-    
-    return df
+# === Step 1: Download Excel File from GitHub ===
+raw_input_url = "https://raw.githubusercontent.com/SagarFieldElevate/DatabaseManagement/main/Uploads/margin-statistics.xlsx"
+input_filename = "margin-statistics.xlsx"
+output_filename = "margin_debt.xlsx"
 
-# === Main Script ===
-df = get_margin_debt(start_date="2015-01-01")
-filename = "margin_debt.xlsx"
-df.to_excel(filename, index=False)
+response = requests.get(raw_input_url)
+with open(input_filename, 'wb') as f:
+    f.write(response.content)
 
-github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
+# === Step 2: Rename Column and Save Transformed File ===
+df = pd.read_excel(input_filename)
+if 'Year-Month' in df.columns:
+    df.rename(columns={'Year-Month': 'Date'}, inplace=True)
+
+df.to_excel(output_filename, index=False)
+os.remove(input_filename)  # Clean up original downloaded file
+
+# === Step 3: Upload to GitHub ===
+github_response = upload_to_github(output_filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
+# === Step 4: Check Airtable & Create or Update Record ===
 airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
@@ -67,10 +52,12 @@ existing_records = [
 record_id = existing_records[0]['id'] if existing_records else None
 
 if record_id:
-    update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    update_airtable(record_id, raw_url, output_filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("US Margin Debt (Millions USD)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("US Margin Debt (Millions USD)", raw_url, output_filename, airtable_url, AIRTABLE_API_KEY)
 
-delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
-os.remove(filename)
-print("✅ US Margin Debt (Millions USD): Airtable updated and GitHub cleaned up.")
+# === Step 5: Cleanup GitHub & Local ===
+delete_file_from_github(output_filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
+os.remove(output_filename)
+
+print("✅ US Margin Debt (Millions USD): Transformed file pushed to Airtable and GitHub cleaned up.")
