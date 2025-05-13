@@ -29,6 +29,12 @@ def get_equity_market_cap_daily(start_date="2015-01-01"):
 
 # === Main Script ===
 df = get_equity_market_cap_daily(start_date="2015-01-01")
+# Flatten MultiIndex columns if necessary
+if isinstance(df.columns, pd.MultiIndex):
+    df.columns = [' '.join(col).strip() for col in df.columns]
+
+# Sanitize any column names that accidentally include the ticker
+df.columns = [col.replace("^W5000", "").strip() for col in df.columns]
 filename = "equity_market_cap_daily.xlsx"
 df.to_excel(filename, index=False)
 
