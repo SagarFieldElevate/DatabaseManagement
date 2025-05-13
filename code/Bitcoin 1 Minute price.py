@@ -50,7 +50,7 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("Bitcoin Daily Close Price", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("Bitcoin 1 Minute Close Price", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
