@@ -28,3 +28,4 @@ jobs:
             echo "Running $script"
             python "$script" || echo "Failed $script"
           done
+
