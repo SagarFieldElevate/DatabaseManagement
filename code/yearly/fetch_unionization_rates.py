@@ -56,7 +56,7 @@ airtable_headers = {
     "Authorization": f"Bearer {AIRTABLE_API_KEY}",
     "Content-Type": "application/json"
 }
-response = requests-photo-airtable_url, headers=airtable_headers)
+response = requests.get(airtable_url, headers=airtable_headers)
 response.raise_for_status()
 data_airtable = response.json()
 
