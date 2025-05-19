@@ -20,3 +20,36 @@ code/
 All scripts have been moved into these frequency folders. Older indicator
 directories were removed to simplify navigation. Place any new scripts in
 the folder that matches the data update frequency.
+
+## Running Scripts
+
+Install dependencies before executing any scripts:
+
+```bash
+pip install -r requirements.txt
+```
+
+Set the following environment variables so the scripts can upload data and
+access external APIs:
+
+- `AIRTABLE_API_KEY` – Airtable access token
+- `GH_TOKEN` – GitHub token for uploading files
+- `FRED_API_KEY` – Federal Reserve API key
+- `BLS_API_KEY` – Bureau of Labor Statistics API key
+- `COINDESK_API_KEY` – CoinDesk API key
+- `DUNE_API_KEY` – Dune Analytics API key
+
+Some scripts may require additional keys depending on the data source.
+
+To run every script sequentially you can loop through all files under the
+`code` directory:
+
+```bash
+for dir in code/*/; do
+    for script in "$dir"*.py; do
+        python "$script"
+    done
+done
+```
+
+Each script prints a check‑mark success message when it completes.
