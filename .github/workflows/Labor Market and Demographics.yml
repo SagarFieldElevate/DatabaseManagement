@@ -27,11 +27,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Labor Force Participation Script
-        run: python "code/Labor Market and Demographics/fetch_labor_force_participation.py"
+        run: python "code/monthly/fetch_labor_force_participation.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_labor_force_participation.py"
+        run: python "code/monthly/fetch_labor_force_participation.py"
         continue-on-error: true
 
   run-wage-growth-rates:
@@ -49,11 +49,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Wage Growth Rates Script
-        run: python "code/Labor Market and Demographics/fetch_wage_growth_rates.py"
+        run: python "code/monthly/fetch_wage_growth_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_wage_growth_rates.py"
+        run: python "code/monthly/fetch_wage_growth_rates.py"
         continue-on-error: true
 
   run-job-vacancy-rates:
@@ -71,11 +71,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Job Vacancy Rates Script
-        run: python "code/Labor Market and Demographics/fetch_job_vacancy_rates.py"
+        run: python "code/monthly/fetch_job_vacancy_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_job_vacancy_rates.py"
+        run: python "code/monthly/fetch_job_vacancy_rates.py"
         continue-on-error: true
 
   run-employment-population-ratio:
@@ -93,11 +93,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Employment-to-Population Ratio Script
-        run: python "code/Labor Market and Demographics/fetch_employment_population_ratio.py"
+        run: python "code/monthly/fetch_employment_population_ratio.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_employment_population_ratio.py"
+        run: python "code/monthly/fetch_employment_population_ratio.py"
         continue-on-error: true
 
   run-youth-unemployment-rate:
@@ -115,11 +115,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Youth Unemployment Rate Script
-        run: python "code/Labor Market and Demographics/fetch_youth_unemployment_rate.py"
+        run: python "code/monthly/fetch_youth_unemployment_rate.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_youth_unemployment_rate.py"
+        run: python "code/monthly/fetch_youth_unemployment_rate.py"
         continue-on-error: true
 
   run-aging-population-metrics:
@@ -137,11 +137,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Aging Population Metrics Script
-        run: python "code/Labor Market and Demographics/fetch_aging_population_metrics.py"
+        run: python "code/yearly/fetch_aging_population_metrics.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_aging_population_metrics.py"
+        run: python "code/yearly/fetch_aging_population_metrics.py"
         continue-on-error: true
 
   run-migration-rates:
@@ -159,11 +159,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Migration Rates Script
-        run: python "code/Labor Market and Demographics/fetch_migration_rates.py"
+        run: python "code/yearly/fetch_migration_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_migration_rates.py"
+        run: python "code/yearly/fetch_migration_rates.py"
         continue-on-error: true
 
   run-education-attainment-levels:
@@ -181,11 +181,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Education Attainment Levels Script
-        run: python "code/Labor Market and Demographics/fetch_education_attainment_levels.py"
+        run: python "code/yearly/fetch_education_attainment_levels.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_education_attainment_levels.py"
+        run: python "code/yearly/fetch_education_attainment_levels.py"
         continue-on-error: true
 
   run-labor-productivity:
@@ -203,11 +203,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Labor Productivity Script
-        run: python "code/Labor Market and Demographics/fetch_labor_productivity.py"
+        run: python "code/quarterly/fetch_labor_productivity.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_labor_productivity.py"
+        run: python "code/quarterly/fetch_labor_productivity.py"
         continue-on-error: true
 
   run-unionization-rates:
@@ -225,9 +225,9 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Unionization Rates Script
-        run: python "code/Labor Market and Demographics/fetch_unionization_rates.py"
+        run: python "code/yearly/fetch_unionization_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Labor Market and Demographics/fetch_unionization_rates.py"
+        run: python "code/yearly/fetch_unionization_rates.py"
         continue-on-error: true

@@ -26,11 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Stock Market Indices Script
-        run: python "code/Financial Market Indicators/fetch_stock_market_indices.py"
+        run: python "code/daily/fetch_stock_market_indices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_stock_market_indices.py"
+        run: python "code/daily/fetch_stock_market_indices.py"
         continue-on-error: true
 
   run-bond-yields:
@@ -48,11 +48,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Bond Yields Script
-        run: python "code/Financial Market Indicators/fetch_bond_yields.py"
+        run: python "code/daily/fetch_bond_yields.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_bond_yields.py"
+        run: python "code/daily/fetch_bond_yields.py"
         continue-on-error: true
 
   run-yield-curve-spread:
@@ -70,11 +70,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Yield Curve Spread Script
-        run: python "code/Financial Market Indicators/fetch_yield_curve_spread.py"
+        run: python "code/daily/fetch_yield_curve_spread.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_yield_curve_spread.py"
+        run: python "code/daily/fetch_yield_curve_spread.py"
         continue-on-error: true
 
   run-credit-spreads:
@@ -92,11 +92,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Credit Spreads Script
-        run: python "code/Financial Market Indicators/fetch_credit_spreads.py"
+        run: python "code/daily/fetch_credit_spreads.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_credit_spreads.py"
+        run: python "code/daily/fetch_credit_spreads.py"
         continue-on-error: true
 
   run-vix:
@@ -114,11 +114,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Volatility Index (VIX) Script
-        run: python "code/Financial Market Indicators/fetch_vix.py"
+        run: python "code/daily/fetch_vix.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_vix.py"
+        run: python "code/daily/fetch_vix.py"
         continue-on-error: true
 
   run-equity-market-cap:
@@ -136,11 +136,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Equity Market Capitalization Script
-        run: python "code/Financial Market Indicators/fetch_equity_market_cap.py"
+        run: python "code/daily/fetch_equity_market_cap.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_equity_market_cap.py"
+        run: python "code/daily/fetch_equity_market_cap.py"
         continue-on-error: true
 
   run-margin-debt:
@@ -158,11 +158,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Margin Debt Script
-        run: python "code/Financial Market Indicators/fetch_margin_debt.py"
+        run: python "code/monthly/fetch_margin_debt.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_margin_debt.py"
+        run: python "code/monthly/fetch_margin_debt.py"
         continue-on-error: true
 
   run-ipos:
@@ -180,11 +180,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Initial Public Offerings (IPOs) Script
-        run: python "code/Financial Market Indicators/fetch_ipos.py"
+        run: python "code/event_driven/fetch_ipos.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_ipos.py"
+        run: python "code/event_driven/fetch_ipos.py"
         continue-on-error: true
 
   run-stock-buybacks:
@@ -202,11 +202,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Stock Buybacks Script
-        run: python "code/Financial Market Indicators/fetch_stock_buybacks.py"
+        run: python "code/quarterly/fetch_stock_buybacks.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_stock_buybacks.py"
+        run: python "code/quarterly/fetch_stock_buybacks.py"
         continue-on-error: true
 
   run-dividend-yields:
@@ -224,9 +224,9 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Dividend Yields Script
-        run: python "code/Financial Market Indicators/fetch_dividend_yields.py"
+        run: python "code/monthly/fetch_dividend_yields.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Financial Market Indicators/fetch_dividend_yields.py"
+        run: python "code/monthly/fetch_dividend_yields.py"
         continue-on-error: true
