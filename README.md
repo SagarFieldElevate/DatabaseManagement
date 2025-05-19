@@ -20,3 +20,20 @@ code/
 All scripts have been moved into these frequency folders. Older indicator
 directories were removed to simplify navigation. Place any new scripts in
 the folder that matches the data update frequency.
+
+## GitHub Workflows
+
+Automated GitHub Actions are organized by update frequency. Each workflow file
+matches a directory under `code/` and sequentially executes every script in
+that directory. The available workflows are:
+
+* `intraday.yml` – runs high‑frequency jobs every 15 minutes
+* `daily.yml` – runs nightly jobs at midnight UTC
+* `weekly.yml` – triggers every Sunday
+* `monthly.yml` – runs on the first day of each month
+* `quarterly.yml` – runs on the first day of each quarter
+* `yearly.yml` – runs once a year on January 1st
+* `event_driven.yml` – manually triggered for event‑specific scripts
+
+All workflows directly loop over their respective folders; there is no separate
+templates directory anymore.
