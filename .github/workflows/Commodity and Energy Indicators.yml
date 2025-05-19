@@ -26,11 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Crude Oil Prices Script
-        run: python "code/Commodity and Energy Indicators/fetch_crude_oil_prices.py"
+        run: python "code/daily/fetch_crude_oil_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_crude_oil_prices.py"
+        run: python "code/daily/fetch_crude_oil_prices.py"
         continue-on-error: true
 
   run-natural-gas-prices:
@@ -48,11 +48,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Natural Gas Prices Script
-        run: python "code/Commodity and Energy Indicators/fetch_natural_gas_prices.py"
+        run: python "code/daily/fetch_natural_gas_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_natural_gas_prices.py"
+        run: python "code/daily/fetch_natural_gas_prices.py"
         continue-on-error: true
 
   run-coal-prices:
@@ -70,11 +70,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Coal Prices Script
-        run: python "code/Commodity and Energy Indicators/fetch_coal_prices.py"
+        run: python "code/monthly/fetch_coal_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_coal_prices.py"
+        run: python "code/monthly/fetch_coal_prices.py"
         continue-on-error: true
 
   run-electricity-prices:
@@ -92,11 +92,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Electricity Prices Script
-        run: python "code/Commodity and Energy Indicators/fetch_electricity_prices.py"
+        run: python "code/monthly/fetch_electricity_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_electricity_prices.py"
+        run: python "code/monthly/fetch_electricity_prices.py"
         continue-on-error: true
 
   run-commodity-price-index:
@@ -114,11 +114,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Commodity Price Index Script
-        run: python "code/Commodity and Energy Indicators/fetch_commodity_price_index.py"
+        run: python "code/monthly/fetch_commodity_price_index.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_commodity_price_index.py"
+        run: python "code/monthly/fetch_commodity_price_index.py"
         continue-on-error: true
 
   run-agricultural-prices:
@@ -136,11 +136,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Agricultural Prices Script
-        run: python "code/Commodity and Energy Indicators/fetch_agricultural_prices.py"
+        run: python "code/monthly/fetch_agricultural_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_agricultural_prices.py"
+        run: python "code/monthly/fetch_agricultural_prices.py"
         continue-on-error: true
 
   run-metal-prices:
@@ -158,11 +158,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Metal Prices Script
-        run: python "code/Commodity and Energy Indicators/fetch_metal_prices.py"
+        run: python "code/monthly/fetch_metal_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_metal_prices.py"
+        run: python "code/monthly/fetch_metal_prices.py"
         continue-on-error: true
 
   run-gold-prices:
@@ -180,11 +180,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Gold Prices Script
-        run: python "code/Commodity and Energy Indicators/fetch_gold_prices.py"
+        run: python "code/daily/fetch_gold_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_gold_prices.py"
+        run: python "code/daily/fetch_gold_prices.py"
         continue-on-error: true
 
   run-strategic-reserves:
@@ -202,11 +202,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Strategic Reserves Script
-        run: python "code/Commodity and Energy Indicators/fetch_strategic_reserves.py"
+        run: python "code/weekly/fetch_strategic_reserves.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_strategic_reserves.py"
+        run: python "code/weekly/fetch_strategic_reserves.py"
         continue-on-error: true
 
   run-energy-consumption:
@@ -224,9 +224,9 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 yfinance
       - name: Run Energy Consumption Script
-        run: python "code/Commodity and Energy Indicators/fetch_energy_consumption.py"
+        run: python "code/yearly/fetch_energy_consumption.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Commodity and Energy Indicators/fetch_energy_consumption.py"
+        run: python "code/yearly/fetch_energy_consumption.py"
         continue-on-error: true

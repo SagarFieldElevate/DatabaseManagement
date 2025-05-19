@@ -27,11 +27,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Gross Domestic Product Script
-        run: python "code/Macro-Level economic indicators/Gross Domestic Product.py"
+        run: python "code/quarterly/Gross Domestic Product.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Gross Domestic Product.py"
+        run: python "code/quarterly/Gross Domestic Product.py"
         continue-on-error: true
 
   run-gdp-growth-rate:
@@ -49,11 +49,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run GDP Growth Rate Script
-        run: python "code/Macro-Level economic indicators/GDP Growth Rate.py"
+        run: python "code/quarterly/GDP Growth Rate.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/GDP Growth Rate.py"
+        run: python "code/quarterly/GDP Growth Rate.py"
         continue-on-error: true
 
   run-inflation-rate-cpi:
@@ -71,11 +71,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Inflation Rate (CPI) Script
-        run: python "code/Macro-Level economic indicators/Inflation Rate (CPI).py"
+        run: python "code/monthly/Inflation Rate (CPI).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Inflation Rate (CPI).py"
+        run: python "code/monthly/Inflation Rate (CPI).py"
         continue-on-error: true
 
   run-unemployment-rate:
@@ -93,11 +93,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Unemployment Rate Script
-        run: python "code/Macro-Level economic indicators/Unemployment Rate.py"
+        run: python "code/monthly/Unemployment Rate.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Unemployment Rate.py"
+        run: python "code/monthly/Unemployment Rate.py"
         continue-on-error: true
 
   run-interest-rates:
@@ -115,11 +115,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Interest Rates (Federal Funds Rate) Script
-        run: python "code/Macro-Level economic indicators/Interest Rates (Federal Funds Rate).py"
+        run: python "code/daily/Interest Rates (Federal Funds Rate).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Interest Rates (Federal Funds Rate).py"
+        run: python "code/daily/Interest Rates (Federal Funds Rate).py"
         continue-on-error: true
 
   # Batch 2: 5 jobs running in parallel, dependent on Batch 1
@@ -144,11 +144,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Money Supply (M2) Script
-        run: python "code/Macro-Level economic indicators/Money Supply (M2).py"
+        run: python "code/monthly/Money Supply (M2).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Money Supply (M2).py"
+        run: python "code/monthly/Money Supply (M2).py"
         continue-on-error: true
 
   run-consumer-confidence:
@@ -172,11 +172,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Consumer Confidence Index Script
-        run: python "code/Macro-Level economic indicators/Consumer Confidence Index.py"
+        run: python "code/monthly/Consumer Confidence Index.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Consumer Confidence Index.py"
+        run: python "code/monthly/Consumer Confidence Index.py"
         continue-on-error: true
 
   run-business-confidence:
@@ -200,11 +200,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Business Confidence Index Script
-        run: python "code/Macro-Level economic indicators/Business Confidence Index.py"
+        run: python "code/monthly/Business Confidence Index.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Business Confidence Index.py"
+        run: python "code/monthly/Business Confidence Index.py"
         continue-on-error: true
 
   run-retail-sales:
@@ -228,11 +228,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Retail Sales Script
-        run: python "code/Macro-Level economic indicators/Retail Sales.py"
+        run: python "code/monthly/Retail Sales.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Retail Sales.py"
+        run: python "code/monthly/Retail Sales.py"
         continue-on-error: true
 
   run-industrial-production:
@@ -256,11 +256,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Industrial Production Script
-        run: python "code/Macro-Level economic indicators/Industrial Production.py"
+        run: python "code/monthly/Industrial Production.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Industrial Production.py"
+        run: python "code/monthly/Industrial Production.py"
         continue-on-error: true
 
   # Batch 3: 5 jobs running in parallel, dependent on Batch 2
@@ -285,11 +285,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Capacity Utilization Script
-        run: python "code/Macro-Level economic indicators/Capacity Utilization.py"
+        run: python "code/monthly/Capacity Utilization.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Capacity Utilization.py"
+        run: python "code/monthly/Capacity Utilization.py"
         continue-on-error: true
 
   run-pmi:
@@ -313,11 +313,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Purchasing Managers' Index (PMI) Script
-        run: python "code/Macro-Level economic indicators/Purchasing Managers' Index (PMI).py"
+        run: python "code/monthly/Purchasing Managers' Index (PMI).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Purchasing Managers' Index (PMI).py"
+        run: python "code/monthly/Purchasing Managers' Index (PMI).py"
         continue-on-error: true
 
   run-housing-starts:
@@ -341,11 +341,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Housing Starts Script
-        run: python "code/Macro-Level economic indicators/Housing Starts.py"
+        run: python "code/monthly/Housing Starts.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Housing Starts.py"
+        run: python "code/monthly/Housing Starts.py"
         continue-on-error: true
 
   run-building-permits:
@@ -369,11 +369,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Building Permits Script
-        run: python "code/Macro-Level economic indicators/Building Permits.py"
+        run: python "code/monthly/Building Permits.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Building Permits.py"
+        run: python "code/monthly/Building Permits.py"
         continue-on-error: true
 
   run-trade-balance:
@@ -397,11 +397,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Trade Balance Script
-        run: python "code/Macro-Level economic indicators/Trade Balance.py"
+        run: python "code/monthly/Trade Balance.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Trade Balance.py"
+        run: python "code/monthly/Trade Balance.py"
         continue-on-error: true
 
   # Batch 4: 5 jobs running in parallel, dependent on Batch 3
@@ -426,11 +426,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Current Account Balance (OECD) Script
-        run: python "code/Macro-Level economic indicators/Current Account Balance (OECD).py"
+        run: python "code/quarterly/Current Account Balance (OECD).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Current Account Balance (OECD).py"
+        run: python "code/quarterly/Current Account Balance (OECD).py"
         continue-on-error: true
 
   run-fdi:
@@ -454,11 +454,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Foreign Direct Investment (FDI) (UNCTAD) Script
-        run: python "code/Macro-Level economic indicators/Foreign Direct Investment (FDI) (UNCTAD).py"
+        run: python "code/quarterly/Foreign Direct Investment (FDI) (UNCTAD).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Foreign Direct Investment (FDI) (UNCTAD).py"
+        run: python "code/quarterly/Foreign Direct Investment (FDI) (UNCTAD).py"
         continue-on-error: true
 
   run-government-budget-balance:
@@ -482,11 +482,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Government Budget Balance (OECD) Script
-        run: python "code/Macro-Level economic indicators/Government Budget Balance (OECD).py"
+        run: python "code/quarterly/Government Budget Balance (OECD).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Government Budget Balance (OECD).py"
+        run: python "code/quarterly/Government Budget Balance (OECD).py"
         continue-on-error: true
 
   run-public-debt-levels:
@@ -510,11 +510,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Public Debt Levels (IMF) Script
-        run: python "code/Macro-Level economic indicators/Public Debt Levels (IMF).py"
+        run: python "code/yearly/Public Debt Levels (IMF).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Public Debt Levels (IMF).py"
+        run: python "code/yearly/Public Debt Levels (IMF).py"
         continue-on-error: true
 
   run-exchange-rates:
@@ -538,9 +538,9 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Exchange Rates (Investing.com) Script
-        run: python "code/Macro-Level economic indicators/Exchange Rates (Investing.com).py"
+        run: python "code/daily/Exchange Rates (Investing.com).py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Macro-Level economic indicators/Exchange Rates (Investing.com).py"
+        run: python "code/daily/Exchange Rates (Investing.com).py"
         continue-on-error: true

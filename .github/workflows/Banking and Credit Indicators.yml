@@ -26,11 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Bank Lending Rates Script
-        run: python "code/Banking and Credit Indicators/fetch_bank_lending_rates.py"
+        run: python "code/daily/fetch_bank_lending_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_bank_lending_rates.py"
+        run: python "code/daily/fetch_bank_lending_rates.py"
         continue-on-error: true
 
   run-loan-to-deposit-ratios:
@@ -48,11 +48,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Loan-to-Deposit Ratios Script
-        run: python "code/Banking and Credit Indicators/fetch_loan_to_deposit_ratios.py"
+        run: python "code/quarterly/fetch_loan_to_deposit_ratios.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_loan_to_deposit_ratios.py"
+        run: python "code/quarterly/fetch_loan_to_deposit_ratios.py"
         continue-on-error: true
 
   run-non-performing-loans:
@@ -70,11 +70,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Non-Performing Loans Script
-        run: python "code/Banking and Credit Indicators/fetch_non_performing_loans.py"
+        run: python "code/yearly/fetch_non_performing_loans.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_non_performing_loans.py"
+        run: python "code/yearly/fetch_non_performing_loans.py"
         continue-on-error: true
 
   run-household-debt-levels:
@@ -92,11 +92,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Household Debt Levels Script
-        run: python "code/Banking and Credit Indicators/fetch_household_debt_levels.py"
+        run: python "code/quarterly/fetch_household_debt_levels.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_household_debt_levels.py"
+        run: python "code/quarterly/fetch_household_debt_levels.py"
         continue-on-error: true
 
   run-corporate-debt-levels:
@@ -114,11 +114,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Corporate Debt Levels Script
-        run: python "code/Banking and Credit Indicators/fetch_corporate_debt_levels.py"
+        run: python "code/quarterly/fetch_corporate_debt_levels.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_corporate_debt_levels.py"
+        run: python "code/quarterly/fetch_corporate_debt_levels.py"
         continue-on-error: true
 
   run-credit-card-delinquency-rates:
@@ -136,11 +136,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Credit Card Delinquency Rates Script
-        run: python "code/Banking and Credit Indicators/fetch_credit_card_delinquency_rates.py"
+        run: python "code/monthly/fetch_credit_card_delinquency_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_credit_card_delinquency_rates.py"
+        run: python "code/monthly/fetch_credit_card_delinquency_rates.py"
         continue-on-error: true
 
   run-mortgage-default-rates:
@@ -158,11 +158,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Mortgage Default Rates Script
-        run: python "code/Banking and Credit Indicators/fetch_mortgage_default_rates.py"
+        run: python "code/quarterly/fetch_mortgage_default_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_mortgage_default_rates.py"
+        run: python "code/quarterly/fetch_mortgage_default_rates.py"
         continue-on-error: true
 
   run-bank-capital-adequacy-ratios:
@@ -180,11 +180,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Bank Capital Adequacy Ratios Script
-        run: python "code/Banking and Credit Indicators/fetch_bank_capital_adequacy_ratios.py"
+        run: python "code/quarterly/fetch_bank_capital_adequacy_ratios.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_bank_capital_adequacy_ratios.py"
+        run: python "code/quarterly/fetch_bank_capital_adequacy_ratios.py"
         continue-on-error: true
 
   run-money-market-fund-flows:
@@ -202,11 +202,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Money Market Fund Flows Script
-        run: python "code/Banking and Credit Indicators/fetch_money_market_fund_flows.py"
+        run: python "code/weekly/fetch_money_market_fund_flows.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_money_market_fund_flows.py"
+        run: python "code/weekly/fetch_money_market_fund_flows.py"
         continue-on-error: true
 
   run-shadow-banking-size:
@@ -224,9 +224,9 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Shadow Banking Size Script
-        run: python "code/Banking and Credit Indicators/fetch_shadow_banking_size.py"
+        run: python "code/yearly/fetch_shadow_banking_size.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Banking and Credit Indicators/fetch_shadow_banking_size.py"
+        run: python "code/yearly/fetch_shadow_banking_size.py"
         continue-on-error: true

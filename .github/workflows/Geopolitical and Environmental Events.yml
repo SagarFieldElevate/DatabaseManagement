@@ -25,11 +25,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Armed Conflicts Script
-        run: python "code/Geopolitical and Environmental Events/fetch_armed_conflicts.py"
+        run: python "code/event_driven/fetch_armed_conflicts.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_armed_conflicts.py"
+        run: python "code/event_driven/fetch_armed_conflicts.py"
         continue-on-error: true
 
   run-political-instability:
@@ -47,11 +47,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Political Instability Script
-        run: python "code/Geopolitical and Environmental Events/fetch_political_instability.py"
+        run: python "code/event_driven/fetch_political_instability.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_political_instability.py"
+        run: python "code/event_driven/fetch_political_instability.py"
         continue-on-error: true
 
   run-elections-leadership-changes:
@@ -69,11 +69,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Elections and Leadership Changes Script
-        run: python "code/Geopolitical and Environmental Events/fetch_elections_leadership_changes.py"
+        run: python "code/event_driven/fetch_elections_leadership_changes.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_elections_leadership_changes.py"
+        run: python "code/event_driven/fetch_elections_leadership_changes.py"
         continue-on-error: true
 
   run-natural-disasters:
@@ -91,11 +91,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Natural Disasters Script
-        run: python "code/Geopolitical and Environmental Events/fetch_natural_disasters.py"
+        run: python "code/event_driven/fetch_natural_disasters.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_natural_disasters.py"
+        run: python "code/event_driven/fetch_natural_disasters.py"
         continue-on-error: true
 
   run-pandemics-health-crises:
@@ -113,11 +113,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Pandemics and Health Crises Script
-        run: python "code/Geopolitical and Environmental Events/fetch_pandemics_health_crises.py"
+        run: python "code/event_driven/fetch_pandemics_health_crises.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_pandemics_health_crises.py"
+        run: python "code/event_driven/fetch_pandemics_health_crises.py"
         continue-on-error: true
 
   run-climate-change-effects:
@@ -135,11 +135,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Climate Change Effects Script
-        run: python "code/Geopolitical and Environmental Events/fetch_climate_change_effects.py"
+        run: python "code/event_driven/fetch_climate_change_effects.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_climate_change_effects.py"
+        run: python "code/event_driven/fetch_climate_change_effects.py"
         continue-on-error: true
 
   run-cybersecurity-threats:
@@ -157,11 +157,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Cybersecurity Threats Script
-        run: python "code/Geopolitical and Environmental Events/fetch_cybersecurity_threats.py"
+        run: python "code/event_driven/fetch_cybersecurity_threats.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_cybersecurity_threats.py"
+        run: python "code/event_driven/fetch_cybersecurity_threats.py"
         continue-on-error: true
 
   run-terrorism-incidents:
@@ -179,11 +179,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Terrorism Incidents Script
-        run: python "code/Geopolitical and Environmental Events/fetch_terrorism_incidents.py"
+        run: python "code/event_driven/fetch_terrorism_incidents.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_terrorism_incidents.py"
+        run: python "code/event_driven/fetch_terrorism_incidents.py"
         continue-on-error: true
 
   run-refugee-crises:
@@ -201,11 +201,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Refugee Crises Script
-        run: python "code/Geopolitical and Environmental Events/fetch_refugee_crises.py"
+        run: python "code/event_driven/fetch_refugee_crises.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_refugee_crises.py"
+        run: python "code/event_driven/fetch_refugee_crises.py"
         continue-on-error: true
 
   run-international-sanctions:
@@ -223,9 +223,9 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run International Sanctions Script
-        run: python "code/Geopolitical and Environmental Events/fetch_international_sanctions.py"
+        run: python "code/event_driven/fetch_international_sanctions.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Geopolitical and Environmental Events/fetch_international_sanctions.py"
+        run: python "code/event_driven/fetch_international_sanctions.py"
         continue-on-error: true

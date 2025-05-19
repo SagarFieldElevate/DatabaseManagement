@@ -26,11 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Fiscal Stimulus Measures Script
-        run: python "code/Policy and Regulatory Factors/fetch_fiscal_stimulus_measures.py"
+        run: python "code/event_driven/fetch_fiscal_stimulus_measures.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Policy and Regulatory Factors/fetch_fiscal_stimulus_measures.py"
+        run: python "code/event_driven/fetch_fiscal_stimulus_measures.py"
         continue-on-error: true
 
   run-tax-policy-changes:
@@ -48,11 +48,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Tax Policy Changes Script
-        run: python "code/Policy and Regulatory Factors/fetch_tax_policy_changes.py"
+        run: python "code/event_driven/fetch_tax_policy_changes.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Policy and Regulatory Factors/fetch_tax_policy_changes.py"
+        run: python "code/event_driven/fetch_tax_policy_changes.py"
         continue-on-error: true
 
   run-monetary-policy-decisions:
@@ -70,11 +70,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Monetary Policy Decisions Script
-        run: python "code/Policy and Regulatory Factors/fetch_monetary_policy_decisions.py"
+        run: python "code/event_driven/fetch_monetary_policy_decisions.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Policy and Regulatory Factors/fetch_monetary_policy_decisions.py"
+        run: python "code/event_driven/fetch_monetary_policy_decisions.py"
         continue-on-error: true
 
   run-regulatory-reforms:
@@ -92,11 +92,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Regulatory Reforms Script
-        run: python "code/Policy and Regulatory Factors/fetch_regulatory_reforms.py"
+        run: python "code/event_driven/fetch_regulatory_reforms.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Policy and Regulatory Factors/fetch_regulatory_reforms.py"
+        run: python "code/event_driven/fetch_regulatory_reforms.py"
         continue-on-error: true
 
   run-minimum-wage-laws:
@@ -136,11 +136,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Environmental Regulations Script
-        run: python "code/Policy and Regulatory Factors/fetch_environmental_regulations.py"
+        run: python "code/event_driven/fetch_environmental_regulations.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Policy and Regulatory Factors/fetch_environmental_regulations.py"
+        run: python "code/event_driven/fetch_environmental_regulations.py"
         continue-on-error: true
 
   run-trade-policy-shifts:
@@ -180,11 +180,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Healthcare Policy Changes Script
-        run: python "code/Policy and Regulatory Factors/fetch_healthcare_policy_changes.py"
+        run: python "code/event_driven/fetch_healthcare_policy_changes.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Policy and Regulatory Factors/fetch_healthcare_policy_changes.py"
+        run: python "code/event_driven/fetch_healthcare_policy_changes.py"
         continue-on-error: true
 
   run-infrastructure-spending:
@@ -202,11 +202,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Infrastructure Spending Script
-        run: python "code/Policy and Regulatory Factors/fetch_infrastructure_spending.py"
+        run: python "code/event_driven/fetch_infrastructure_spending.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Policy and Regulatory Factors/fetch_infrastructure_spending.py"
+        run: python "code/event_driven/fetch_infrastructure_spending.py"
         continue-on-error: true
 
   run-central-bank-independence:

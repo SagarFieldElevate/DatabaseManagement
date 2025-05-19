@@ -26,11 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Global Trade Volume Script
-        run: python "code/Trade and Globalization Metrics/fetch_global_trade_volume.py"
+        run: python "code/monthly/fetch_global_trade_volume.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_global_trade_volume.py"
+        run: python "code/monthly/fetch_global_trade_volume.py"
         continue-on-error: true
 
   run-export-import-prices:
@@ -48,11 +48,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Export/Import Prices Script
-        run: python "code/Trade and Globalization Metrics/fetch_export_import_prices.py"
+        run: python "code/monthly/fetch_export_import_prices.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_export_import_prices.py"
+        run: python "code/monthly/fetch_export_import_prices.py"
         continue-on-error: true
 
   run-baltic-dry-index:
@@ -70,11 +70,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-data-reader
       - name: Run Baltic Dry Index Script
-        run: python "code/Trade and Globalization Metrics/fetch_baltic_dry_index.py"
+        run: python "code/daily/fetch_baltic_dry_index.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_baltic_dry_index.py"
+        run: python "code/daily/fetch_baltic_dry_index.py"
         continue-on-error: true
 
   run-supply-chain-disruptions:
@@ -92,11 +92,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Supply Chain Disruptions Script
-        run: python "code/Trade and Globalization Metrics/fetch_supply_chain_disruptions.py"
+        run: python "code/event_driven/fetch_supply_chain_disruptions.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_supply_chain_disruptions.py"
+        run: python "code/event_driven/fetch_supply_chain_disruptions.py"
         continue-on-error: true
 
   run-tariff-rates:
@@ -114,11 +114,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Tariff Rates Script
-        run: python "code/Trade and Globalization Metrics/fetch_tariff_rates.py"
+        run: python "code/event_driven/fetch_tariff_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_tariff_rates.py"
+        run: python "code/event_driven/fetch_tariff_rates.py"
         continue-on-error: true
 
   run-trade-agreements:
@@ -136,11 +136,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Trade Agreements Script
-        run: python "code/Trade and Globalization Metrics/fetch_trade_agreements.py"
+        run: python "code/event_driven/fetch_trade_agreements.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_trade_agreements.py"
+        run: python "code/event_driven/fetch_trade_agreements.py"
         continue-on-error: true
 
   run-capital-flows:
@@ -158,11 +158,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Cross-Border Capital Flows Script
-        run: python "code/Trade and Globalization Metrics/fetch_capital_flows.py"
+        run: python "code/quarterly/fetch_capital_flows.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_capital_flows.py"
+        run: python "code/quarterly/fetch_capital_flows.py"
         continue-on-error: true
 
   run-remittances:
@@ -180,11 +180,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Remittances Script
-        run: python "code/Trade and Globalization Metrics/fetch_remittances.py"
+        run: python "code/yearly/fetch_remittances.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_remittances.py"
+        run: python "code/yearly/fetch_remittances.py"
         continue-on-error: true
 
   run-gvc-participation:
@@ -202,11 +202,11 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Global Value Chains Participation Script
-        run: python "code/Trade and Globalization Metrics/fetch_gvc_participation.py"
+        run: python "code/yearly/fetch_gvc_participation.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_gvc_participation.py"
+        run: python "code/yearly/fetch_gvc_participation.py"
         continue-on-error: true
 
   run-trade-sanctions:
@@ -224,9 +224,9 @@ jobs:
           pip install -r requirements.txt
           pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Trade Sanctions Script
-        run: python "code/Trade and Globalization Metrics/fetch_trade_sanctions.py"
+        run: python "code/event_driven/fetch_trade_sanctions.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Trade and Globalization Metrics/fetch_trade_sanctions.py"
+        run: python "code/event_driven/fetch_trade_sanctions.py"
         continue-on-error: true

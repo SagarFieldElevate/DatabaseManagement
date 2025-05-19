@@ -25,11 +25,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run R&D Spending Script
-        run: python "code/Technological and Innovation Metrics/fetch_rd_spending.py"
+        run: python "code/yearly/fetch_rd_spending.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_rd_spending.py"
+        run: python "code/yearly/fetch_rd_spending.py"
         continue-on-error: true
 
   run-patent-filings:
@@ -47,11 +47,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Patent Filings Script
-        run: python "code/Technological and Innovation Metrics/fetch_patent_filings.py"
+        run: python "code/yearly/fetch_patent_filings.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_patent_filings.py"
+        run: python "code/yearly/fetch_patent_filings.py"
         continue-on-error: true
 
   run-technology-adoption-rates:
@@ -69,11 +69,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Technology Adoption Rates Script
-        run: python "code/Technological and Innovation Metrics/fetch_technology_adoption_rates.py"
+        run: python "code/yearly/fetch_technology_adoption_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_technology_adoption_rates.py"
+        run: python "code/yearly/fetch_technology_adoption_rates.py"
         continue-on-error: true
 
   run-internet-penetration-rates:
@@ -91,11 +91,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Internet Penetration Rates Script
-        run: python "code/Technological and Innovation Metrics/fetch_internet_penetration_rates.py"
+        run: python "code/yearly/fetch_internet_penetration_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_internet_penetration_rates.py"
+        run: python "code/yearly/fetch_internet_penetration_rates.py"
         continue-on-error: true
 
   run-ai-integration:
@@ -113,11 +113,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run AI Integration Script
-        run: python "code/Technological and Innovation Metrics/fetch_ai_integration.py"
+        run: python "code/yearly/fetch_ai_integration.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_ai_integration.py"
+        run: python "code/yearly/fetch_ai_integration.py"
         continue-on-error: true
 
   run-startup-ecosystem-strength:
@@ -135,11 +135,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Startup Ecosystem Strength Script
-        run: python "code/Technological and Innovation Metrics/fetch_startup_ecosystem_strength.py"
+        run: python "code/yearly/fetch_startup_ecosystem_strength.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_startup_ecosystem_strength.py"
+        run: python "code/yearly/fetch_startup_ecosystem_strength.py"
         continue-on-error: true
 
   run-venture-capital-investment:
@@ -157,11 +157,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Venture Capital Investment Script
-        run: python "code/Technological and Innovation Metrics/fetch_venture_capital_investment.py"
+        run: python "code/yearly/fetch_venture_capital_investment.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_venture_capital_investment.py"
+        run: python "code/yearly/fetch_venture_capital_investment.py"
         continue-on-error: true
 
   run-digital-infrastructure-quality:
@@ -179,11 +179,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Digital Infrastructure Quality Script
-        run: python "code/Technological and Innovation Metrics/fetch_digital_infrastructure_quality.py"
+        run: python "code/yearly/fetch_digital_infrastructure_quality.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_digital_infrastructure_quality.py"
+        run: python "code/yearly/fetch_digital_infrastructure_quality.py"
         continue-on-error: true
 
   run-ecommerce-growth-rates:
@@ -201,11 +201,11 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run E-commerce Growth Rates Script
-        run: python "code/Technological and Innovation Metrics/fetch_ecommerce_growth_rates.py"
+        run: python "code/yearly/fetch_ecommerce_growth_rates.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_ecommerce_growth_rates.py"
+        run: python "code/yearly/fetch_ecommerce_growth_rates.py"
         continue-on-error: true
 
   run-cybersecurity-investment:
@@ -223,9 +223,9 @@ jobs:
           pip install -r requirements.txt
           pip install pandas openpyxl requests beautifulsoup4 pandas-datareader
       - name: Run Cybersecurity Investment Script
-        run: python "code/Technological and Innovation Metrics/fetch_cybersecurity_investment.py"
+        run: python "code/yearly/fetch_cybersecurity_investment.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technological and Innovation Metrics/fetch_cybersecurity_investment.py"
+        run: python "code/yearly/fetch_cybersecurity_investment.py"
         continue-on-error: true
