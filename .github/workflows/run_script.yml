@@ -27,11 +27,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run 24h Volatility & Trading Range Script
-        run: python "code/24h Volatility & Trading Range.py"
+        run: python "code/daily/24h Volatility & Trading Range.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/24h Volatility & Trading Range.py"
+        run: python "code/daily/24h Volatility & Trading Range.py"
         continue-on-error: true
 
   run-bitcoin-halving:
@@ -49,11 +49,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Bitcoin Halving Script
-        run: python "code/BitcoinHalving.py"
+        run: python "code/event_driven/BitcoinHalving.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/BitcoinHalving.py"
+        run: python "code/event_driven/BitcoinHalving.py"
         continue-on-error: true
 
   run-consumer-confidence:
@@ -93,11 +93,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Gold Daily Price Script
-        run: python "code/GoldDailyPrice.py"
+        run: python "code/daily/GoldDailyPrice.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/GoldDailyPrice.py"
+        run: python "code/daily/GoldDailyPrice.py"
         continue-on-error: true
 
   run-housing-permit:
@@ -137,11 +137,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Market Cap Script
-        run: python "code/MarketCap.py"
+        run: python "code/daily/MarketCap.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/MarketCap.py"
+        run: python "code/daily/MarketCap.py"
         continue-on-error: true
 
   run-qqq-data:
@@ -159,11 +159,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run QQQ Data Script
-        run: python "code/QQQData.py"
+        run: python "code/daily/QQQData.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/QQQData.py"
+        run: python "code/daily/QQQData.py"
         continue-on-error: true
 
   run-volume-traded:
@@ -181,11 +181,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Volume Traded Script
-        run: python "code/VolumeTraded.py"
+        run: python "code/daily/VolumeTraded.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/VolumeTraded.py"
+        run: python "code/daily/VolumeTraded.py"
         continue-on-error: true
 
   run-technicals:
@@ -203,11 +203,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Technicals Script
-        run: python "code/Technicals.py"
+        run: python "code/daily/Technicals.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/Technicals.py"
+        run: python "code/daily/Technicals.py"
         continue-on-error: true
 
   run-retail-consumption:
@@ -225,11 +225,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Retail Consumption Script
-        run: python "code/retailConsumption.py"
+        run: python "code/monthly/retailConsumption.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/retailConsumption.py"
+        run: python "code/monthly/retailConsumption.py"
         continue-on-error: true
 
   # Batch 2: 10 jobs running in parallel, dependent on Batch 1
@@ -259,11 +259,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run BTC Price Daily Script
-        run: python "code/BTCPriceDaily.py"
+        run: python "code/daily/BTCPriceDaily.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/BTCPriceDaily.py"
+        run: python "code/daily/BTCPriceDaily.py"
         continue-on-error: true
 
   run-coindesk-sentiment:
@@ -292,11 +292,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run CoinDesk Sentiment Script
-        run: python "code/CoinDeskSentiment.py"
+        run: python "code/daily/CoinDeskSentiment.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/CoinDeskSentiment.py"
+        run: python "code/daily/CoinDeskSentiment.py"
         continue-on-error: true
 
   run-currency-exchange:
@@ -325,11 +325,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Currency Exchange Script
-        run: python "code/CurrencyExchange.py"
+        run: python "code/daily/CurrencyExchange.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/CurrencyExchange.py"
+        run: python "code/daily/CurrencyExchange.py"
         continue-on-error: true
 
   run-gdp-data:
@@ -391,11 +391,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Google Trending Script
-        run: python "code/GoogleTrending.py"
+        run: python "code/daily/GoogleTrending.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/GoogleTrending.py"
+        run: python "code/daily/GoogleTrending.py"
         continue-on-error: true
 
   run-inflation-data:
@@ -424,11 +424,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Inflation Data Script
-        run: python "code/InflationData.py"
+        run: python "code/monthly/InflationData.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/InflationData.py"
+        run: python "code/monthly/InflationData.py"
         continue-on-error: true
 
   run-labor-force-participation:
@@ -457,11 +457,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Labor Force Participation Script
-        run: python "code/LaborForceParticipation.py"
+        run: python "code/monthly/LaborForceParticipation.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/LaborForceParticipation.py"
+        run: python "code/monthly/LaborForceParticipation.py"
         continue-on-error: true
 
   run-m2-data:
@@ -523,11 +523,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Prices Script
-        run: python "code/PricesScript.py"
+        run: python "code/daily/PricesScript.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/PricesScript.py"
+        run: python "code/daily/PricesScript.py"
         continue-on-error: true
 
   run-spy-data:
@@ -556,11 +556,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run SPY Data Script
-        run: python "code/SPYData.py"
+        run: python "code/daily/SPYData.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/SPYData.py"
+        run: python "code/daily/SPYData.py"
         continue-on-error: true
 
   # Batch 3: 7 jobs running in parallel, dependent on Batch 2
@@ -590,11 +590,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run BTC ETF Net Flow Script
-        run: python "code/BTC ETF Net Flow.py"
+        run: python "code/daily/BTC ETF Net Flow.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/BTC ETF Net Flow.py"
+        run: python "code/daily/BTC ETF Net Flow.py"
         continue-on-error: true
 
   run-global-gdp:
@@ -623,11 +623,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Global GDP Script
-        run: python "code/GlobalGDP.py"
+        run: python "code/yearly/GlobalGDP.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/GlobalGDP.py"
+        run: python "code/yearly/GlobalGDP.py"
         continue-on-error: true
 
   run-interest-rate:
@@ -656,11 +656,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Interest Rate Script
-        run: python "code/InterestRate.py"
+        run: python "code/daily/InterestRate.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/InterestRate.py"
+        run: python "code/daily/InterestRate.py"
         continue-on-error: true
 
   run-liquidity-indicator:
@@ -689,11 +689,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run Liquidity Indicator Script
-        run: python "code/LiquidityIndicator.py"
+        run: python "code/daily/LiquidityIndicator.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/LiquidityIndicator.py"
+        run: python "code/daily/LiquidityIndicator.py"
         continue-on-error: true
 
   run-stablecoin-supply:
@@ -722,11 +722,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run StableCoin Supply Script
-        run: python "code/StableCoinSupply.py"
+        run: python "code/daily/StableCoinSupply.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/StableCoinSupply.py"
+        run: python "code/daily/StableCoinSupply.py"
         continue-on-error: true
 
   run-usdollar-index:
@@ -755,11 +755,11 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert pandas requests fredapi
       - name: Run USDollar Index Script
-        run: python "code/USDollarIndex.py"
+        run: python "code/daily/USDollarIndex.py"
         continue-on-error: true
       - name: Retry on Failure
         if: failure()
-        run: python "code/USDollarIndex.py"
+        run: python "code/daily/USDollarIndex.py"
         continue-on-error: true
 
   run-unemployment-data:

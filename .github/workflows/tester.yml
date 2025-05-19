@@ -30,43 +30,43 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run 1m script
-        run: python code/bitcoin_close_1min.py
+        run: python code/intraday/bitcoin_close_1min.py
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
 
       - name: Run 5m script
-        run: python code/bitcoin_close_5min.py
+        run: python code/intraday/bitcoin_close_5min.py
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
 
       - name: Run 15m script
-        run: python code/bitcoin_close_15min.py
+        run: python code/intraday/bitcoin_close_15min.py
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
 
       - name: Run 30m script
-        run: python code/bitcoin_close_30min.py
+        run: python code/intraday/bitcoin_close_30min.py
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
 
       - name: Run 1h script
-        run: python code/bitcoin_close_1h.py
+        run: python code/intraday/bitcoin_close_1h.py
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
 
       - name: Run 1wk script
-        run: python code/bitcoin_close_1wk.py
+        run: python code/weekly/bitcoin_close_1wk.py
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
 
       - name: Run 1mo script
-        run: python code/bitcoin_close_1mo.py
+        run: python code/monthly/bitcoin_close_1mo.py
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
