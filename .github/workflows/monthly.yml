@@ -2,63 +2,29 @@ name: Monthly Jobs
 
 on:
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: "0 0 1 * *"
   workflow_dispatch:
 
-env:
-  AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-
 jobs:
-  run-scripts:
+  run-monthly-scripts:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        script:
-          - 'code/monthly/Money Supply (M2).py'
-          - 'code/monthly/run_all_scripts.py'
-          - 'code/monthly/fetch_coal_prices.py'
-          - 'code/monthly/fetch_youth_unemployment_rate.py'
-          - 'code/monthly/fetch_agricultural_prices.py'
-          - 'code/monthly/Capacity Utilization.py'
-          - 'code/monthly/Housing Starts.py'
-          - 'code/monthly/fetch_margin_debt.py'
-          - 'code/monthly/fetch_export_import_prices.py'
-          - 'code/monthly/Purchasing Managers' Index (PMI).py'
-          - 'code/monthly/fetch_commodity_price_index.py'
-          - 'code/monthly/fetch_global_trade_volume.py'
-          - 'code/monthly/Trade Balance.py'
-          - 'code/monthly/Industrial Production.py'
-          - 'code/monthly/fetch_metal_prices.py'
-          - 'code/monthly/Building Permits.py'
-          - 'code/monthly/Unemployment Rate.py'
-          - 'code/monthly/fetch_labor_force_participation.py'
-          - 'code/monthly/Consumer Confidence Index.py'
-          - 'code/monthly/fetch_wage_growth_rates.py'
-          - 'code/monthly/bitcoin_close_1mo.py'
-          - 'code/monthly/fetch_credit_card_delinquency_rates.py'
-          - 'code/monthly/fetch_dividend_yields.py'
-          - 'code/monthly/Business Confidence Index.py'
-          - 'code/monthly/fetch_job_vacancy_rates.py'
-          - 'code/monthly/fetch_electricity_prices.py'
-          - 'code/monthly/LaborForceParticipation.py'
-          - 'code/monthly/Inflation Rate (CPI).py'
-          - 'code/monthly/fetch_employment_population_ratio.py'
-          - 'code/monthly/InflationData.py'
-          - 'code/monthly/Retail Sales.py'
-          - 'code/monthly/retailConsumption.py'
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: Install Dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run monthly scripts
         run: |
-          pip install -r requirements.txt
-          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
-      - name: Run Script
-        run: python ${{ matrix.script }}
-      - name: Retry on Failure
-        if: failure()
-        run: python ${{ matrix.script }}
+          shopt -s nullglob
+          for script in code/monthly/*.py; do
+            echo "Running $script"
+            python "$script" || echo "Failed $script"
+          done

@@ -23,16 +23,17 @@ the folder that matches the data update frequency.
 
 ## GitHub Workflows
 
-Automated GitHub Actions are organized by schedule. The `.github/workflows`
-folder contains one workflow file for each update frequency:
+Automated GitHub Actions are organized by update frequency. Each workflow file
+matches a directory under `code/` and sequentially executes every script in
+that directory. The available workflows are:
 
-* `intraday.yml` – runs high frequency jobs every 15 minutes
-* `daily.yml` – runs daily jobs at midnight UTC
-* `weekly.yml` – runs weekly jobs every Sunday
+* `intraday.yml` – runs high‑frequency jobs every 15 minutes
+* `daily.yml` – runs nightly jobs at midnight UTC
+* `weekly.yml` – triggers every Sunday
 * `monthly.yml` – runs on the first day of each month
 * `quarterly.yml` – runs on the first day of each quarter
-* `yearly.yml` – runs annually on January 1st
-* `event_driven.yml` – runs event-based jobs each day
+* `yearly.yml` – runs once a year on January 1st
+* `event_driven.yml` – manually triggered for event‑specific scripts
 
-All job definitions now live directly in these schedule files using a matrix of
-scripts for the given frequency.
+All workflows directly loop over their respective folders; there is no separate
+templates directory anymore.

@@ -2,37 +2,30 @@ name: Intraday Jobs
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
-env:
-  AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-
 jobs:
-  run-scripts:
+  run-intraday-scripts:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        script:
-          - 'code/intraday/bitcoin_close_30min.py'
-          - 'code/intraday/bitcoin_close_15min.py'
-          - 'code/intraday/bitcoin_close_5min.py'
-          - 'code/intraday/btc_5m_history.py'
-          - 'code/intraday/bitcoin_close_1min.py'
-          - 'code/intraday/bitcoin_close_1h.py'
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: Install Dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run intraday scripts
         run: |
-          pip install -r requirements.txt
-          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
-      - name: Run Script
-        run: python ${{ matrix.script }}
-      - name: Retry on Failure
-        if: failure()
-        run: python ${{ matrix.script }}
+          shopt -s nullglob
+          for script in code/intraday/*.py; do
+            echo "Running $script"
+            python "$script" || echo "Failed $script"
+          done
+

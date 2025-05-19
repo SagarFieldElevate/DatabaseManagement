@@ -2,52 +2,29 @@ name: Yearly Jobs
 
 on:
   schedule:
-    - cron: '0 0 1 1 *'
+    - cron: "0 0 1 1 *"
   workflow_dispatch:
 
-env:
-  AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-
 jobs:
-  run-scripts:
+  run-yearly-scripts:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        script:
-          - 'code/yearly/GlobalGDP.py'
-          - 'code/yearly/fetch_rd_spending.py'
-          - 'code/yearly/fetch_migration_rates.py'
-          - 'code/yearly/fetch_unionization_rates.py'
-          - 'code/yearly/fetch_internet_penetration_rates.py'
-          - 'code/yearly/fetch_technology_adoption_rates.py'
-          - 'code/yearly/fetch_aging_population_metrics.py'
-          - 'code/yearly/fetch_shadow_banking_size.py'
-          - 'code/yearly/fetch_gvc_participation.py'
-          - 'code/yearly/Public Debt Levels (IMF).py'
-          - 'code/yearly/fetch_education_attainment_levels.py'
-          - 'code/yearly/fetch_remittances.py'
-          - 'code/yearly/fetch_non_performing_loans.py'
-          - 'code/yearly/fetch_ecommerce_growth_rates.py'
-          - 'code/yearly/fetch_venture_capital_investment.py'
-          - 'code/yearly/fetch_digital_infrastructure_quality.py'
-          - 'code/yearly/fetch_startup_ecosystem_strength.py'
-          - 'code/yearly/fetch_patent_filings.py'
-          - 'code/yearly/fetch_cybersecurity_investment.py'
-          - 'code/yearly/fetch_ai_integration.py'
-          - 'code/yearly/fetch_energy_consumption.py'
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: Install Dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run yearly scripts
         run: |
-          pip install -r requirements.txt
-          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
-      - name: Run Script
-        run: python ${{ matrix.script }}
-      - name: Retry on Failure
-        if: failure()
-        run: python ${{ matrix.script }}
+          shopt -s nullglob
+          for script in code/yearly/*.py; do
+            echo "Running $script"
+            python "$script" || echo "Failed $script"
+          done
