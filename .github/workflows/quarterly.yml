@@ -1,0 +1,45 @@
+name: Quarterly Jobs
+
+on:
+  schedule:
+    - cron: '0 0 1 */3 *'
+  workflow_dispatch:
+
+env:
+  AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+
+jobs:
+  run-scripts:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        script:
+          - 'code/quarterly/fetch_stock_buybacks.py'
+          - 'code/quarterly/Government Budget Balance (OECD).py'
+          - 'code/quarterly/fetch_labor_productivity.py'
+          - 'code/quarterly/fetch_loan_to_deposit_ratios.py'
+          - 'code/quarterly/GDP Growth Rate.py'
+          - 'code/quarterly/fetch_corporate_debt_levels.py'
+          - 'code/quarterly/Current Account Balance (OECD).py'
+          - 'code/quarterly/fetch_capital_flows.py'
+          - 'code/quarterly/fetch_household_debt_levels.py'
+          - 'code/quarterly/Gross Domestic Product.py'
+          - 'code/quarterly/fetch_mortgage_default_rates.py'
+          - 'code/quarterly/Foreign Direct Investment (FDI) (UNCTAD).py'
+          - 'code/quarterly/fetch_bank_capital_adequacy_ratios.py'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install fredapi pandas openpyxl requests beautifulsoup4 pandas-datareader
+      - name: Run Script
+        run: python ${{ matrix.script }}
+      - name: Retry on Failure
+        if: failure()
+        run: python ${{ matrix.script }}
