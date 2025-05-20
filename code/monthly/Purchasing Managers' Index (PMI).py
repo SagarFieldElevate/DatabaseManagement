@@ -6,7 +6,7 @@ from data_upload_utils import upload_to_github, create_airtable_record, update_a
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
-TABLE_NAME = "Macro Level Economic Indicators"
+TABLE_NAME = "monthly"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"

@@ -9,7 +9,7 @@ AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 FRED_API_KEY = os.getenv("FRED_API_KEY")
 
 BASE_ID = "appnssPRD9yeYJJe5"
-TABLE_NAME = "Macro Level Economic Indicators"
+TABLE_NAME = "daily"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
