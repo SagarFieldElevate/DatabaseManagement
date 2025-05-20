@@ -2,6 +2,9 @@ import os
 import base64
 import requests
 
+# Default Airtable attachment field name
+ATTACHMENT_FIELD = os.getenv("AIRTABLE_ATTACHMENT_FIELD", "Attachments")
+
 def upload_to_github(filename, repo_name, branch, upload_path, token):
     with open(filename, "rb") as f:
         content = base64.b64encode(f.read()).decode()
@@ -45,7 +48,7 @@ def update_airtable(record_id, raw_url, filename, airtable_url, airtable_token):
     }
     patch_payload = {
         "fields": {
-            "Database Attachment": [
+            ATTACHMENT_FIELD: [
                 {
                     "url": raw_url,
                     "filename": filename
@@ -67,7 +70,7 @@ def create_airtable_record(name, raw_url, filename, airtable_url, airtable_token
     # Core required fields
     record_fields = {
         "Name": name,
-        "Database Attachment": [{
+        ATTACHMENT_FIELD: [{
             "url": raw_url,
             "filename": filename
         }]
