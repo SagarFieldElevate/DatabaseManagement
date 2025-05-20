@@ -13,7 +13,7 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
-TABLE_NAME = "Database"
+TABLE_NAME = "intraday"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 # === Fetch Binance BTC 5m Data Function ===

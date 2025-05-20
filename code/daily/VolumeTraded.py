@@ -39,7 +39,7 @@ df.to_excel(filename, index=False)
 # === Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
-TABLE_NAME = "Database"
+TABLE_NAME = "daily"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"

@@ -19,7 +19,9 @@ code/
 
 All scripts have been moved into these frequency folders. Older indicator
 directories were removed to simplify navigation. Place any new scripts in
-the folder that matches the data update frequency.
+the folder that matches the data update frequency. Each script defines
+`TABLE_NAME` using its parent folder name (e.g. `daily`, `weekly`), so the
+Airtable records automatically go to the corresponding table.
 
 ## GitHub Workflows
 
