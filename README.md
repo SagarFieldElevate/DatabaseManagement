@@ -39,3 +39,14 @@ that directory. The available workflows are:
 
 All workflows directly loop over their respective folders; there is no separate
 templates directory anymore.
+
+## Environment Variables
+
+Scripts rely on the following environment variables when run through the
+workflows:
+
+* `AIRTABLE_API_KEY` – API key with access to the target Airtable base.
+* `GH_TOKEN` – GitHub token used for uploading intermediate files.
+* `AIRTABLE_ATTACHMENT_FIELD` – *(optional)* name of the Airtable field that
+  stores uploaded files. If not provided, the utilities default to a field
+  named `Attachments`.
