@@ -92,17 +92,40 @@ def create_airtable_record(name, raw_url, filename, airtable_url, airtable_token
 
         raise Exception(f"❌ Airtable record creation failed: {airtable_resp.status_code} - {airtable_resp.text}")
 
-def delete_file_from_github(filename, repo_name, branch, upload_path, token, sha):
+def delete_file_from_github(filename, repo_name, branch, upload_path, token, sha=None, max_retries=3):
+    """Delete a file from GitHub, retrying on conflicts and always using the latest SHA."""
+
     delete_url = f"https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}"
-    delete_payload = {
-        "message": f"Delete {filename}",
-        "sha": sha,
-        "branch": branch
-    }
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json"
     }
-    delete_resp = requests.delete(delete_url, headers=headers, json=delete_payload)
-    if delete_resp.status_code != 200:
+
+    for attempt in range(max_retries):
+        get_resp = requests.get(f"{delete_url}?ref={branch}", headers=headers)
+        if get_resp.status_code == 404:
+            return
+        if get_resp.status_code != 200:
+            raise Exception(f"❌ Unable to fetch file SHA: {get_resp.status_code} - {get_resp.text}")
+
+        sha = get_resp.json().get("sha")
+        if not sha:
+            raise Exception("❌ No SHA returned for file")
+
+        delete_payload = {
+            "message": f"Delete {filename}",
+            "sha": sha,
+            "branch": branch,
+        }
+
+        delete_resp = requests.delete(delete_url, headers=headers, json=delete_payload)
+        if delete_resp.status_code == 200:
+            return delete_resp.json()
+
+        if delete_resp.status_code == 409 and attempt < max_retries - 1:
+            continue
+
+        if delete_resp.status_code == 404:
+            return
+
         raise Exception(f"❌ GitHub file deletion failed: {delete_resp.status_code} - {delete_resp.text}")
