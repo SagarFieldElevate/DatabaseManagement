@@ -16,7 +16,7 @@ BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
-# === Fetch BTC Daily Close Price ===
+# === Fetch BTC 1 Minute Close Price ===
 symbol = "BTC-USD"
 df = yf.download("BTC-USD", period="7d", interval="1m")[['Close']].reset_index()
 df.columns = ['DateTime', 'Bitcoin Close Price (USD)']
@@ -42,7 +42,7 @@ records = response.json()["records"]
 
 existing_records = [
     rec for rec in records
-    if rec['fields'].get('Name') == "Bitcoin Daily Close Price"
+    if rec['fields'].get('Name') == "Bitcoin 1 Minute Close Price"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -55,4 +55,4 @@ else:
 # === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Bitcoin Daily Close Price: Airtable updated and GitHub cleaned up.")
+print("✅ Bitcoin 1 Minute Close Price: Airtable updated and GitHub cleaned up.")
