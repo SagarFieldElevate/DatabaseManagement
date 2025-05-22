@@ -5,8 +5,7 @@ from dune_client.client import DuneClient
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
-# Use the public Dune endpoint; no API key required
-dune = DuneClient()
+dune = DuneClient("63revqtmAaY9OoFIRoudipI7wN4NQLAL")
 
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
