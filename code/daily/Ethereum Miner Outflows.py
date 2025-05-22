@@ -16,6 +16,7 @@ UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 INDICATOR_NAME = "Ethereum Miner Outflows"
+
 QUERY_ID = 567890  # Dune query for ETH miner outflows
 
 
@@ -32,6 +33,7 @@ def fetch_dune_series(query_id: int) -> pd.DataFrame:
 
 # === Main Script ===
 df = fetch_dune_series(QUERY_ID)
+
 filename = "ethereum_miner_outflows.xlsx"
 df.to_excel(filename, index=False)
 

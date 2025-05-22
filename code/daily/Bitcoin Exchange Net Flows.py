@@ -27,11 +27,14 @@ def fetch_dune_series(query_id: int) -> pd.DataFrame:
     value_col = [c for c in df.columns if c != time_col][0]
     df.rename(columns={time_col: "Date", value_col: INDICATOR_NAME}, inplace=True)
     df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
+
     return df
 
 
 # === Main Script ===
+
 df = fetch_dune_series(QUERY_ID)
+
 filename = "bitcoin_exchange_net_flows.xlsx"
 df.to_excel(filename, index=False)
 

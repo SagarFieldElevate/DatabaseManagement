@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import requests
+
 from dune_client.client import DuneClient
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
@@ -16,6 +17,7 @@ UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 INDICATOR_NAME = "Ethereum Exchange Net Flows"
+
 QUERY_ID = 234567  # Dune query for ETH exchange net flows
 
 
@@ -27,11 +29,13 @@ def fetch_dune_series(query_id: int) -> pd.DataFrame:
     value_col = [c for c in df.columns if c != time_col][0]
     df.rename(columns={time_col: "Date", value_col: INDICATOR_NAME}, inplace=True)
     df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
+
     return df
 
 
 # === Main Script ===
 df = fetch_dune_series(QUERY_ID)
+
 filename = "ethereum_exchange_net_flows.xlsx"
 df.to_excel(filename, index=False)
 
