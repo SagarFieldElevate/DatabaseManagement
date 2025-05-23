@@ -9,6 +9,11 @@ jobs:
   run-daily-scripts:
     name: ${{ matrix.script }}
     runs-on: ubuntu-latest
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -45,6 +50,12 @@ jobs:
           - "code/daily/fetch_stock_market_indices.py"
           - "code/daily/fetch_vix.py"
           - "code/daily/fetch_yield_curve_spread.py"
+          - "code/daily/coingecko_altcoin_price_top100.py"
+          - "code/daily/coingecko_btc_daily_returns.py"
+          - "code/daily/coingecko_btc_daily_volume.py"
+          - "code/daily/coingecko_crypto_price_daily.py"
+          - "code/daily/coingecko_eth_daily_volume.py"
+          - "code/daily/coingecko_stablecoin_peg_deviation.py"
           - "code/daily/Bitcoin Coin Day Destroyed - Historical Trend.py"
           - "code/daily/Centralized Stablecoins Market Cap.py"
           - "code/daily/US Gov - BTC Balance and USD Value.py"
@@ -52,10 +63,6 @@ jobs:
           - "code/daily/SOPR 3.0.py"
           - "code/daily/Miner Revenue.py"
           - "code/daily/Active Addresses.py"
-    env:
-      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
 
     steps:
       - name: Checkout repository

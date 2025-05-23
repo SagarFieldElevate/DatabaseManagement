@@ -47,6 +47,7 @@ workflows:
 
 * `AIRTABLE_API_KEY` – API key with access to the target Airtable base.
 * `GH_TOKEN` – GitHub token used for uploading intermediate files.
+* `COINGECKO_API_KEY` – API key for CoinGecko cryptocurrency data.
 * `AIRTABLE_ATTACHMENT_FIELD` – *(optional)* name of the Airtable field that
   stores uploaded files. If not provided, the utilities default to a field
   named `Attachments`.

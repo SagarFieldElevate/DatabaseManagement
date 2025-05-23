@@ -9,6 +9,11 @@ jobs:
   run-intraday-scripts:
     name: ${{ matrix.script }}
     runs-on: ubuntu-latest
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -21,10 +26,7 @@ jobs:
           - "code/intraday/bitcoin_close_5min.py"
           - "code/intraday/btc_5m_history.py"
           - "code/intraday/data_upload_utils.py"
-    env:
-      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          - "code/intraday/coingecko_crypto_price_1m.py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
