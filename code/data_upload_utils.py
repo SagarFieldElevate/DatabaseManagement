@@ -26,8 +26,20 @@ def ensure_utc(df):
 
 _ORIG_TO_EXCEL = pd.DataFrame.to_excel
 
+def _drop_timezone(df):
+    """Remove timezone from datetime columns and store non-UTC tz in new columns."""
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            tz = df[col].dt.tz
+            if tz is not None:
+                if str(tz) != "UTC":
+                    df[f"{col}_timezone"] = str(tz)
+                df[col] = df[col].dt.tz_convert("UTC").dt.tz_localize(None)
+    return df
+
 def _to_excel_utc(self, *args, **kwargs):
     self = ensure_utc(self)
+    self = _drop_timezone(self)
     return _ORIG_TO_EXCEL(self, *args, **kwargs)
 
 if not getattr(pd.DataFrame.to_excel, "_utc_patched", False):
