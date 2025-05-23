@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 from datetime import datetime, timedelta
 import os
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -51,6 +51,7 @@ df = pd.DataFrame([halving_data])
 
 # === Save to Excel ===
 filename = "bitcoin_halving_progress.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===

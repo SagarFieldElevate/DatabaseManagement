@@ -3,7 +3,7 @@ import pandas as pd
 import yfinance as yf
 import pandas_ta as ta
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -54,6 +54,7 @@ df.rename(columns={
 
 # === Save to Excel ===
 filename = "bitcoin_technical_indicators.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===

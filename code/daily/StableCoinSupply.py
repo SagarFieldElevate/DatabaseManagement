@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 from datetime import datetime
 import os
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
@@ -77,6 +77,7 @@ df_pivoted['Total'] = df_grouped.groupby('date')['total_circulating_usd'].first(
 
 # Save the data to Excel file
 filename = "stablecoin_circulating_supply_with_sum.xlsx"
+df_pivoted = ensure_utc(df_pivoted)
 df_pivoted.to_excel(filename)
 
 # Upload to GitHub

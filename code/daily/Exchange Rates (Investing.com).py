@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -44,6 +44,7 @@ def get_fred_usdeur(start_date="2015-01-01"):
 # === Main Script ===
 df = get_fred_usdeur(start_date="2015-01-01")
 filename = "usdeur_exchange_rates.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # Upload to GitHub

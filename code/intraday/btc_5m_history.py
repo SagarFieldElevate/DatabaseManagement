@@ -3,7 +3,7 @@ import requests
 import os
 import time
 from datetime import datetime
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
@@ -64,6 +64,7 @@ def get_binance_us_btc_5m_history(days=140):
 # === Main Script ===
 btc_df = get_binance_us_btc_5m_history(140)
 filename = "binance_btc_5m_history.xlsx"
+btc_df = ensure_utc(btc_df)
 btc_df.to_excel(filename, index=False)
 
 # Upload to GitHub
