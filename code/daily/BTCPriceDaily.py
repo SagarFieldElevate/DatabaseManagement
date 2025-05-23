@@ -3,7 +3,13 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import (
+    upload_to_github,
+    create_airtable_record,
+    update_airtable,
+    delete_file_from_github,
+    ensure_utc,
+)
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -22,7 +28,8 @@ df = yf.download(symbol, period="max")[['Close']].reset_index()
 
 # Format columns
 df.columns = ['Date', 'Bitcoin Close Price (USD)']
-df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+df['Date'] = pd.to_datetime(df['Date'], utc=True)
+df = ensure_utc(df)
 df['Bitcoin Close Price (USD)'] = df['Bitcoin Close Price (USD)'].round(2)
 
 # === Save to Excel ===

@@ -1,9 +1,14 @@
 from pycoingecko import CoinGeckoAPI
 import pandas as pd
-from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import (
+    upload_to_github,
+    create_airtable_record,
+    update_airtable,
+    delete_file_from_github,
+    ensure_utc,
+)
 
 # === Initialize CoinGecko with API key ===
 COINGECKO_API_KEY = os.getenv("COINGECKO_API_KEY", "CG-eFCtjc4Mocq5xr7kno7b8qUm")
@@ -16,13 +21,14 @@ for symbol, coin_id in coins.items():
     market_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency="usd", days=365)
     for ts, price in market_data["prices"]:
         records.append({
-            "Date": datetime.utcfromtimestamp(ts / 1000).strftime("%Y-%m-%d"),
+            "Date": pd.to_datetime(ts, unit="ms", utc=True),
             "Symbol": symbol,
             "Close Price (USD)": price
         })
 
 # === Save to Excel ===
 df = pd.DataFrame(records)
+df = ensure_utc(df)
 filename = "coingecko_prices_daily.xlsx"
 df.to_excel(filename, index=False)
 
