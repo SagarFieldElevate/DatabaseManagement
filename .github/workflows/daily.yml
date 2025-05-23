@@ -10,6 +10,11 @@ jobs:
   run-daily-scripts:
     name: ${{ matrix.script }}
     runs-on: ubuntu-latest
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -51,10 +56,12 @@ jobs:
           - "code/daily/Stablecoin Exchange Flows.py"
           - "code/daily/Bitcoin Miner Outflows.py"
           - "code/daily/Ethereum Miner Outflows.py"
-    env:
-      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          - "code/daily/coingecko_altcoin_price_top100.py"
+          - "code/daily/coingecko_btc_daily_returns.py"
+          - "code/daily/coingecko_btc_daily_volume.py"
+          - "code/daily/coingecko_crypto_price_daily.py"
+          - "code/daily/coingecko_eth_daily_volume.py"
+          - "code/daily/coingecko_stablecoin_peg_deviation.py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
