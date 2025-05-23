@@ -3,7 +3,8 @@ import requests
 import pandas as pd
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
-API_KEY = os.getenv("ETHERSCAN_API_KEY")
+API_KEY = os.getenv("ETHERSCAN_API_KEY", "R1C32K1CWPMNJFWWNFIA51QGPSNRAAEBRJ")
+
 # === Gas Prices ===
 resp = requests.get(f"https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY}")
 resp.raise_for_status()
