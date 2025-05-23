@@ -51,3 +51,10 @@ workflows:
 * `AIRTABLE_ATTACHMENT_FIELD` – *(optional)* name of the Airtable field that
   stores uploaded files. If not provided, the utilities default to a field
   named `Attachments`.
+
+### Datetime Handling
+
+All scripts should ensure date columns are stored using `datetime64[ns, UTC]`
+dtype. The helper `ensure_utc` in `code/data_upload_utils.py` converts any
+datetime-like columns to UTC timezone. Call this function before saving or
+uploading your data to keep a consistent timezone across the project.

@@ -3,7 +3,7 @@ import pandas as pd
 import yfinance as yf
 import requests
 from datetime import datetime
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -30,6 +30,7 @@ def get_spy_close_data(start_date="2015-01-01"):
 # === Main Script ===
 df = get_spy_close_data(start_date="2015-01-01")
 filename = "spy_daily_close_price.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===

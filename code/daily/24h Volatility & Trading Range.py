@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # Initialize CoinGecko
 cg = CoinGeckoAPI()
@@ -52,6 +52,7 @@ for symbol, coin_id in coins.items():
 # Create DataFrame and export to Excel
 df = pd.DataFrame(data)
 filename = "crypto_365d_volatility_trading_range.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # === Airtable + GitHub Config ===

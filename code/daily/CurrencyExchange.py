@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import requests
 from fredapi import Fred
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 FRED_API_KEY = os.getenv("FRED_API_KEY")
@@ -51,6 +51,7 @@ def get_currency_exchange():
 # === Main Script ===
 df = get_currency_exchange()
 filename = "usd_currency_exchange_rates.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # Upload to GitHub

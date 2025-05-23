@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Initialize CoinGecko with API key ===
 COINGECKO_API_KEY = os.getenv("COINGECKO_API_KEY", "CG-eFCtjc4Mocq5xr7kno7b8qUm")
@@ -19,6 +19,7 @@ price_df["Return"] = price_df["price"].pct_change() * 100
 price_df = price_df.dropna()[["Date", "Return"]]
 
 filename = "bitcoin_daily_returns.xlsx"
+price_df = ensure_utc(price_df)
 price_df.to_excel(filename, index=False)
 
 # === Config ===

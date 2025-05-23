@@ -2,7 +2,7 @@ from pycoingecko import CoinGeckoAPI
 import pandas as pd
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Initialize CoinGecko with API key ===
 COINGECKO_API_KEY = os.getenv("COINGECKO_API_KEY", "CG-eFCtjc4Mocq5xr7kno7b8qUm")
@@ -18,6 +18,7 @@ records = [{
 
 df = pd.DataFrame(records)
 filename = "coingecko_top100_altcoin_prices.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # === Config ===
