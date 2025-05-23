@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 import os
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -39,6 +39,7 @@ file_path = "Uploads/ECONOMICS_USBCOI, 1M.csv"
 # Process the data
 df = load_and_process_data(file_path)
 filename = "usbc_roi_processed.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # Upload to GitHub

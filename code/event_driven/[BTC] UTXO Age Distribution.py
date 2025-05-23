@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import requests
 from dune_client.client import DuneClient
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 dune = DuneClient()
@@ -26,6 +26,7 @@ df.rename(columns={time_col: 'Date'}, inplace=True)
 df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
 
 filename = "btc_utxo_age_distribution.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # === Upload to GitHub ===

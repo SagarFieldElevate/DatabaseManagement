@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 COINGECKO_API_KEY = os.getenv("COINGECKO_API_KEY", "CG-eFCtjc4Mocq5xr7kno7b8qUm")
 cg = CoinGeckoAPI(api_key=COINGECKO_API_KEY)
@@ -28,6 +28,7 @@ for symbol, coin_id in stablecoins.items():
 
 df = pd.DataFrame(records)
 filename = "stablecoin_peg_deviation.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")

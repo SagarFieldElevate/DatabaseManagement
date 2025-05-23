@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -31,6 +31,8 @@ if 'Year-Month' in df.columns:
 # Filter out data before 2015
 df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m')
 df = df[df['Date'] >= pd.Timestamp('2015-01-01')]
+
+df = ensure_utc(df)
 
 df.to_excel(output_filename, index=False)
 os.remove(input_filename)  # Clean up original downloaded file

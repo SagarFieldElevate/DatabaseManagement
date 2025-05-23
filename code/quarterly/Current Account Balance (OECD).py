@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import requests
 from pandas_datareader import data as pdr
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -41,6 +41,7 @@ def get_current_account_balance(start_date="2015-01-01"):
 # === Main Script ===
 df = get_current_account_balance(start_date="2015-01-01")
 filename = "us_current_account_balance.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # Upload to GitHub

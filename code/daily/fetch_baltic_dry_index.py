@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -43,6 +43,7 @@ df = load_baltic_dry_index_data(file_path)
 
 # Save the DataFrame to Excel
 filename = "baltic_dry_index.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # Upload the file to GitHub

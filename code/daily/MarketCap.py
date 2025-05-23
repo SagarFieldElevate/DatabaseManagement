@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Initialize CoinGecko ===
 cg = CoinGeckoAPI()
@@ -55,6 +55,7 @@ combined_df = pd.concat(data, ignore_index=True)
 
 # === Save to Excel ===
 filename = "crypto_market_cap_365d.xlsx"
+combined_df = ensure_utc(combined_df)
 combined_df.to_excel(filename, index=False)
 
 # === Config for Airtable + GitHub ===
