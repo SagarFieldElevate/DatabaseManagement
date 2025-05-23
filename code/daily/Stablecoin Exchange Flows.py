@@ -1,10 +1,10 @@
 import os
 import pandas as pd
 import requests
+from dune_client.client import DuneClient
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
-GLASSNODE_API_KEY = os.getenv("GLASSNODE_API_KEY")
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "daily"
@@ -16,36 +16,22 @@ UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 INDICATOR_NAME = "Stablecoin Exchange Flows"
-ENDPOINT = "/v1/metrics/transactions/transfers_volume_sum_to_exchanges"
-STABLECOINS = ["USDT", "USDC", "DAI", "BUSD"]
+QUERY_ID = 345678  # Dune query aggregating stablecoin exchange flows
 
 
-def fetch_glassnode_series(asset: str) -> pd.DataFrame:
-    url = f"https://api.glassnode.com{ENDPOINT}"
-    params = {"a": asset, "api_key": GLASSNODE_API_KEY}
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    data = response.json()
-    df = pd.DataFrame(data)
-    df["t"] = pd.to_datetime(df["t"], unit="s")
-    df.columns = ["Date", asset]
+def fetch_dune_series(query_id: int) -> pd.DataFrame:
+    dune = DuneClient()
+    query_result = dune.get_latest_result(query_id)
+    df = pd.DataFrame(query_result.result.rows)
+    time_col = [c for c in df.columns if "time" in c.lower() or "date" in c.lower()][0]
+    value_col = [c for c in df.columns if c != time_col][0]
+    df.rename(columns={time_col: "Date", value_col: INDICATOR_NAME}, inplace=True)
+    df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
     return df
 
 
-def fetch_aggregated_flows() -> pd.DataFrame:
-    frames = [fetch_glassnode_series(asset) for asset in STABLECOINS]
-    df = frames[0]
-    for other in frames[1:]:
-        df = df.merge(other, on="Date", how="outer")
-    df.sort_values("Date", inplace=True)
-    df.fillna(0, inplace=True)
-    df[INDICATOR_NAME] = df[STABLECOINS].sum(axis=1)
-    df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
-    return df[["Date", INDICATOR_NAME]]
-
-
 # === Main Script ===
-df = fetch_aggregated_flows()
+df = fetch_dune_series(QUERY_ID)
 filename = "stablecoin_exchange_flows.xlsx"
 df.to_excel(filename, index=False)
 

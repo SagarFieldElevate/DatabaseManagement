@@ -1,10 +1,10 @@
 import os
 import pandas as pd
 import requests
+from dune_client.client import DuneClient
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 # === Secrets & Config ===
-GLASSNODE_API_KEY = os.getenv("GLASSNODE_API_KEY")
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "daily"
@@ -16,23 +16,24 @@ UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 INDICATOR_NAME = "Ethereum Miner Outflows"
-ENDPOINT = "/v1/metrics/transactions/miner_outflows"
+
+QUERY_ID = 567890  # Dune query for ETH miner outflows
 
 
-def fetch_glassnode_series(asset: str) -> pd.DataFrame:
-    url = f"https://api.glassnode.com{ENDPOINT}"
-    params = {"a": asset, "api_key": GLASSNODE_API_KEY}
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    data = response.json()
-    df = pd.DataFrame(data)
-    df["t"] = pd.to_datetime(df["t"], unit="s").dt.strftime("%Y-%m-%d")
-    df.columns = ["Date", INDICATOR_NAME]
+def fetch_dune_series(query_id: int) -> pd.DataFrame:
+    dune = DuneClient()
+    query_result = dune.get_latest_result(query_id)
+    df = pd.DataFrame(query_result.result.rows)
+    time_col = [c for c in df.columns if "time" in c.lower() or "date" in c.lower()][0]
+    value_col = [c for c in df.columns if c != time_col][0]
+    df.rename(columns={time_col: "Date", value_col: INDICATOR_NAME}, inplace=True)
+    df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%Y-%m-%d")
     return df
 
 
 # === Main Script ===
-df = fetch_glassnode_series("ETH")
+df = fetch_dune_series(QUERY_ID)
+
 filename = "ethereum_miner_outflows.xlsx"
 df.to_excel(filename, index=False)
 
