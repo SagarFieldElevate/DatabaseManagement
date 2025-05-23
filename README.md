@@ -55,6 +55,7 @@ workflows:
 ### Datetime Handling
 
 All scripts should ensure date columns are stored using `datetime64[ns, UTC]`
-dtype. The helper `ensure_utc` in `code/data_upload_utils.py` converts any
-datetime-like columns to UTC timezone. Call this function before saving or
-uploading your data to keep a consistent timezone across the project.
+dtype. Each `data_upload_utils.py` module defines an `ensure_utc` helper and
+monkey-patches `pandas.DataFrame.to_excel` so DataFrames are automatically
+converted to UTC before being written. Simply import one of these utilities and
+call `df.to_excel(...)` as usual.

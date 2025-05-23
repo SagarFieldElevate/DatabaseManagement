@@ -21,6 +21,18 @@ def ensure_utc(df):
                 df[col] = converted
     return df
 
+
+_ORIG_TO_EXCEL = pd.DataFrame.to_excel
+
+def _to_excel_utc(self, *args, **kwargs):
+    self = ensure_utc(self)
+    return _ORIG_TO_EXCEL(self, *args, **kwargs)
+
+if not getattr(pd.DataFrame.to_excel, "_utc_patched", False):
+    pd.DataFrame.to_excel = _to_excel_utc
+    pd.DataFrame.to_excel._utc_patched = True
+
+
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
     with open(filename, "rb") as f:
         content = base64.b64encode(f.read()).decode()
