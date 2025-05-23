@@ -32,6 +32,7 @@ if not getattr(pd.DataFrame.to_excel, "_utc_patched", False):
     pd.DataFrame.to_excel = _to_excel_utc
     pd.DataFrame.to_excel._utc_patched = True
 
+
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
     """Upload a file to GitHub, retrying on 409 conflicts and temporary errors."""
 

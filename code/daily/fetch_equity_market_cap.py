@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 import yfinance as yf
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -36,6 +36,7 @@ if isinstance(df.columns, pd.MultiIndex):
 # Sanitize any column names that accidentally include the ticker
 df.columns = [col.replace("^W5000", "").strip() for col in df.columns]
 filename = "equity_market_cap_daily.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # Upload to GitHub

@@ -4,7 +4,7 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -24,6 +24,8 @@ df.columns = ['Month', 'Bitcoin Close Price (USD)']
 df['Month'] = df['Month'].dt.strftime('%Y-%m-%d ')
 df['Bitcoin Close Price (USD)'] = df['Bitcoin Close Price (USD)'].round(2)
 filename = "bitcoin_close_1mo.xlsx"
+
+df = ensure_utc(df)
 
 df.to_excel(filename, index=False)
 

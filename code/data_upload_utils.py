@@ -23,6 +23,7 @@ def ensure_utc(df):
                 df[col] = converted
     return df
 
+
 _ORIG_TO_EXCEL = pd.DataFrame.to_excel
 
 def _to_excel_utc(self, *args, **kwargs):

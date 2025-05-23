@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -44,6 +44,7 @@ def get_dividend_yield_from_csv(file_path, start_date="2015-01-01"):
 local_file_path = "uploads/MULTPL_SP500_DIV_YIELD_MONTH, 1D.csv"
 df = get_dividend_yield_from_csv(local_file_path, start_date="2015-01-01")
 filename = "sp500_dividend_yield.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 # === GitHub Upload ===

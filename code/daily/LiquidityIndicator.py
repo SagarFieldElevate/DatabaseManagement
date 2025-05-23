@@ -3,7 +3,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -97,6 +97,7 @@ forecast_df = forecast_df[['Forecast_Date', 'Direction', 'Strength (scaled -1 to
 
 # Save the forecast as Excel
 filename = f'BTC_Liquidity_Forecast_{today}.xlsx'
+forecast_df = ensure_utc(forecast_df)
 forecast_df.to_excel(filename, index=False)
 
 # Upload to GitHub

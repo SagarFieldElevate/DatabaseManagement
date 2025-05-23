@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 import os
 import requests
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
 
 # === Secrets & Config ===
 BLS_API_KEY = os.getenv("BLS_API_KEY")
@@ -51,6 +51,7 @@ def get_job_vacancy_rates(start_date="2015-01-01"):
 # === Main Script ===
 df = get_job_vacancy_rates(start_date="2015-01-01")
 filename = "job_vacancy_rates.xlsx"
+df = ensure_utc(df)
 df.to_excel(filename, index=False)
 
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
