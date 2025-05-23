@@ -1,11 +1,12 @@
 import os
 import base64
+import time
 import requests
 
 # Field storing attachments in Airtable
 ATTACHMENT_FIELD = os.getenv("AIRTABLE_ATTACHMENT_FIELD", "Attachments")
 
-def upload_to_github(filename, repo_name, branch, upload_path, token):
+def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
     with open(filename, "rb") as f:
         content = base64.b64encode(f.read()).decode()
 
@@ -16,30 +17,33 @@ def upload_to_github(filename, repo_name, branch, upload_path, token):
     }
 
     # Step 1: Check if file already exists to get its SHA
-    get_resp = requests.get(f"{upload_url}?ref={branch}", headers=headers)
-    sha = None
-    if get_resp.status_code == 200:
-        sha = get_resp.json().get("sha")
+    for attempt in range(max_retries):
+        get_resp = requests.get(f"{upload_url}?ref={branch}", headers=headers)
+        sha = get_resp.json().get("sha") if get_resp.status_code == 200 else None
 
-    # Step 2: Prepare upload payload
-    upload_payload = {
-        "message": f"Upload {filename}",
-        "content": content,
-        "branch": branch
-    }
-    if sha:
-        upload_payload["sha"] = sha  # Needed for overwrite
+        upload_payload = {
+            "message": f"Upload {filename}",
+            "content": content,
+            "branch": branch
+        }
+        if sha:
+            upload_payload["sha"] = sha
 
-    # Step 3: Upload (PUT) to GitHub
-    upload_resp = requests.put(upload_url, headers=headers, json=upload_payload)
-    if upload_resp.status_code not in [200, 201]:
+        upload_resp = requests.put(upload_url, headers=headers, json=upload_payload)
+        if upload_resp.status_code in [200, 201]:
+            response_json = upload_resp.json()
+            raw_url = f"https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}"
+            response_json['content']['raw_url'] = raw_url
+            return response_json
+
+        if upload_resp.status_code == 409 and attempt < max_retries - 1:
+            continue
+
+        if upload_resp.status_code >= 500 and attempt < max_retries - 1:
+            time.sleep(2 ** attempt)
+            continue
+
         raise Exception(f"❌ GitHub upload failed: {upload_resp.status_code} - {upload_resp.text}")
-
-    # Step 4: Add raw_url manually
-    response_json = upload_resp.json()
-    raw_url = f"https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}"
-    response_json['content']['raw_url'] = raw_url
-    return response_json
 
 def update_airtable(record_id, raw_url, filename, airtable_url, airtable_token):
     airtable_headers = {
