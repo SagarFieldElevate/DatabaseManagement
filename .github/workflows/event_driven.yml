@@ -13,6 +13,7 @@ jobs:
       matrix:
         script:
           - "code/event_driven/BitcoinHalving.py"
+          - "code/event_driven/[BTC] UTXO Age Distribution.py"
           - "code/event_driven/data_upload_utils.py"
           - "code/event_driven/fetch_armed_conflicts.py"
           - "code/event_driven/fetch_climate_change_effects.py"

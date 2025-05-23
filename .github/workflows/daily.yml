@@ -2,7 +2,6 @@ name: Daily Jobs
 
 on:
   schedule:
-
     - cron: "0 0 * * *"
   workflow_dispatch:
 
@@ -51,25 +50,31 @@ jobs:
           - "code/daily/fetch_stock_market_indices.py"
           - "code/daily/fetch_vix.py"
           - "code/daily/fetch_yield_curve_spread.py"
-          - "code/daily/Bitcoin Exchange Net Flows.py"
-          - "code/daily/Ethereum Exchange Net Flows.py"
-          - "code/daily/Stablecoin Exchange Flows.py"
-          - "code/daily/Bitcoin Miner Outflows.py"
-          - "code/daily/Ethereum Miner Outflows.py"
           - "code/daily/coingecko_altcoin_price_top100.py"
           - "code/daily/coingecko_btc_daily_returns.py"
           - "code/daily/coingecko_btc_daily_volume.py"
           - "code/daily/coingecko_crypto_price_daily.py"
           - "code/daily/coingecko_eth_daily_volume.py"
           - "code/daily/coingecko_stablecoin_peg_deviation.py"
+          - "code/daily/Bitcoin Coin Day Destroyed - Historical Trend.py"
+          - "code/daily/Centralized Stablecoins Market Cap.py"
+          - "code/daily/US Gov - BTC Balance and USD Value.py"
+          - "code/daily/Transaction Count and Active User.py"
+          - "code/daily/SOPR 3.0.py"
+          - "code/daily/Miner Revenue.py"
+          - "code/daily/Active Addresses.py"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
       - name: Run ${{ matrix.script }}
         run: python "${{ matrix.script }}"
