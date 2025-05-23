@@ -1,5 +1,6 @@
 import os
 import base64
+import time
 import requests
 
 # Name of the Airtable attachment field. Can be overridden using the
@@ -8,7 +9,7 @@ import requests
 ATTACHMENT_FIELD = os.getenv("AIRTABLE_ATTACHMENT_FIELD", "Attachments")
 
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
-    """Upload a file to GitHub, retrying on 409 conflicts."""
+    """Upload a file to GitHub, retrying on 409 conflicts and temporary errors."""
 
     with open(filename, "rb") as f:
         content = base64.b64encode(f.read()).decode()
@@ -44,6 +45,11 @@ def upload_to_github(filename, repo_name, branch, upload_path, token, max_retrie
 
         if upload_resp.status_code == 409 and attempt < max_retries - 1:
             # Branch moved; retry after fetching the latest SHA
+            continue
+
+        if upload_resp.status_code >= 500 and attempt < max_retries - 1:
+            # GitHub server error, wait and retry
+            time.sleep(2 ** attempt)
             continue
 
         raise Exception(f"❌ GitHub upload failed: {upload_resp.status_code} - {upload_resp.text}")
