@@ -2,11 +2,36 @@ import os
 import base64
 import time
 import requests
+import pandas as pd
 
 # Name of the Airtable attachment field. Can be overridden using the
 # AIRTABLE_ATTACHMENT_FIELD environment variable if a different field name is
 # configured in the Airtable base.
 ATTACHMENT_FIELD = os.getenv("AIRTABLE_ATTACHMENT_FIELD", "Attachments")
+
+def ensure_utc(df):
+    """Ensure all datetime columns use datetime64[ns, UTC]."""
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            if df[col].dt.tz is None:
+                df[col] = df[col].dt.tz_localize("UTC")
+            else:
+                df[col] = df[col].dt.tz_convert("UTC")
+        else:
+            converted = pd.to_datetime(df[col], errors="ignore", utc=True)
+            if pd.api.types.is_datetime64_any_dtype(converted):
+                df[col] = converted
+    return df
+
+_ORIG_TO_EXCEL = pd.DataFrame.to_excel
+
+def _to_excel_utc(self, *args, **kwargs):
+    self = ensure_utc(self)
+    return _ORIG_TO_EXCEL(self, *args, **kwargs)
+
+if not getattr(pd.DataFrame.to_excel, "_utc_patched", False):
+    pd.DataFrame.to_excel = _to_excel_utc
+    pd.DataFrame.to_excel._utc_patched = True
 
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
     """Upload a file to GitHub, retrying on 409 conflicts and temporary errors."""

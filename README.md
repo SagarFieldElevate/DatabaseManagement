@@ -51,3 +51,11 @@ workflows:
 * `AIRTABLE_ATTACHMENT_FIELD` – *(optional)* name of the Airtable field that
   stores uploaded files. If not provided, the utilities default to a field
   named `Attachments`.
+
+### Datetime Handling
+
+All scripts should ensure date columns are stored using `datetime64[ns, UTC]`
+dtype. Each `data_upload_utils.py` module defines an `ensure_utc` helper and
+monkey-patches `pandas.DataFrame.to_excel` so DataFrames are automatically
+converted to UTC before being written. Simply import one of these utilities and
+call `df.to_excel(...)` as usual.
