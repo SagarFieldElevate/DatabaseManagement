@@ -16,7 +16,7 @@ def ensure_utc(df):
                 df[col] = df[col].dt.tz_localize("UTC")
             else:
                 df[col] = df[col].dt.tz_convert("UTC")
-        else:
+        elif pd.api.types.is_object_dtype(df[col]) or pd.api.types.is_string_dtype(df[col]):
             converted = pd.to_datetime(df[col], errors="ignore", utc=True)
             if pd.api.types.is_datetime64_any_dtype(converted):
                 df[col] = converted
