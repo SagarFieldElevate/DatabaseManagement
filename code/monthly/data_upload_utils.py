@@ -1,11 +1,49 @@
 import os
 import base64
+import time
 import requests
+import pandas as pd
 
 # Field name used for Airtable attachments
 ATTACHMENT_FIELD = os.getenv("AIRTABLE_ATTACHMENT_FIELD", "Attachments")
 
-def upload_to_github(filename, repo_name, branch, upload_path, token):
+def ensure_utc(df):
+    """Ensure all datetime columns use datetime64[ns, UTC]."""
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            if df[col].dt.tz is None:
+                df[col] = df[col].dt.tz_localize("UTC")
+            else:
+                df[col] = df[col].dt.tz_convert("UTC")
+        else:
+            converted = pd.to_datetime(df[col], errors="ignore", utc=True)
+            if pd.api.types.is_datetime64_any_dtype(converted):
+                df[col] = converted
+    return df
+
+_ORIG_TO_EXCEL = pd.DataFrame.to_excel
+
+def _drop_timezone(df):
+    """Remove timezone from datetime columns and store non-UTC tz in new columns."""
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            tz = df[col].dt.tz
+            if tz is not None:
+                if str(tz) != "UTC":
+                    df[f"{col}_timezone"] = str(tz)
+                df[col] = df[col].dt.tz_convert("UTC").dt.tz_localize(None)
+    return df
+
+def _to_excel_utc(self, *args, **kwargs):
+    self = ensure_utc(self)
+    self = _drop_timezone(self)
+    return _ORIG_TO_EXCEL(self, *args, **kwargs)
+
+if not getattr(pd.DataFrame.to_excel, "_utc_patched", False):
+    pd.DataFrame.to_excel = _to_excel_utc
+    pd.DataFrame.to_excel._utc_patched = True
+
+def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
     with open(filename, "rb") as f:
         content = base64.b64encode(f.read()).decode()
 
@@ -15,31 +53,36 @@ def upload_to_github(filename, repo_name, branch, upload_path, token):
         "Accept": "application/vnd.github+json"
     }
 
-    # Step 1: Check if file already exists to get its SHA
-    get_resp = requests.get(f"{upload_url}?ref={branch}", headers=headers)
-    sha = None
-    if get_resp.status_code == 200:
-        sha = get_resp.json().get("sha")
+    for attempt in range(max_retries):
+        # Step 1: Check if file already exists to get its SHA
+        get_resp = requests.get(f"{upload_url}?ref={branch}", headers=headers)
+        sha = get_resp.json().get("sha") if get_resp.status_code == 200 else None
 
-    # Step 2: Prepare upload payload
-    upload_payload = {
-        "message": f"Upload {filename}",
-        "content": content,
-        "branch": branch
-    }
-    if sha:
-        upload_payload["sha"] = sha  # Needed for overwrite
+        # Step 2: Prepare upload payload
+        upload_payload = {
+            "message": f"Upload {filename}",
+            "content": content,
+            "branch": branch
+        }
+        if sha:
+            upload_payload["sha"] = sha  # Needed for overwrite
 
-    # Step 3: Upload (PUT) to GitHub
-    upload_resp = requests.put(upload_url, headers=headers, json=upload_payload)
-    if upload_resp.status_code not in [200, 201]:
+        # Step 3: Upload (PUT) to GitHub
+        upload_resp = requests.put(upload_url, headers=headers, json=upload_payload)
+        if upload_resp.status_code in [200, 201]:
+            response_json = upload_resp.json()
+            raw_url = f"https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}"
+            response_json['content']['raw_url'] = raw_url
+            return response_json
+
+        if upload_resp.status_code == 409 and attempt < max_retries - 1:
+            continue
+
+        if upload_resp.status_code >= 500 and attempt < max_retries - 1:
+            time.sleep(2 ** attempt)
+            continue
+
         raise Exception(f"❌ GitHub upload failed: {upload_resp.status_code} - {upload_resp.text}")
-
-    # Step 4: Add raw_url manually
-    response_json = upload_resp.json()
-    raw_url = f"https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}"
-    response_json['content']['raw_url'] = raw_url
-    return response_json
 
 def update_airtable(record_id, raw_url, filename, airtable_url, airtable_token):
     airtable_headers = {

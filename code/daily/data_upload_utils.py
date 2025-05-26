@@ -1,13 +1,51 @@
 import os
 import base64
+import time
 import requests
+import pandas as pd
 
 # The Airtable field used to store uploaded files. Override with the
 # AIRTABLE_ATTACHMENT_FIELD environment variable if needed.
 ATTACHMENT_FIELD = os.getenv("AIRTABLE_ATTACHMENT_FIELD", "Attachments")
 
+def ensure_utc(df):
+    """Ensure all datetime columns use datetime64[ns, UTC]."""
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            if df[col].dt.tz is None:
+                df[col] = df[col].dt.tz_localize("UTC")
+            else:
+                df[col] = df[col].dt.tz_convert("UTC")
+        else:
+            converted = pd.to_datetime(df[col], errors="ignore", utc=True)
+            if pd.api.types.is_datetime64_any_dtype(converted):
+                df[col] = converted
+    return df
+
+_ORIG_TO_EXCEL = pd.DataFrame.to_excel
+
+def _drop_timezone(df):
+    """Remove timezone from datetime columns and store non-UTC tz in new columns."""
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any_dtype(df[col]):
+            tz = df[col].dt.tz
+            if tz is not None:
+                if str(tz) != "UTC":
+                    df[f"{col}_timezone"] = str(tz)
+                df[col] = df[col].dt.tz_convert("UTC").dt.tz_localize(None)
+    return df
+
+def _to_excel_utc(self, *args, **kwargs):
+    self = ensure_utc(self)
+    self = _drop_timezone(self)
+    return _ORIG_TO_EXCEL(self, *args, **kwargs)
+
+if not getattr(pd.DataFrame.to_excel, "_utc_patched", False):
+    pd.DataFrame.to_excel = _to_excel_utc
+    pd.DataFrame.to_excel._utc_patched = True
+
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
-    """Upload a file to GitHub, retrying on 409 conflicts."""
+    """Upload a file to GitHub, retrying on 409 conflicts and temporary errors."""
 
     with open(filename, "rb") as f:
         content = base64.b64encode(f.read()).decode()
@@ -43,6 +81,11 @@ def upload_to_github(filename, repo_name, branch, upload_path, token, max_retrie
 
         if upload_resp.status_code == 409 and attempt < max_retries - 1:
             # Branch moved; retry after fetching the latest SHA
+            continue
+
+        if upload_resp.status_code >= 500 and attempt < max_retries - 1:
+            # GitHub server error, wait and retry
+            time.sleep(2 ** attempt)
             continue
 
         raise Exception(f"❌ GitHub upload failed: {upload_resp.status_code} - {upload_resp.text}")
