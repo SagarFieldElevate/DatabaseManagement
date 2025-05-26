@@ -2,7 +2,14 @@ import pandas as pd
 import os
 import requests
 from dune_client.client import DuneClient
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
+from data_upload_utils import (
+    upload_to_github,
+    create_airtable_record,
+    update_airtable,
+    delete_file_from_github,
+    ensure_utc,
+    standardize_date_column,
+)
 
 # === Secrets & Config ===
 dune = DuneClient("6dTWCBeP4XNtdH9YMQBT3Ad4AK57ZcOk")
@@ -21,9 +28,8 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 query_id = 5130605
 query_result = dune.get_latest_result(query_id)
 df = pd.DataFrame(query_result.result.rows)
-time_col = [col for col in df.columns if 'time' in col.lower() or 'date' in col.lower()][0]
-df.rename(columns={time_col: 'Date'}, inplace=True)
-df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
+df = standardize_date_column(df)
+df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
 
 filename = "bitcoin_coin_day_destroyed_historical_trend.xlsx"
 df = ensure_utc(df)
