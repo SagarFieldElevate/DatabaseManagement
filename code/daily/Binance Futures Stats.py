@@ -1,30 +1,36 @@
 import os
 import requests
 import pandas as pd
+from datetime import datetime
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
-base_url = "https://mempool.space/api/v1"
-fees = requests.get(f"{base_url}/fees/recommended").json()
-summary = requests.get(f"{base_url}/mempool").json()
+symbols = ["BTCUSDT", "ETHUSDT"]
+records = []
+for symbol in symbols:
+    # Funding rate
+    r = requests.get(f"https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1")
+    funding = r.json()[0]
+    # Open interest
+    oi = requests.get(f"https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1").json()[0]
+    # Order book snapshot
+    ob = requests.get(f"https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5").json()
+    # Liquidations placeholder (Binance API v2; may require key)
+    liquidations = requests.get(f"https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1").json()[0]
+    records.append({
+        "Symbol": symbol,
+        "Funding Rate": funding.get("fundingRate"),
+        "Open Interest": oi.get("sumOpenInterestValue"),
+        "Bid 1": ob.get("bids", [[None]])[0][0],
+        "Ask 1": ob.get("asks", [[None]])[0][0],
+        "Last Liquidation Price": liquidations.get("price")
+    })
 
-block_hash_resp = requests.get("https://mempool.space/api/block-height/1")
-block_hash = block_hash_resp.text.strip()
-block_url = f"https://mempool.space/block/{block_hash}"
-block_data = requests.get(f"https://mempool.space/api/block/{block_hash}").json()
-
-records = [
-    {"Metric": "fastFee", "Value": fees.get("fastestFee")},
-    {"Metric": "mempoolSize", "Value": summary.get("count")},
-    {"Metric": "mempoolVsize", "Value": summary.get("vsize")},
-    {"Metric": "Genesis Block Timestamp", "Value": block_data.get("timestamp")},
-    {"Metric": "Genesis Block Link", "Value": block_url}
-
-]
-
+# === Save to Excel ===
 df = pd.DataFrame(records)
-filename = "mempool_stats.xlsx"
+filename = "binance_futures_stats.xlsx"
 df.to_excel(filename, index=False)
 
+# === Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "daily"
@@ -34,12 +40,14 @@ GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
-INDICATOR_NAME = "Mempool Stats"
+INDICATOR_NAME = "Binance Futures Stats"
 
+# === Upload ===
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
+# === Airtable Check ===
 airtable_headers = {"Authorization": f"Bearer {AIRTABLE_API_KEY}", "Content-Type": "application/json"}
 response = requests.get(airtable_url, headers=airtable_headers)
 records_airtable = response.json().get('records', [])
@@ -51,6 +59,7 @@ if record_id:
 else:
     create_airtable_record(INDICATOR_NAME, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
+# === Cleanup ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Mempool stats uploaded.")
+print("✅ Binance Futures stats uploaded.")

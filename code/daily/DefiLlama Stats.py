@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
-# === Fetch TVL and DEX volume ===
+
 try:
     tvl_resp = requests.get("https://api.llama.fi/tvl", timeout=10)
     tvl_resp.raise_for_status()
@@ -17,6 +17,7 @@ try:
     dex = dex_resp.json()
 except (requests.exceptions.RequestException, ValueError):
     dex = {}
+
 
 records = [{"Metric": "Total DeFi TVL", "Value": tvl.get("tvl")},
            {"Metric": "DEX Volume 24h", "Value": dex.get("totalVolume24h")},

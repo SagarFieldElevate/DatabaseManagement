@@ -3,26 +3,19 @@ import requests
 import pandas as pd
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
-base_url = "https://mempool.space/api/v1"
-fees = requests.get(f"{base_url}/fees/recommended").json()
-summary = requests.get(f"{base_url}/mempool").json()
+OPENSEA_API_KEY = os.getenv("OPENSEA_API_KEY")
+COLLECTION_SLUG = os.getenv("OPENSEA_COLLECTION", "cryptopunks")
+url = f"https://api.opensea.io/api/v1/collection/{COLLECTION_SLUG}/stats"
+headers = {"X-API-KEY": OPENSEA_API_KEY} if OPENSEA_API_KEY else {}
+response = requests.get(url, headers=headers)
+response.raise_for_status()
+stats = response.json().get("stats", {})
 
-block_hash_resp = requests.get("https://mempool.space/api/block-height/1")
-block_hash = block_hash_resp.text.strip()
-block_url = f"https://mempool.space/block/{block_hash}"
-block_data = requests.get(f"https://mempool.space/api/block/{block_hash}").json()
-
-records = [
-    {"Metric": "fastFee", "Value": fees.get("fastestFee")},
-    {"Metric": "mempoolSize", "Value": summary.get("count")},
-    {"Metric": "mempoolVsize", "Value": summary.get("vsize")},
-    {"Metric": "Genesis Block Timestamp", "Value": block_data.get("timestamp")},
-    {"Metric": "Genesis Block Link", "Value": block_url}
-
-]
+records = [{"Metric": "Floor Price", "Value": stats.get("floor_price")},
+           {"Metric": "Total Volume", "Value": stats.get("total_volume")}]
 
 df = pd.DataFrame(records)
-filename = "mempool_stats.xlsx"
+filename = "opensea_nft_stats.xlsx"
 df.to_excel(filename, index=False)
 
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -34,7 +27,7 @@ GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
 BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
-INDICATOR_NAME = "Mempool Stats"
+INDICATOR_NAME = f"OpenSea {COLLECTION_SLUG} Stats"
 
 github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
 raw_url = github_response['content']['raw_url']
@@ -53,4 +46,4 @@ else:
 
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
 os.remove(filename)
-print("✅ Mempool stats uploaded.")
+print("✅ OpenSea stats uploaded.")
