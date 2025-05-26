@@ -1,16 +1,30 @@
 import os
 import requests
+from requests.exceptions import JSONDecodeError, RequestException
 import pandas as pd
 from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
 
 base_url = "https://mempool.space/api/v1"
-fees = requests.get(f"{base_url}/fees/recommended").json()
-summary = requests.get(f"{base_url}/mempool").json()
+
+
+def get_json(url: str) -> dict:
+    """Return JSON data from the URL or an empty dict on failure."""
+    try:
+        resp = requests.get(url)
+        resp.raise_for_status()
+        return resp.json()
+    except (RequestException, JSONDecodeError) as exc:
+        print(f"Warning: failed to fetch JSON from {url}: {exc}")
+        return {}
+
+
+fees = get_json(f"{base_url}/fees/recommended")
+summary = get_json(f"{base_url}/mempool")
 
 block_hash_resp = requests.get("https://mempool.space/api/block-height/1")
 block_hash = block_hash_resp.text.strip()
 block_url = f"https://mempool.space/block/{block_hash}"
-block_data = requests.get(f"https://mempool.space/api/block/{block_hash}").json()
+block_data = get_json(f"https://mempool.space/api/block/{block_hash}")
 
 records = [
     {"Metric": "fastFee", "Value": fees.get("fastestFee")},
