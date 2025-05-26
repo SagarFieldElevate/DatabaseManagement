@@ -21,7 +21,10 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_gold_prices(start_date="2015-01-01"):
-    data = fred.get_series('GOLDPMGBD228NLBM', start_date=start_date)
+    # Use the 10:30 A.M. London fixing price which is a stable
+    # series on FRED. The previous series id caused "Bad Request"
+    # errors during retrieval.
+    data = fred.get_series('GOLDAMGBD228NLBM', start_date=start_date)
     df = pd.DataFrame({
         'Date': data.index,
         'Gold Price (USD/Ounce)': data.values
