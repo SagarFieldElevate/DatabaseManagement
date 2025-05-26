@@ -7,10 +7,18 @@ base_url = "https://mempool.space/api/v1"
 fees = requests.get(f"{base_url}/fees/recommended").json()
 summary = requests.get(f"{base_url}/mempool").json()
 
+block_hash_resp = requests.get("https://mempool.space/api/block-height/1")
+block_hash = block_hash_resp.text.strip()
+block_url = f"https://mempool.space/block/{block_hash}"
+block_data = requests.get(f"https://mempool.space/api/block/{block_hash}").json()
+
 records = [
     {"Metric": "fastFee", "Value": fees.get("fastestFee")},
     {"Metric": "mempoolSize", "Value": summary.get("count")},
-    {"Metric": "mempoolVsize", "Value": summary.get("vsize")}
+    {"Metric": "mempoolVsize", "Value": summary.get("vsize")},
+    {"Metric": "Genesis Block Timestamp", "Value": block_data.get("timestamp")},
+    {"Metric": "Genesis Block Link", "Value": block_url}
+
 ]
 
 df = pd.DataFrame(records)
