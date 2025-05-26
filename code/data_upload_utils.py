@@ -24,6 +24,16 @@ def ensure_utc(df):
     return df
 
 
+def standardize_date_column(df):
+    """Rename the first date-like column to 'Date' and parse it."""
+    date_cols = [c for c in df.columns if 'time' in c.lower() or 'date' in c.lower()]
+    target = date_cols[0] if date_cols else df.columns[0]
+    if target != 'Date':
+        df.rename(columns={target: 'Date'}, inplace=True)
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+    return df
+
+
 _ORIG_TO_EXCEL = pd.DataFrame.to_excel
 
 def _drop_timezone(df):
