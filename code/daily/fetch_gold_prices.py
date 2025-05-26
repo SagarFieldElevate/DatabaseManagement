@@ -37,6 +37,7 @@ def get_gold_prices(start_date="2015-01-01"):
         csv_df['DATE'] = pd.to_datetime(csv_df['DATE'])
         csv_df = csv_df[csv_df['DATE'] >= pd.to_datetime(start_date)]
         data = csv_df.set_index('DATE')['VALUE']
+
     df = pd.DataFrame({
         'Date': data.index,
         'Gold Price (USD/Ounce)': pd.to_numeric(data.values, errors='coerce')
