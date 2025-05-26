@@ -59,6 +59,8 @@ def get_binance_us_btc_5m_history(days=140):
 
     df["open_time"] = pd.to_datetime(df["open_time"], unit="ms")
     df = df[["open_time", "open", "high", "low", "close", "volume"]]
+    df.rename(columns={"open_time": "Date"}, inplace=True)
+    df["Date"] = df["Date"].dt.strftime("%Y-%m-%d %H:%M")
     return df
 
 # === Main Script ===
