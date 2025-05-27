@@ -53,6 +53,7 @@ def get_gold_prices(start_date="2015-01-01"):
         csv_df = pd.read_csv(io.StringIO(resp.text), comment="#")
         if csv_df.columns[1] != "VALUE":
             csv_df.rename(columns={csv_df.columns[1]: "VALUE"}, inplace=True)
+
         csv_df['DATE'] = pd.to_datetime(csv_df['DATE'])
         csv_df = csv_df[csv_df['DATE'] >= pd.to_datetime(start_date)]
         data = csv_df.set_index('DATE')['VALUE']
