@@ -32,8 +32,13 @@ def get_gold_prices(start_date="2015-01-01"):
         except Exception:
             data = None
     if data is None:
-        url = f"https://fred.stlouisfed.org/series/{series_ids[0]}/downloaddata/{series_ids[0]}.csv"
-        csv_df = pd.read_csv(url)
+        # Fallback to downloading the CSV directly from FRED.  The
+        # `downloaddata` endpoint occasionally serves an HTML error page
+        # which Pandas cannot parse.  Using the `fredgraph.csv` endpoint is
+        # more reliable.
+        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_ids[0]}"
+        csv_df = pd.read_csv(url, comment='#')
+        csv_df.rename(columns={csv_df.columns[1]: 'VALUE'}, inplace=True)
         csv_df['DATE'] = pd.to_datetime(csv_df['DATE'])
         csv_df = csv_df[csv_df['DATE'] >= pd.to_datetime(start_date)]
         data = csv_df.set_index('DATE')['VALUE']
