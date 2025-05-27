@@ -21,10 +21,26 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # === Indicator Fetch Function ===
 def get_gold_prices(start_date="2015-01-01"):
-    data = fred.get_series('GOLDPMGBD228NLBM', start_date=start_date)
+    """Retrieve daily gold prices with fallbacks for API failures."""
+    series_ids = ["GOLDAMGBD228NLBM", "GOLDPMGBD228NLBM"]
+    data = None
+    for sid in series_ids:
+        try:
+            data = fred.get_series(sid, start_date=start_date)
+            if data is not None:
+                break
+        except Exception:
+            data = None
+    if data is None:
+        url = f"https://fred.stlouisfed.org/series/{series_ids[0]}/downloaddata/{series_ids[0]}.csv"
+        csv_df = pd.read_csv(url)
+        csv_df['DATE'] = pd.to_datetime(csv_df['DATE'])
+        csv_df = csv_df[csv_df['DATE'] >= pd.to_datetime(start_date)]
+        data = csv_df.set_index('DATE')['VALUE']
+
     df = pd.DataFrame({
         'Date': data.index,
-        'Gold Price (USD/Ounce)': data.values
+        'Gold Price (USD/Ounce)': pd.to_numeric(data.values, errors='coerce')
     })
     
     df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
