@@ -13,10 +13,10 @@ cg = CoinGeckoAPI(api_key=COINGECKO_API_KEY)
 coins = {"BTC": "bitcoin", "ETH": "ethereum"}
 records = []
 for symbol, coin_id in coins.items():
-    market_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency="usd", days=1, interval="minutely")
+    market_data = cg.get_coin_market_chart_by_id(id=coin_id, vs_currency="usd", days=1)
     for ts, price in market_data["prices"]:
         records.append({
-            "DateTime": datetime.utcfromtimestamp(ts / 1000).strftime("%Y-%m-%d %H:%M"),
+            "Date": datetime.utcfromtimestamp(ts / 1000).strftime("%Y-%m-%d %H:%M"),
             "Symbol": symbol,
             "Price (USD)": price
         })

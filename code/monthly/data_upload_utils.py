@@ -15,10 +15,19 @@ def ensure_utc(df):
                 df[col] = df[col].dt.tz_localize("UTC")
             else:
                 df[col] = df[col].dt.tz_convert("UTC")
-        else:
+        elif pd.api.types.is_object_dtype(df[col]) or pd.api.types.is_string_dtype(df[col]):
             converted = pd.to_datetime(df[col], errors="ignore", utc=True)
             if pd.api.types.is_datetime64_any_dtype(converted):
                 df[col] = converted
+    return df
+
+def standardize_date_column(df):
+    """Rename the first date-like column to 'Date' and parse it."""
+    date_cols = [c for c in df.columns if 'time' in c.lower() or 'date' in c.lower()]
+    target = date_cols[0] if date_cols else df.columns[0]
+    if target != 'Date':
+        df.rename(columns={target: 'Date'}, inplace=True)
+    df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
     return df
 
 _ORIG_TO_EXCEL = pd.DataFrame.to_excel
@@ -42,6 +51,15 @@ def _to_excel_utc(self, *args, **kwargs):
 if not getattr(pd.DataFrame.to_excel, "_utc_patched", False):
     pd.DataFrame.to_excel = _to_excel_utc
     pd.DataFrame.to_excel._utc_patched = True
+
+__all__ = [
+    "ensure_utc",
+    "standardize_date_column",
+    "upload_to_github",
+    "create_airtable_record",
+    "update_airtable",
+    "delete_file_from_github",
+]
 
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
     with open(filename, "rb") as f:

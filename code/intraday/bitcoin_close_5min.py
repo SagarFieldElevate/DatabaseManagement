@@ -20,8 +20,8 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 # === Fetch BTC Close Price ===
 symbol = "BTC-USD"
 df = yf.download("BTC-USD", period="60d", interval="5m")[['Close']].reset_index()
-df.columns = ['DateTime', 'Bitcoin Close Price (USD)']
-df['DateTime'] = df['DateTime'].dt.strftime('%Y-%m-%d %H:%M')
+df.columns = ['Date', 'Bitcoin Close Price (USD)']
+df['Date'] = df['Date'].dt.strftime('%Y-%m-%d %H:%M')
 df['Bitcoin Close Price (USD)'] = df['Bitcoin Close Price (USD)'].round(2)
 filename = "bitcoin_close_5min.xlsx"
 
