@@ -8,6 +8,7 @@ SCRIPTS = [
     'code/daily/DefiLlama Stats.py',
     'code/daily/Etherscan Stats.py',
     'code/daily/Mempool Stats.py',
+    'code/daily/CoinMetrics Indicators.py',
 ]
 
 @pytest.mark.parametrize('path', SCRIPTS)
