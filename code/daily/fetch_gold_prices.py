@@ -33,27 +33,30 @@ def get_gold_prices(start_date="2015-01-01"):
         except Exception:
             data = None
     if data is None:
-        # Fallback to downloading the CSV directly from FRED. Attempt the
-        # `fredgraph.csv` endpoint first and fall back to `downloaddata` if it
-        # returns an HTTP error (e.g. 404).
-        headers = {"User-Agent": "Mozilla/5.0"}
-        url_graph = (
-            f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_ids[0]}"
-        )
+        # Fallback to downloading the CSV directly from FRED.  The
+        # `downloaddata` endpoint occasionally serves an HTML error page
+        # which Pandas cannot parse.  Using the `fredgraph.csv` endpoint is
+        # more reliable.
+        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_ids[0]}"
         try:
-            resp = requests.get(url_graph, headers=headers, timeout=10)
+            resp = requests.get(url, timeout=30)
             resp.raise_for_status()
+            # Ensure we actually received CSV data and not an error page.
+            content_type = resp.headers.get("content-type", "")
+            if "csv" not in content_type.lower():
+                raise ValueError("Unexpected content type from FRED")
+            csv_df = pd.read_csv(io.StringIO(resp.text), comment="#")
         except Exception:
-            url_graph = (
+            # If the more reliable endpoint fails, fall back to the older
+            # `downloaddata` endpoint as a last resort.
+            url = (
                 f"https://fred.stlouisfed.org/series/{series_ids[0]}/downloaddata/{series_ids[0]}.csv"
             )
-            resp = requests.get(url_graph, headers=headers, timeout=10)
+            resp = requests.get(url, timeout=30)
             resp.raise_for_status()
+            csv_df = pd.read_csv(io.StringIO(resp.text))
 
-        csv_df = pd.read_csv(io.StringIO(resp.text), comment="#")
-        if csv_df.columns[1] != "VALUE":
-            csv_df.rename(columns={csv_df.columns[1]: "VALUE"}, inplace=True)
-
+        csv_df.rename(columns={csv_df.columns[1]: "VALUE"}, inplace=True)
         csv_df['DATE'] = pd.to_datetime(csv_df['DATE'])
         csv_df = csv_df[csv_df['DATE'] >= pd.to_datetime(start_date)]
         data = csv_df.set_index('DATE')['VALUE']
