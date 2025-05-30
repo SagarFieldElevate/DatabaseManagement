@@ -9,6 +9,7 @@ jobs:
   run-daily-scripts:
     name: ${{ matrix.script }}
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     env:
       AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -17,7 +18,7 @@ jobs:
       COINMETRICS_API_KEY: ${{ secrets.COINMETRICS_API_KEY }}
     strategy:
       fail-fast: false
-      max-parallel: 5
+      max-parallel: 10
       matrix:
         script:
           - "code/daily/24h Volatility & Trading Range.py"
