@@ -1,36 +1,57 @@
 import os
 import requests
 import pandas as pd
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github
+from data_upload_utils import (
+    upload_to_github,
+    create_airtable_record,
+    update_airtable,
+    delete_file_from_github,
+)
 
-API_KEY = "BLgxPvn1qdWWzTqh7fx3"
-BASE_URL = "https://api.coinmetrics.io/v4/timeseries/asset-metrics"
+# Use env variable if available, otherwise fall back to provided demo key
+API_KEY = os.getenv("COINMETRICS_API_KEY", "BLgxPvn1qdWWzTqh7fx3")
+BASE_URL = "https://api.coinmetrics.io/v4"
 
-params = {
+headers = {"X-CoinMetrics-Api-Key": API_KEY}
+
+def fetch(endpoint: str, params: dict) -> list:
+    try:
+        resp = requests.get(endpoint, params=params, headers=headers, timeout=10)
+        resp.raise_for_status()
+        return resp.json().get("data", [])
+    except (requests.exceptions.RequestException, ValueError):
+        return []
+
+asset_params = {
     "assets": "btc",
-    "metrics": "AdrActCnt,TxCnt,HashRateMean,CapMVRVCur",
+    "metrics": "AdrActCnt,TxCnt,HashRateMean,SplyCur,CapMVRVCur",
     "frequency": "1d",
     "page_size": 1,
 }
-headers = {"X-CoinMetrics-Api-Key": API_KEY}
 
-try:
-    resp = requests.get(BASE_URL, params=params, headers=headers, timeout=10)
-    resp.raise_for_status()
-    data = resp.json().get("data", [])
-except (requests.exceptions.RequestException, ValueError):
-    data = []
+market_params = {
+    "markets": "coinbase-btc-usd-spot",
+    "frequency": "1d",
+    "page_size": 1,
+}
 
-records = []
-if data:
-    latest = data[-1]
-    records.append({
-        "Date": latest.get("time"),
-        "Active Addresses": latest.get("AdrActCnt"),
-        "Transaction Count": latest.get("TxCnt"),
-        "Hash Rate": latest.get("HashRateMean"),
-        "MVRV Current": latest.get("CapMVRVCur"),
-    })
+asset_data = fetch(f"{BASE_URL}/timeseries/asset-metrics", asset_params)
+market_data = fetch(f"{BASE_URL}/timeseries/market-candles", market_params)
+
+latest_asset = asset_data[-1] if asset_data else {}
+latest_market = market_data[-1] if market_data else {}
+
+records = [
+    {
+        "Date": latest_asset.get("time") or latest_market.get("time"),
+        "Active Addresses": latest_asset.get("AdrActCnt"),
+        "Transaction Count": latest_asset.get("TxCnt"),
+        "Hash Rate": latest_asset.get("HashRateMean"),
+        "Current Supply": latest_asset.get("SplyCur"),
+        "MVRV Current": latest_asset.get("CapMVRVCur"),
+        "Close Price": latest_market.get("close"),
+    }
+]
 
 
 df = pd.DataFrame(records)
