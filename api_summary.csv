@@ -1,0 +1,169 @@
+Script,Description,Endpoints,Libraries,Overlap
+code/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/intraday/coingecko_crypto_price_1m.py,coingecko crypto price 1m,,"CoinGecko API, Unknown HTTP API",No
+code/intraday/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/intraday/btc_5m_history.py,btc 5m history,https://api.binance.us/api/v3/klines,,No
+code/intraday/bitcoin_close_5min.py,bitcoin close 5min,,"Yahoo Finance API, Unknown HTTP API",No
+code/intraday/bitcoin_close_30min.py,bitcoin close 30min,,"Yahoo Finance API, Unknown HTTP API",No
+code/intraday/bitcoin_close_1min.py,bitcoin close 1min,,"Yahoo Finance API, Unknown HTTP API",No
+code/intraday/bitcoin_close_1h.py,bitcoin close 1h,,"Yahoo Finance API, Unknown HTTP API",No
+code/intraday/bitcoin_close_15min.py,bitcoin close 15min,,"Yahoo Finance API, Unknown HTTP API",No
+code/quarterly/fetch_stock_buybacks.py,fetch stock buybacks,https://ycharts.com/indicators/sp_500_buybacks,,No
+code/quarterly/fetch_household_debt_levels.py,fetch household debt levels,,Unknown HTTP API,No
+code/quarterly/fetch_loan_to_deposit_ratios.py,fetch loan to deposit ratios,https://data.imf.org/?sk=51B096FA-2CD2-40DC-AE8A-BF71B1E1A2B3,,No
+code/quarterly/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/quarterly/Government Budget Balance (OECD).py,Government Budget Balance (OECD),https://api.stlouisfed.org/fred/series/observations,,Yes
+code/quarterly/fetch_mortgage_default_rates.py,fetch mortgage default rates,,Unknown HTTP API,No
+code/quarterly/fetch_capital_flows.py,fetch capital flows,https://data.imf.org/?sk=7A51304B-6426-40C0-83DD-CA473CA1FD52,,No
+code/quarterly/Foreign Direct Investment (FDI) (UNCTAD).py,Foreign Direct Investment (FDI) (UNCTAD),https://unctad.org/topic/investment/statistics,,No
+code/quarterly/Current Account Balance (OECD).py,Current Account Balance (OECD),,Unknown HTTP API,No
+code/quarterly/GDP Growth Rate.py,GDP Growth Rate,,Unknown HTTP API,No
+code/quarterly/fetch_bank_capital_adequacy_ratios.py,fetch bank capital adequacy ratios,https://www.bis.org/statistics/totcredit.htm,,No
+code/quarterly/fetch_labor_productivity.py,fetch labor productivity,,Unknown HTTP API,No
+code/quarterly/fetch_corporate_debt_levels.py,fetch corporate debt levels,,Unknown HTTP API,No
+code/quarterly/Gross Domestic Product.py,Gross Domestic Product,,Unknown HTTP API,No
+code/daily/fetch_equity_market_cap.py,fetch equity market cap,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/PricesScript.py,PricesScript,,"CoinGecko API, Unknown HTTP API",No
+code/daily/InterestRate.py,InterestRate,,Unknown HTTP API,No
+code/daily/US Gov - BTC Balance and USD Value.py,US Gov - BTC Balance and USD Value,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/Active Addresses.py,Active Addresses,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/coingecko_crypto_price_daily.py,coingecko crypto price daily,,"CoinGecko API, Unknown HTTP API",No
+code/daily/fetch_gold_prices.py,fetch gold prices,https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_ids[0]}; https://fred.stlouisfed.org/series/{series_ids[0]}/downloaddata/{series_ids[0]}.csv,,No
+code/daily/OpenSea NFT Stats.py,OpenSea NFT Stats,https://api.opensea.io/api/v1/collection/{COLLECTION_SLUG}/stats,,No
+code/daily/Etherscan Token Events.py,Etherscan Token Events,https://api.etherscan.io/api?module=account&action=tokentx&address={ADDRESS}&page=1&offset=10&sort=desc&apikey={API_KEY},,No
+code/daily/Exchange Rates (Investing.com).py,Exchange Rates (Investing.com),https://api.stlouisfed.org/fred/series/observations,,Yes
+code/daily/Binance Open Interest.py,Binance Open Interest,https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1,,Yes
+code/daily/StableCoinSupply.py,StableCoinSupply,https://stablecoins.llama.fi/stablecoin/{stablecoin_id},,No
+code/daily/GoldDailyPrice.py,GoldDailyPrice,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/Binance Order Book.py,Binance Order Book,https://api.binance.com/api/v3/depth?symbol={symbol}&limit=5; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5,,Yes
+code/daily/fetch_stock_market_indices.py,fetch stock market indices,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/daily/fetch_bank_lending_rates.py,fetch bank lending rates,,Unknown HTTP API,No
+code/daily/Mempool Stats.py,Mempool Stats,https://mempool.space/api/v1; https://mempool.space/api/block-height/1; https://mempool.space/block/{block_hash}; https://mempool.space/api/block/{block_hash},,No
+code/daily/Alternative.me Fear and Greed Index.py,Alternative.me Fear and Greed Index,https://api.alternative.me/fng/?format=json&limit=730,,No
+code/daily/LiquidityIndicator.py,LiquidityIndicator,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/Binance Liquidations.py,Binance Liquidations,https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1,,Yes
+code/daily/coingecko_btc_daily_returns.py,coingecko btc daily returns,,"CoinGecko API, Unknown HTTP API",No
+code/daily/CoinMetrics Indicators.py,CoinMetrics Indicators,https://api.coinmetrics.io/v4,,No
+code/daily/AlphaVantage DXY.py,AlphaVantage DXY,https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=DXY&apikey={API_KEY}&outputsize=full,,No
+code/daily/DefiLlama Stats.py,DefiLlama Stats,https://api.llama.fi/tvl; https://api.llama.fi/overview/dexs,,Yes
+code/daily/fetch_crude_oil_prices.py,fetch crude oil prices,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/fetch_vix.py,fetch vix,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/BTCPriceDaily.py,BTCPriceDaily,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/Miner Revenue.py,Miner Revenue,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/coingecko_stablecoin_peg_deviation.py,coingecko stablecoin peg deviation,,"CoinGecko API, Unknown HTTP API",No
+code/daily/USDollarIndex.py,USDollarIndex,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/QQQData.py,QQQData,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/Centralized Stablecoins Market Cap.py,Centralized Stablecoins Market Cap,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/MarketCap.py,MarketCap,,"CoinGecko API, Unknown HTTP API",No
+code/daily/SOPR 3.0.py,SOPR 3.0,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/coingecko_eth_daily_volume.py,coingecko eth daily volume,,"CoinGecko API, Unknown HTTP API",No
+code/daily/Binance Funding Rate.py,Binance Funding Rate,https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1,,Yes
+code/daily/Transaction Count and Active User.py,Transaction Count and Active User,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/24h Volatility & Trading Range.py,24h Volatility & Trading Range,,"CoinGecko API, Unknown HTTP API",No
+code/daily/fetch_baltic_dry_index.py,fetch baltic dry index,,Unknown HTTP API,No
+code/daily/GoogleTrending.py,GoogleTrending,,"CoinGecko API, Unknown HTTP API",No
+code/daily/DefiLlama DEX Volume.py,DefiLlama DEX Volume,https://api.llama.fi/overview/dexs,,Yes
+code/daily/SPYData.py,SPYData,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/fetch_bond_yields.py,fetch bond yields,,Unknown HTTP API,No
+code/daily/Etherscan Stats.py,Etherscan Stats,https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY}; https://api.etherscan.io/api?module=account&action=tokentx&address={address}&page=1&offset=10&sort=desc&apikey={API_KEY},,Yes
+code/daily/coingecko_altcoin_price_top100.py,coingecko altcoin price top100,,"CoinGecko API, Unknown HTTP API",No
+code/daily/fetch_yield_curve_spread.py,fetch yield curve spread,,Unknown HTTP API,No
+code/daily/Bitcoin Coin Day Destroyed - Historical Trend.py,Bitcoin Coin Day Destroyed - Historical Trend,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/Etherscan Gas Prices.py,Etherscan Gas Prices,https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY},,Yes
+code/daily/Binance Futures Stats.py,Binance Futures Stats,https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1; https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5; https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1,,Yes
+code/daily/Technicals.py,Technicals,,"Yahoo Finance API, Unknown HTTP API",No
+code/daily/Blockchair Stats.py,Blockchair Stats,https://api.blockchair.com/{CHAIN}/stats,,No
+code/daily/VolumeTraded.py,VolumeTraded,,"CoinGecko API, Unknown HTTP API",No
+code/daily/fetch_credit_spreads.py,fetch credit spreads,,Unknown HTTP API,No
+code/daily/BTC ETF Net Flow.py,BTC ETF Net Flow,,"Dune Analytics API, Unknown HTTP API",No
+code/daily/fetch_natural_gas_prices.py,fetch natural gas prices,,Unknown HTTP API,No
+code/daily/CurrencyExchange.py,CurrencyExchange,,Unknown HTTP API,No
+code/daily/coingecko_btc_daily_volume.py,coingecko btc daily volume,,"CoinGecko API, Unknown HTTP API",No
+code/daily/OpenSea NFT Transfers.py,OpenSea NFT Transfers,https://api.opensea.io/api/v2/events?collection_slug={COLLECTION_SLUG}&event_type=transfer&limit=50,,No
+code/daily/Interest Rates (Federal Funds Rate).py,Interest Rates (Federal Funds Rate),,Unknown HTTP API,No
+code/daily/DefiLlama TVL.py,DefiLlama TVL,https://api.llama.fi/tvl,,Yes
+code/event_driven/fetch_tax_policy_changes.py,fetch tax policy changes,https://www.oecd.org/tax/tax-policy-reform.htm,,No
+code/event_driven/fetch_natural_disasters.py,fetch natural disasters,https://www.emdat.be/database,,No
+code/event_driven/fetch_healthcare_policy_changes.py,fetch healthcare policy changes,https://www.who.int/news-room/fact-sheets,,No
+code/event_driven/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/event_driven/fetch_pandemics_health_crises.py,fetch pandemics health crises,https://www.who.int/emergencies/disease-outbreak-news,,No
+code/event_driven/fetch_supply_chain_disruptions.py,fetch supply chain disruptions,https://www.supplychainbrain.com/topics/supply-chain-disruptions,,No
+code/event_driven/fetch_refugee_crises.py,fetch refugee crises,https://api.unhcr.org/population/v1/refugees/,,No
+code/event_driven/fetch_infrastructure_spending.py,fetch infrastructure spending,https://www.imf.org/en/Publications/FM,,Yes
+code/event_driven/fetch_trade_sanctions.py,fetch trade sanctions,https://www.sanctionsmap.eu/,,Yes
+code/event_driven/fetch_political_instability.py,fetch political instability,https://freedomhouse.org/report/freedom-world,,No
+code/event_driven/fetch_ipos.py,fetch ipos,https://www.nasdaq.com/market-activity/ipos,,No
+code/event_driven/[BTC] UTXO Age Distribution.py,[BTC] UTXO Age Distribution,,"Dune Analytics API, Unknown HTTP API",No
+code/event_driven/fetch_climate_change_effects.py,fetch climate change effects,https://www.ipcc.ch/reports/,,No
+code/event_driven/fetch_tariff_rates.py,fetch tariff rates,https://www.wto.org/english/res_e/statis_e/tariff_profiles_e.htm,,No
+code/event_driven/fetch_armed_conflicts.py,fetch armed conflicts,https://www.sipri.org/research/peace-and-security/conflict-and-peace,,No
+code/event_driven/fetch_international_sanctions.py,fetch international sanctions,https://www.sanctionsmap.eu/,,Yes
+code/event_driven/fetch_environmental_regulations.py,fetch environmental regulations,https://www.epa.gov/laws-regulations,,No
+code/event_driven/fetch_regulatory_reforms.py,fetch regulatory reforms,https://www.doingbusiness.org/en/reforms,,No
+code/event_driven/fetch_cybersecurity_threats.py,fetch cybersecurity threats,https://www.cisa.gov/news-events/cybersecurity-advisories,,No
+code/event_driven/fetch_trade_agreements.py,fetch trade agreements,https://ustr.gov/trade-agreements/free-trade-agreements,,No
+code/event_driven/fetch_elections_leadership_changes.py,fetch elections leadership changes,https://www.electionguide.org/elections/,,No
+code/event_driven/fetch_terrorism_incidents.py,fetch terrorism incidents,https://www.start.umd.edu/gtd/,,No
+code/event_driven/fetch_monetary_policy_decisions.py,fetch monetary policy decisions,,Unknown HTTP API,No
+code/event_driven/fetch_fiscal_stimulus_measures.py,fetch fiscal stimulus measures,https://www.imf.org/en/Publications/FM,,Yes
+code/event_driven/BitcoinHalving.py,BitcoinHalving,https://blockchain.info/q/getblockcount,,No
+code/monthly/Inflation Rate (CPI).py,Inflation Rate (CPI),,Unknown HTTP API,No
+code/monthly/fetch_youth_unemployment_rate.py,fetch youth unemployment rate,https://ilostat.ilo.org/topics/youth/,,No
+code/monthly/fetch_metal_prices.py,fetch metal prices,,Unknown HTTP API,No
+code/monthly/fetch_labor_force_participation.py,fetch labor force participation,,Unknown HTTP API,No
+code/monthly/Money Supply (M2).py,Money Supply (M2),,Unknown HTTP API,No
+code/monthly/fetch_credit_card_delinquency_rates.py,fetch credit card delinquency rates,,Unknown HTTP API,No
+code/monthly/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/monthly/Retail Sales.py,Retail Sales,,Unknown HTTP API,No
+code/monthly/LaborForceParticipation.py,LaborForceParticipation,,Unknown HTTP API,No
+code/monthly/InflationData.py,InflationData,,Unknown HTTP API,No
+code/monthly/fetch_global_trade_volume.py,fetch global trade volume,https://unctadstat.unctad.org/datacentre/reportInfo/MerchandiseTrade,,No
+code/monthly/Housing Starts.py,Housing Starts,,Unknown HTTP API,No
+code/monthly/fetch_export_import_prices.py,fetch export import prices,,Unknown HTTP API,No
+code/monthly/Trade Balance.py,Trade Balance,,Unknown HTTP API,No
+code/monthly/fetch_electricity_prices.py,fetch electricity prices,https://www.iea.org/data-and-statistics/data-tables?category=Prices,,No
+code/monthly/fetch_agricultural_prices.py,fetch agricultural prices,http://www.fao.org/faostat/en/#data/PP,,No
+code/monthly/bitcoin_close_1mo.py,bitcoin close 1mo,,"Yahoo Finance API, Unknown HTTP API",No
+code/monthly/fetch_employment_population_ratio.py,fetch employment population ratio,,Unknown HTTP API,No
+code/monthly/Purchasing Managers' Index (PMI).py,Purchasing Managers' Index (PMI),,Unknown HTTP API,No
+code/monthly/Business Confidence Index.py,Business Confidence Index,,Unknown HTTP API,No
+code/monthly/Industrial Production.py,Industrial Production,,Unknown HTTP API,No
+code/monthly/fetch_margin_debt.py,fetch margin debt,,Unknown HTTP API,No
+code/monthly/retailConsumption.py,retailConsumption,,Unknown HTTP API,No
+code/monthly/fetch_coal_prices.py,fetch coal prices,,Unknown HTTP API,No
+code/monthly/fetch_dividend_yields.py,fetch dividend yields,,Unknown HTTP API,No
+code/monthly/fetch_commodity_price_index.py,fetch commodity price index,https://www.worldbank.org/en/research/commodity-markets,,No
+code/monthly/fetch_wage_growth_rates.py,fetch wage growth rates,,Unknown HTTP API,No
+code/monthly/Consumer Confidence Index.py,Consumer Confidence Index,,Unknown HTTP API,No
+code/monthly/Capacity Utilization.py,Capacity Utilization,,Unknown HTTP API,No
+code/monthly/Unemployment Rate.py,Unemployment Rate,,Unknown HTTP API,No
+code/monthly/Building Permits.py,Building Permits,,Unknown HTTP API,No
+code/monthly/fetch_job_vacancy_rates.py,fetch job vacancy rates,https://api.bls.gov/publicAPI/v2/timeseries/data/,,No
+code/monthly/run_all_scripts.py,run all scripts,,Investing.com Data,No
+code/weekly/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/weekly/fetch_strategic_reserves.py,fetch strategic reserves,https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=WCSSTUS1&f=W,,No
+code/weekly/fetch_money_market_fund_flows.py,fetch money market fund flows,https://www.ici.org/research/stats/money-market,,No
+code/weekly/bitcoin_close_1wk.py,bitcoin close 1wk,,"Yahoo Finance API, Unknown HTTP API",No
+code/yearly/fetch_ecommerce_growth_rates.py,fetch ecommerce growth rates,https://www.statista.com/statistics/379046/worldwide-retail-e-commerce-sales/,,No
+code/yearly/fetch_venture_capital_investment.py,fetch venture capital investment,https://news.crunchbase.com/venture/,,No
+code/yearly/data_upload_utils.py,data upload utils,,Unknown HTTP API,No
+code/yearly/fetch_technology_adoption_rates.py,fetch technology adoption rates,https://www.weforum.org/reports/global-competitiveness-report/,,No
+code/yearly/fetch_remittances.py,fetch remittances,https://data.worldbank.org/indicator/BX.TRF.PWKR.CD.DT?locations=US,,No
+code/yearly/fetch_cybersecurity_investment.py,fetch cybersecurity investment,https://cybersecurityventures.com/cybersecurity-market-report/,,No
+code/yearly/fetch_rd_spending.py,fetch rd spending,,Unknown HTTP API,No
+code/yearly/fetch_unionization_rates.py,fetch unionization rates,https://ilostat.ilo.org/topics/union-membership/,,No
+code/yearly/fetch_energy_consumption.py,fetch energy consumption,https://www.iea.org/data-and-statistics/data-tables?category=Energy,,No
+code/yearly/fetch_migration_rates.py,fetch migration rates,https://migrationdataportal.org/data,,No
+code/yearly/fetch_gvc_participation.py,fetch gvc participation,,Unknown HTTP API,No
+code/yearly/Public Debt Levels (IMF).py,Public Debt Levels (IMF),https://www.imf.org/en/Publications/WEO/weo-database/2025/April,,No
+code/yearly/fetch_education_attainment_levels.py,fetch education attainment levels,,Unknown HTTP API,No
+code/yearly/fetch_internet_penetration_rates.py,fetch internet penetration rates,https://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx,,No
+code/yearly/fetch_patent_filings.py,fetch patent filings,https://www.wipo.int/ipstats/en/statistics/patents/,,No
+code/yearly/fetch_digital_infrastructure_quality.py,fetch digital infrastructure quality,https://www.speedtest.net/global-index,,No
+code/yearly/GlobalGDP.py,GlobalGDP,,Unknown HTTP API,No
+code/yearly/fetch_non_performing_loans.py,fetch non performing loans,https://data.worldbank.org/indicator/FB.AST.NPER.ZS?locations=US,,No
+code/yearly/fetch_ai_integration.py,fetch ai integration,https://oecd.ai/en/data-and-analysis,,No
+code/yearly/fetch_shadow_banking_size.py,fetch shadow banking size,https://www.fsb.org/regularly-updated-reports/global-monitoring-report-on-non-bank-financial-intermediation/,,No
+code/yearly/fetch_aging_population_metrics.py,fetch aging population metrics,https://data.worldbank.org/indicator/SP.POP.65UP.TO?locations=US,,No
+code/yearly/fetch_startup_ecosystem_strength.py,fetch startup ecosystem strength,https://startupgenome.com/reports,,No
