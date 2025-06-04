@@ -28,6 +28,8 @@ jobs:
           - "code/intraday/btc_5m_history.py"
           - "code/intraday/data_upload_utils.py"
           - "code/intraday/coingecko_crypto_price_1m.py"
+          - "code/intraday/Binance Liquidations.py"
+          - "code/intraday/Binance Open Interest.py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
