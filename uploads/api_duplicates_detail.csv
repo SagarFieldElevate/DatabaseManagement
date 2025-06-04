@@ -1,0 +1,21 @@
+Endpoint,Script,API
+https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY},code/daily/Etherscan Gas Prices.py,api.etherscan.io
+https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY},code/daily/Etherscan Stats.py,api.etherscan.io
+https://api.llama.fi/overview/dexs,code/daily/DefiLlama DEX Volume.py,api.llama.fi
+https://api.llama.fi/overview/dexs,code/daily/DefiLlama Stats.py,api.llama.fi
+https://api.llama.fi/tvl,code/daily/DefiLlama Stats.py,api.llama.fi
+https://api.llama.fi/tvl,code/daily/DefiLlama TVL.py,api.llama.fi
+https://api.stlouisfed.org/fred/series/observations,code/daily/Exchange Rates (Investing.com).py,api.stlouisfed.org
+https://api.stlouisfed.org/fred/series/observations,code/quarterly/Government Budget Balance (OECD).py,api.stlouisfed.org
+https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5,code/daily/Binance Futures Stats.py,fapi.binance.com
+https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5,code/daily/Binance Order Book.py,fapi.binance.com
+https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1,code/daily/Binance Funding Rate.py,fapi.binance.com
+https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1,code/daily/Binance Futures Stats.py,fapi.binance.com
+https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1,code/daily/Binance Futures Stats.py,fapi.binance.com
+https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1,code/daily/Binance Open Interest.py,fapi.binance.com
+https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1,code/daily/Binance Futures Stats.py,fapi.binance.com
+https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1,code/daily/Binance Liquidations.py,fapi.binance.com
+https://www.imf.org/en/Publications/FM,code/event_driven/fetch_fiscal_stimulus_measures.py,www.imf.org
+https://www.imf.org/en/Publications/FM,code/event_driven/fetch_infrastructure_spending.py,www.imf.org
+https://www.sanctionsmap.eu/,code/event_driven/fetch_international_sanctions.py,www.sanctionsmap.eu
+https://www.sanctionsmap.eu/,code/event_driven/fetch_trade_sanctions.py,www.sanctionsmap.eu
