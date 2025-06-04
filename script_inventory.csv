@@ -1,0 +1,169 @@
+script,dataset_names,apis
+code/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/weekly/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/weekly/bitcoin_close_1wk.py,Bitcoin 1 Week Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/weekly/fetch_strategic_reserves.py,US Strategic Petroleum Reserve (Million Barrels),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=WCSSTUS1&f=W
+code/weekly/fetch_money_market_fund_flows.py,Money Market Fund Assets (Billions USD),https://www.ici.org/research/stats/money-market; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_margin_debt.py,US Margin Debt (Millions USD),https://raw.githubusercontent.com/SagarFieldElevate/DatabaseManagement/main/Uploads/margin-statistics.xlsx; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Consumer Confidence Index.py,US Consumer Confidence Index,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Industrial Production.py,US Industrial Production Index (2017=100),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/monthly/fetch_job_vacancy_rates.py,Job Vacancy Rate (%),https://api.bls.gov/publicAPI/v2/timeseries/data/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_commodity_price_index.py,World Bank Commodity Price Index,https://www.worldbank.org/en/research/commodity-markets; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Capacity Utilization.py,US Capacity Utilization (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_labor_force_participation.py,Labor Force Participation Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_export_import_prices.py,US Export Price Index,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_global_trade_volume.py,Global Trade Volume (Billions USD),https://unctadstat.unctad.org/datacentre/reportInfo/MerchandiseTrade; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/bitcoin_close_1mo.py,Bitcoin 1 Month Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_wage_growth_rates.py,Wage Growth Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_electricity_prices.py,Global Electricity Price (USD/MWh),https://www.iea.org/data-and-statistics/data-tables?category=Prices; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_coal_prices.py,Global Coal Price (USD/Metric Ton),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_metal_prices.py,Copper Price (USD/Metric Ton),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_credit_card_delinquency_rates.py,Credit Card Delinquency Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Business Confidence Index.py,US Business Confidence Index,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_youth_unemployment_rate.py,Youth Unemployment Rate (%),https://ilostat.ilo.org/topics/youth/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Housing Starts.py,US Housing Starts (Thousands of Units),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/retailConsumption.py,US Retail Sales Excluding Autos,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Purchasing Managers' Index (PMI).py,USBCOI (1M),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Trade Balance.py,US Trade Balance (Millions USD),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/LaborForceParticipation.py,US Labor Force Participation Rate,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Retail Sales.py,US Retail Sales (Millions USD),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_agricultural_prices.py,FAO Food Price Index,http://www.fao.org/faostat/en/#data/PP; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/fetch_dividend_yields.py,S&P 500 Dividend Yield (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Building Permits.py,US Building Permits (Thousands of Units),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Unemployment Rate.py,US Unemployment Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Money Supply (M2).py,US Money Supply M2 (Billions USD),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/run_all_scripts.py,,
+code/monthly/fetch_employment_population_ratio.py,Employment-to-Population Ratio (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/InflationData.py,US CPI (Consumer Price Index),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/monthly/Inflation Rate (CPI).py,"US Inflation Rate (CPI, YoY %)",https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/quarterly/fetch_labor_productivity.py,Labor Productivity (Index 2012=100),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/Government Budget Balance (OECD).py,US Government Budget Balance (% of GDP),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://api.stlouisfed.org/fred/series/observations
+code/quarterly/Foreign Direct Investment (FDI) (UNCTAD).py,US FDI Inflows (Millions USD),https://unctad.org/topic/investment/statistics; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/Gross Domestic Product.py,"US GDP (Nominal, Billions USD)",https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/fetch_capital_flows.py,Cross-Border Capital Flows (Billions USD),https://data.imf.org/?sk=7A51304B-6426-40C0-83DD-CA473CA1FD52; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/fetch_corporate_debt_levels.py,Corporate Debt (% of GDP),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/fetch_bank_capital_adequacy_ratios.py,Bank Capital Adequacy Ratio (%),https://www.bis.org/statistics/totcredit.htm; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/GDP Growth Rate.py,US GDP Growth Rate (Annualized %),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/fetch_stock_buybacks.py,S&P 500 Stock Buybacks (Billions USD),https://ycharts.com/indicators/sp_500_buybacks; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/fetch_loan_to_deposit_ratios.py,Loan-to-Deposit Ratio (%),https://data.imf.org/?sk=51B096FA-2CD2-40DC-AE8A-BF71B1E1A2B3; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/Current Account Balance (OECD).py,US Current Account Balance (% of GDP),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/fetch_mortgage_default_rates.py,Mortgage Delinquency Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/quarterly/fetch_household_debt_levels.py,Household Debt (% of GDP),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_stock_market_indices.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/AlphaVantage DXY.py,,https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=DXY&apikey={API_KEY}&outputsize=full; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/PricesScript.py,Cryptocurrency Volatility and Trading Range (365 Days),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/DefiLlama TVL.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://api.llama.fi/tvl
+code/daily/StableCoinSupply.py,Stablecoin Circulating Supply,https://stablecoins.llama.fi/stablecoin/{stablecoin_id}; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/coingecko_altcoin_price_top100.py,CoinGecko Top100 Altcoin Prices,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_credit_spreads.py,Baa Corporate Credit Spread (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/24h Volatility & Trading Range.py,365-Day Crypto Volatility and Range,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/daily/fetch_yield_curve_spread.py,10Y-2Y Treasury Spread (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/coingecko_crypto_price_daily.py,CoinGecko BTC & ETH Price Daily,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Etherscan Token Events.py,,https://api.etherscan.io/api?module=account&action=tokentx&address={ADDRESS}&page=1&offset=10&sort=desc&apikey={API_KEY}; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Active Addresses.py,Active Addresses,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/InterestRate.py,US Federal Funds Rate,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/CoinMetrics Indicators.py,,https://api.coinmetrics.io/v4; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Blockchair Stats.py,,https://api.blockchair.com/{CHAIN}/stats; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/GoldDailyPrice.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Binance Order Book.py,,https://api.binance.com/api/v3/depth?symbol={symbol}&limit=5; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Etherscan Gas Prices.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY}
+code/daily/coingecko_btc_daily_returns.py,CoinGecko BTC Daily Returns,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Transaction Count and Active User.py,Transaction Count and Active User,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/BTC ETF Net Flow.py,BTC ETF Net Flow,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/coingecko_eth_daily_volume.py,CoinGecko ETH Daily Volume,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/USDollarIndex.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/coingecko_stablecoin_peg_deviation.py,CoinGecko Stablecoin Peg Deviation,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_equity_market_cap.py,US Equity Market Capitalization (Billions USD),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/MarketCap.py,Cryptocurrency Market Cap (365 Days),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/coingecko_btc_daily_volume.py,CoinGecko BTC Daily Volume,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Centralized Stablecoins Market Cap.py,Centralized Stablecoins Market Cap,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/BTCPriceDaily.py,Bitcoin Daily Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Interest Rates (Federal Funds Rate).py,US Federal Funds Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/GoogleTrending.py,Trending Cryptocurrencies,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/DefiLlama DEX Volume.py,,https://api.llama.fi/overview/dexs; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/DefiLlama Stats.py,,https://api.llama.fi/overview/dexs; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://api.llama.fi/tvl
+code/daily/fetch_vix.py,CBOE Volatility Index (VIX),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_crude_oil_prices.py,WTI Crude Oil Price (USD/Barrel),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Bitcoin Coin Day Destroyed - Historical Trend.py,Bitcoin Coin Day Destroyed - Historical Trend,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Etherscan Stats.py,,https://api.etherscan.io/api?module=account&action=tokentx&address={address}&page=1&offset=10&sort=desc&apikey={API_KEY}; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY}
+code/daily/Technicals.py,Bitcoin Technical Indicators,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Binance Futures Stats.py,,https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5; https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1
+code/daily/Exchange Rates (Investing.com).py,USD/EUR Exchange Rate,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://api.stlouisfed.org/fred/series/observations
+code/daily/fetch_bond_yields.py,10-Year Treasury Yield (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/QQQData.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_natural_gas_prices.py,Henry Hub Natural Gas Price (USD/MMBtu),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Miner Revenue.py,Miner Revenue,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Mempool Stats.py,,https://mempool.space/block/{block_hash}; https://mempool.space/api/block-height/1; https://mempool.space/api/block/{block_hash}; https://mempool.space/api/v1; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/US Gov - BTC Balance and USD Value.py,US Gov - BTC Balance and USD Value,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Alternative.me Fear and Greed Index.py,,https://api.alternative.me/fng/?format=json&limit=730; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/VolumeTraded.py,Cryptocurrency Volume Traded (365 Days),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/OpenSea NFT Stats.py,,https://api.opensea.io/api/v1/collection/{COLLECTION_SLUG}/stats; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Binance Funding Rate.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1
+code/daily/Binance Liquidations.py,,https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/SOPR 3.0.py,SOPR 3.0,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_gold_prices.py,Gold Price (USD/Ounce),https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_ids[0]}; https://fred.stlouisfed.org/series/{series_ids[0]}/downloaddata/{series_ids[0]}.csv; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/SPYData.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_bank_lending_rates.py,Bank Prime Loan Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/CurrencyExchange.py,USD Currency Exchange Rates,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/fetch_baltic_dry_index.py,Baltic Dry Index,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/Binance Open Interest.py,,https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/LiquidityIndicator.py,BTC Liquidity Forecast,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/daily/OpenSea NFT Transfers.py,,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://api.opensea.io/api/v2/events?collection_slug={COLLECTION_SLUG}&event_type=transfer&limit=50
+code/intraday/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/intraday/bitcoin_close_1min.py,Bitcoin 1 Minute Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/intraday/bitcoin_close_5min.py,Bitcoin 5 Minute Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/intraday/coingecko_crypto_price_1m.py,CoinGecko BTC & ETH Price 1m,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/intraday/btc_5m_history.py,Binance BTC 5m History,https://api.binance.us/api/v3/klines; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/intraday/bitcoin_close_15min.py,Bitcoin 15 Minute Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/intraday/bitcoin_close_30min.py,Bitcoin 30 Minute Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/intraday/bitcoin_close_1h.py,Bitcoin 1 Hour Close Price,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_healthcare_policy_changes.py,Healthcare Policy Change Count,https://www.who.int/news-room/fact-sheets; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/event_driven/fetch_cybersecurity_threats.py,Cybersecurity Incident Count,https://www.cisa.gov/news-events/cybersecurity-advisories; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_supply_chain_disruptions.py,Supply Chain Disruption Events,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}; https://www.supplychainbrain.com/topics/supply-chain-disruptions
+code/event_driven/fetch_tariff_rates.py,Average Tariff Rate (%),https://www.wto.org/english/res_e/statis_e/tariff_profiles_e.htm; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_tax_policy_changes.py,Tax Policy Reform Count,https://www.oecd.org/tax/tax-policy-reform.htm; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_armed_conflicts.py,Armed Conflict Count,https://www.sipri.org/research/peace-and-security/conflict-and-peace; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_ipos.py,US IPO Count,https://www.nasdaq.com/market-activity/ipos; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_climate_change_effects.py,Climate Impact Index,https://www.ipcc.ch/reports/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_monetary_policy_decisions.py,Federal Funds Rate (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_pandemics_health_crises.py,Health Crisis Outbreak Count,https://www.who.int/emergencies/disease-outbreak-news; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_natural_disasters.py,Natural Disaster Count,https://www.emdat.be/database; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_terrorism_incidents.py,Terrorism Incident Count,https://www.start.umd.edu/gtd/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/[BTC] UTXO Age Distribution.py,[BTC] UTXO Age Distribution,https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_political_instability.py,Freedom in the World Index,https://freedomhouse.org/report/freedom-world; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_refugee_crises.py,Refugee Population (Millions),https://api.unhcr.org/population/v1/refugees/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_trade_sanctions.py,Trade Sanctions Count,https://www.sanctionsmap.eu/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_elections_leadership_changes.py,Election Count,https://www.electionguide.org/elections/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_international_sanctions.py,International Sanctions Count,https://www.sanctionsmap.eu/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_environmental_regulations.py,Environmental Regulation Count,https://www.epa.gov/laws-regulations; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_trade_agreements.py,US Trade Agreements Count,https://ustr.gov/trade-agreements/free-trade-agreements; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/BitcoinHalving.py,Bitcoin Halving Progress,https://blockchain.info/q/getblockcount; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_regulatory_reforms.py,Regulatory Reform Count,https://www.doingbusiness.org/en/reforms; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_fiscal_stimulus_measures.py,Fiscal Stimulus Spending (Billions USD),https://www.imf.org/en/Publications/FM; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/event_driven/fetch_infrastructure_spending.py,Infrastructure Spending (Billions USD),https://www.imf.org/en/Publications/FM; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/data_upload_utils.py,,https://raw.githubusercontent.com/{repo_name}/{branch}/{upload_path}/{filename}; https://api.github.com/repos/{repo_name}/contents/{upload_path}/{filename}
+code/yearly/fetch_venture_capital_investment.py,Venture Capital Investment (Billions USD),https://news.crunchbase.com/venture/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_remittances.py,US Remittances Inflows (Billions USD),https://data.worldbank.org/indicator/BX.TRF.PWKR.CD.DT?locations=US; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_shadow_banking_size.py,Shadow Banking Size (Trillions USD),https://www.fsb.org/regularly-updated-reports/global-monitoring-report-on-non-bank-financial-intermediation/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_ai_integration.py,AI Patent Filings,https://oecd.ai/en/data-and-analysis; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_cybersecurity_investment.py,Cybersecurity Investment (Billions USD),https://cybersecurityventures.com/cybersecurity-market-report/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_energy_consumption.py,Global Energy Consumption (Million TOE),https://www.iea.org/data-and-statistics/data-tables?category=Energy; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_rd_spending.py,R&D Spending (% of GDP),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_patent_filings.py,Patent Filings (PCT),https://www.wipo.int/ipstats/en/statistics/patents/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_internet_penetration_rates.py,Internet Penetration Rate (%),https://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_migration_rates.py,Net Migration Rate (per 1000),https://migrationdataportal.org/data; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_education_attainment_levels.py,Tertiary Education Attainment (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_unionization_rates.py,Trade Union Density (%),https://ilostat.ilo.org/topics/union-membership/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_technology_adoption_rates.py,Technology Adoption Score,https://www.weforum.org/reports/global-competitiveness-report/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/Public Debt Levels (IMF).py,US Public Debt (% of GDP),https://www.imf.org/en/Publications/WEO/weo-database/2025/April; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_ecommerce_growth_rates.py,E-commerce Growth Rate (%),https://www.statista.com/statistics/379046/worldwide-retail-e-commerce-sales/; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_non_performing_loans.py,Non-Performing Loans (%),https://data.worldbank.org/indicator/FB.AST.NPER.ZS?locations=US; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_gvc_participation.py,US GVC Backward Participation (%),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_digital_infrastructure_quality.py,Broadband Speed (Mbps),https://www.speedtest.net/global-index; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/GlobalGDP.py,Global GDP (Billions USD),https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_startup_ecosystem_strength.py,Startup Ecosystem Score,https://startupgenome.com/reports; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
+code/yearly/fetch_aging_population_metrics.py,Population Ages 65 and Above (Millions),https://data.worldbank.org/indicator/SP.POP.65UP.TO?locations=US; https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}
