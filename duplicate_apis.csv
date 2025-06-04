@@ -1,0 +1,21 @@
+Duplicate Endpoint,Script,Script Endpoints
+https://api.stlouisfed.org/fred/series/observations,code/quarterly/Government Budget Balance (OECD).py,https://api.stlouisfed.org/fred/series/observations
+https://api.stlouisfed.org/fred/series/observations,code/daily/Exchange Rates (Investing.com).py,https://api.stlouisfed.org/fred/series/observations
+https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1,code/daily/Binance Open Interest.py,https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1
+https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1,code/daily/Binance Futures Stats.py,https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1; https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5; https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1
+https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5,code/daily/Binance Order Book.py,https://api.binance.com/api/v3/depth?symbol={symbol}&limit=5; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5
+https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5,code/daily/Binance Futures Stats.py,https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1; https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5; https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1
+https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1,code/daily/Binance Liquidations.py,https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1
+https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1,code/daily/Binance Futures Stats.py,https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1; https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5; https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1
+https://api.llama.fi/tvl,code/daily/DefiLlama Stats.py,https://api.llama.fi/tvl; https://api.llama.fi/overview/dexs
+https://api.llama.fi/tvl,code/daily/DefiLlama TVL.py,https://api.llama.fi/tvl
+https://api.llama.fi/overview/dexs,code/daily/DefiLlama Stats.py,https://api.llama.fi/tvl; https://api.llama.fi/overview/dexs
+https://api.llama.fi/overview/dexs,code/daily/DefiLlama DEX Volume.py,https://api.llama.fi/overview/dexs
+https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1,code/daily/Binance Funding Rate.py,https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1
+https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1,code/daily/Binance Futures Stats.py,https://fapi.binance.com/fapi/v1/fundingRate?symbol={symbol}&limit=1; https://fapi.binance.com/futures/data/openInterestHist?symbol={symbol}&period=5m&limit=1; https://fapi.binance.com/fapi/v1/depth?symbol={symbol}&limit=5; https://fapi.binance.com/futures/data/orderLiquidation?symbol={symbol}&limit=1
+https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY},code/daily/Etherscan Stats.py,https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY}; https://api.etherscan.io/api?module=account&action=tokentx&address={address}&page=1&offset=10&sort=desc&apikey={API_KEY}
+https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY},code/daily/Etherscan Gas Prices.py,https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey={API_KEY}
+https://www.imf.org/en/Publications/FM,code/event_driven/fetch_infrastructure_spending.py,https://www.imf.org/en/Publications/FM
+https://www.imf.org/en/Publications/FM,code/event_driven/fetch_fiscal_stimulus_measures.py,https://www.imf.org/en/Publications/FM
+https://www.sanctionsmap.eu/,code/event_driven/fetch_trade_sanctions.py,https://www.sanctionsmap.eu/
+https://www.sanctionsmap.eu/,code/event_driven/fetch_international_sanctions.py,https://www.sanctionsmap.eu/
