@@ -26,26 +26,26 @@ def fetch(endpoint: str, params: dict) -> dict:
         resp = requests.get(endpoint, params=params, headers=headers, timeout=30)
         resp.raise_for_status()
         return resp.json()
-    except requests.exceptions.RequestException as e:
+    except Exception as e:
         print(f"Error: {e}")
         return {"data": []}
 
-# Get recent data (last 7 days) for better results
-end_time = datetime.now(timezone.utc)  # Fixed deprecation warning
-start_time = end_time - timedelta(days=7)
+# Get recent data (last 7 days)
+end_time = datetime.utcnow()
+start_time = end_time - timedelta(days=4000)
 
 # Format times as required by API
 start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%S.000Z")
 end_time_str = end_time.strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
-# Asset metrics parameters - using metrics available in community API
+# Asset metrics parameters - using ONLY metrics available in community API
 asset_params = {
     "assets": "btc",
-    "metrics": "AdrActCnt,TxCnt,SplyCur,PriceUSD,CapMrktCurUSD,HashRateMean,CapMVRVCur",
-    "frequency": "1d",
+    "metrics": "AdrActCnt,TxCnt,SplyCur,PriceUSD,CapMrktCurUSD",
+    "frequency": "1d", 
     "start_time": start_time_str,
     "end_time": end_time_str,
-    "page_size": 100,
+    "page_size": 10000,
 }
 
 print("Fetching asset metrics...")
@@ -66,32 +66,28 @@ for asset_point in asset_data:
         "Current Supply": asset_point.get("SplyCur"),
         "Price USD": asset_point.get("PriceUSD"),
         "Market Cap USD": asset_point.get("CapMrktCurUSD"),
-        "Hash Rate": asset_point.get("HashRateMean"),
-        "MVRV Current": asset_point.get("CapMVRVCur"),
     }
     records.append(record)
 
 # Create DataFrame
 df = pd.DataFrame(records)
 
-# Convert Date to datetime and get only the latest record
+# Convert Date to datetime and numeric columns
 if not df.empty:
     df['Date'] = pd.to_datetime(df['Date'])
     df = df.sort_values('Date')
+    df = df.reset_index(drop=True)
     
     # Convert numeric columns to float
     numeric_columns = ['Active Addresses', 'Transaction Count', 'Current Supply', 
-                      'Price USD', 'Market Cap USD', 'Hash Rate', 'MVRV Current']
+                      'Price USD', 'Market Cap USD']
     
     for col in numeric_columns:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors='coerce')
     
-    # Get only the latest data point (as in original code)
+    # Get only the latest data point
     latest_df = df.iloc[[-1]].copy()
-    
-    # Remove columns that are entirely NaN
-    latest_df = latest_df.dropna(axis=1, how='all')
     
     print("\nLatest data point:")
     print(latest_df)
