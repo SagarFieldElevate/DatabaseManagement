@@ -1,32 +1,45 @@
-name: CoinMetrics Indicators Daily Job
+name: TIPS Scripts Trial
 
 on:
-  schedule:
-    - cron: "0 0 * * *"  # Runs daily at midnight UTC
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
 
 jobs:
-  run-coinmetrics-indicators:
-    name: CoinMetrics Indicators
+  run-tips-scripts:
+    name: ${{ matrix.script }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    
     env:
       AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      COINMETRICS_API_KEY: ${{ secrets.COINMETRICS_API_KEY }}
-    
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    strategy:
+      fail-fast: false
+      matrix:
+        script:
+          - "code/daily/5-Year TIPS Yield.py"
+          - "code/daily/10-Year TIPS Yield.py"
+          - "code/daily/20-Year TIPS Yield.py"
+          - "code/daily/30-Year TIPS Yield.py"
+          - "code/weekly/5-Year TIPS Yield.py"
+          - "code/weekly/10-Year TIPS Yield.py"
+          - "code/weekly/20-Year TIPS Yield.py"
+          - "code/weekly/30-Year TIPS Yield.py"
+          - "code/monthly/5-Year TIPS Yield.py"
+          - "code/monthly/10-Year TIPS Yield.py"
+          - "code/monthly/20-Year TIPS Yield.py"
+          - "code/monthly/30-Year TIPS Yield.py"
+          - "code/yearly/5-Year TIPS Yield.py"
+          - "code/yearly/10-Year TIPS Yield.py"
+          - "code/yearly/20-Year TIPS Yield.py"
+          - "code/yearly/30-Year TIPS Yield.py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      
       - name: Install dependencies
         run: pip install -r requirements.txt
-      
-      - name: Run CoinMetrics Indicators
-        run: python "code/daily/DefiLlama DEX Volume.py"
+      - name: Run ${{ matrix.script }}
+        run: python "${{ matrix.script }}"

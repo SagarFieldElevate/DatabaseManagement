@@ -19,6 +19,10 @@ jobs:
           - "code/weekly/data_upload_utils.py"
           - "code/weekly/fetch_money_market_fund_flows.py"
           - "code/weekly/fetch_strategic_reserves.py"
+          - "code/weekly/5-Year TIPS Yield.py"
+          - "code/weekly/10-Year TIPS Yield.py"
+          - "code/weekly/20-Year TIPS Yield.py"
+          - "code/weekly/30-Year TIPS Yield.py"
     env:
       AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

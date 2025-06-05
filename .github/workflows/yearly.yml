@@ -37,6 +37,10 @@ jobs:
           - "code/yearly/fetch_technology_adoption_rates.py"
           - "code/yearly/fetch_unionization_rates.py"
           - "code/yearly/fetch_venture_capital_investment.py"
+          - "code/yearly/5-Year TIPS Yield.py"
+          - "code/yearly/10-Year TIPS Yield.py"
+          - "code/yearly/20-Year TIPS Yield.py"
+          - "code/yearly/30-Year TIPS Yield.py"
     env:
       AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
