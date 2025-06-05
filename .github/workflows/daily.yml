@@ -79,6 +79,7 @@ jobs:
           - "code/daily/Binance Funding Rate.py"
           - "code/daily/OpenSea NFT Stats.py"
           - "code/daily/OpenSea NFT Transfers.py"
+          - "code/daily/fetch_ibkr_macro_data.py"
 
     steps:
       - name: Checkout repository
