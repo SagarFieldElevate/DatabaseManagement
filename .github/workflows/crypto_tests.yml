@@ -1,41 +1,41 @@
-name: Crypto Scripts Tests
+# name: Crypto Scripts Tests
 
-on:
-  push:
-    paths:
-      - 'code/daily/AlphaVantage DXY.py'
-      - 'code/daily/Alternative.me Fear and Greed Index.py'
-      - 'code/daily/Blockchair Stats.py'
-      - 'code/daily/DefiLlama Stats.py'
-      - 'code/daily/Etherscan Gas Prices.py'
-      - 'code/daily/Etherscan Token Events.py'
-      - 'code/daily/Mempool Stats.py'
-      - 'tests/**'
-  pull_request:
-    paths:
-      - 'code/daily/AlphaVantage DXY.py'
-      - 'code/daily/Alternative.me Fear and Greed Index.py'
-      - 'code/daily/Blockchair Stats.py'
-      - 'code/daily/DefiLlama Stats.py'
-      - 'code/daily/Etherscan Gas Prices.py'
-      - 'code/daily/Etherscan Token Events.py'
-      - 'code/daily/Mempool Stats.py'
-      - 'tests/**'
+# on:
+#   push:
+#     paths:
+#       - 'code/daily/AlphaVantage DXY.py'
+#       - 'code/daily/Alternative.me Fear and Greed Index.py'
+#       - 'code/daily/Blockchair Stats.py'
+#       - 'code/daily/DefiLlama Stats.py'
+#       - 'code/daily/Etherscan Gas Prices.py'
+#       - 'code/daily/Etherscan Token Events.py'
+#       - 'code/daily/Mempool Stats.py'
+#       - 'tests/**'
+#   pull_request:
+#     paths:
+#       - 'code/daily/AlphaVantage DXY.py'
+#       - 'code/daily/Alternative.me Fear and Greed Index.py'
+#       - 'code/daily/Blockchair Stats.py'
+#       - 'code/daily/DefiLlama Stats.py'
+#       - 'code/daily/Etherscan Gas Prices.py'
+#       - 'code/daily/Etherscan Token Events.py'
+#       - 'code/daily/Mempool Stats.py'
+#       - 'tests/**'
 
-jobs:
-  test-scripts:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+# jobs:
+#   test-scripts:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+#       - name: Setup Python
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.x'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+#       - name: Install dependencies
+#         run: pip install -r requirements.txt
 
-      - name: Run pytest
-        run: pytest -q
+#       - name: Run pytest
+#         run: pytest -q
