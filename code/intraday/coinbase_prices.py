@@ -1,15 +1,6 @@
 import os
-import pandas as pd
 import requests
 from datetime import datetime
-
-from data_upload_utils import (
-    upload_to_github,
-    create_airtable_record,
-    update_airtable,
-    delete_file_from_github,
-    ensure_utc,
-)
 
 # === Coinbase Prime config ===
 API_BASE = "https://api.prime.coinbase.com"
@@ -28,6 +19,7 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 def fetch_candles(product_id: str, granularity: int):
     """Fetch historical candle data from Coinbase Exchange."""
+    import pandas as pd
     path = f"/products/{product_id}/candles"
     params = {"granularity": granularity}
     url = f"{API_BASE}{path}"
@@ -52,6 +44,14 @@ def fetch_candles(product_id: str, granularity: int):
 
 
 def main():
+    import pandas as pd
+    from data_upload_utils import (
+        upload_to_github,
+        create_airtable_record,
+        update_airtable,
+        delete_file_from_github,
+        ensure_utc,
+    )
     assets = ["BTC-USD", "ETH-USD", "SOL-USD"]
     granularities = {
         "1m": 60,

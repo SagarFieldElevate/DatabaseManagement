@@ -2,17 +2,7 @@ import os
 import time
 import jwt
 import requests
-import pandas as pd
-from data_upload_utils import (
-    upload_to_github,
-    create_airtable_record,
-    update_airtable,
-    delete_file_from_github,
-    ensure_utc,
-)
 
-CB_API_KEY_ID = os.getenv("COINBASE_API_KEY_ID")
-CB_PRIVATE_KEY = os.getenv("COINBASE_PRIVATE_KEY")
 API_BASE = "https://api.prime.coinbase.com"
 ACCOUNT_ID = os.getenv("CB_ACCOUNT_ID")
 PRODUCT_ID = os.getenv("CB_PRODUCT_ID", "BTC-USD")
@@ -30,18 +20,20 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 def cb_headers() -> dict:
     """Return Authorization header for Coinbase Prime using JWT."""
-    if not CB_API_KEY_ID or not CB_PRIVATE_KEY:
+    api_key = os.getenv("COINBASE_API_KEY_ID")
+    private_key = os.getenv("COINBASE_PRIVATE_KEY")
+    if not api_key or not private_key:
         raise EnvironmentError("Missing Coinbase API credentials")
 
     now = int(time.time())
     payload = {
-        "iss": CB_API_KEY_ID,
-        "sub": CB_API_KEY_ID,
+        "iss": api_key,
+        "sub": api_key,
         "aud": API_BASE,
         "iat": now,
         "exp": now + 300,
     }
-    token = jwt.encode(payload, CB_PRIVATE_KEY, algorithm="ES256")
+    token = jwt.encode(payload, private_key, algorithm="ES256")
     return {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",
@@ -58,6 +50,14 @@ def fetch_endpoint(path: str):
 
 
 def main():
+    import pandas as pd
+    from data_upload_utils import (
+        upload_to_github,
+        create_airtable_record,
+        update_airtable,
+        delete_file_from_github,
+        ensure_utc,
+    )
     try:
         accounts = fetch_endpoint("/accounts")
         print("Accounts response:")
