@@ -12,4 +12,3 @@ pandas_ta
 fredapi
 beautifulsoup4
 pandas-datareader
-ib_insync
