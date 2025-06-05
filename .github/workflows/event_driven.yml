@@ -38,6 +38,8 @@ jobs:
           - "code/event_driven/fetch_terrorism_incidents.py"
           - "code/event_driven/fetch_trade_agreements.py"
           - "code/event_driven/fetch_trade_sanctions.py"
+          - "code/event_driven/GoogleTrending.py"
+          - "code/event_driven/Etherscan Token Events.py"
     env:
       AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
