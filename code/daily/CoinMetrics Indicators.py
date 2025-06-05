@@ -1,7 +1,7 @@
 import os
 import requests
 import pandas as pd
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from data_upload_utils import (
     upload_to_github,
     create_airtable_record,
@@ -26,28 +26,36 @@ def fetch(endpoint: str, params: dict) -> dict:
         resp = requests.get(endpoint, params=params, headers=headers, timeout=30)
         resp.raise_for_status()
         return resp.json()
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error {e.response.status_code}: {e}")
+        if e.response.text:
+            print(f"Response: {e.response.text[:500]}")  # First 500 chars
+        return {"data": []}
     except Exception as e:
         print(f"Error: {e}")
         return {"data": []}
 
 # Get recent data (last 7 days)
-end_time = datetime.utcnow()
+end_time = datetime.now()  # This will use local timezone
 start_time = end_time - timedelta(days=4000)
 
-# Format times as required by API
-start_time_str = start_time.strftime("%Y-%m-%dT%H:%M:%S.000Z")
-end_time_str = end_time.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+# Format dates as YYYY-MM-DD (simpler format)
+start_date = start_time.strftime("%Y-%m-%d")
+end_date = end_time.strftime("%Y-%m-%d")
 
 # Asset metrics parameters - using ONLY metrics available in community API
 asset_params = {
     "assets": "btc",
     "metrics": "AdrActCnt,TxCnt,SplyCur,PriceUSD,CapMrktCurUSD",
     "frequency": "1d", 
-    "start_time": start_time_str,
-    "end_time": end_time_str,
+    "start_time": start_date,
+    "end_time": end_date,
     "page_size": 10000,
 }
 
+print(f"Using {'paid' if API_KEY else 'community'} API")
+print(f"API URL: {BASE_URL}")
+print(f"Date range: {start_date} to {end_date}")
 print("Fetching asset metrics...")
 asset_response = fetch(f"{BASE_URL}/timeseries/asset-metrics", asset_params)
 asset_data = asset_response.get("data", [])
