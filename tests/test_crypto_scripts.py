@@ -10,6 +10,8 @@ SCRIPTS = [
     'code/daily/Etherscan Token Events.py',
     'code/daily/Mempool Stats.py',
     'code/daily/CoinMetrics Indicators.py',
+    'code/intraday/coinbase_prices.py',
+    'code/daily/coinbase_analytics.py',
 ]
 
 @pytest.mark.parametrize('path', SCRIPTS)
