@@ -1,0 +1,32 @@
+name: CoinMetrics Indicators Daily Job
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Runs daily at midnight UTC
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  run-coinmetrics-indicators:
+    name: CoinMetrics Indicators
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      COINMETRICS_API_KEY: ${{ secrets.COINMETRICS_API_KEY }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Run CoinMetrics Indicators
+        run: python "code/daily/CoinMetrics Indicators.py"
