@@ -12,6 +12,8 @@ SCRIPTS = [
     'code/daily/CoinMetrics Indicators.py',
     'code/intraday/coinbase_prices.py',
     'code/daily/coinbase_analytics.py',
+    'code/coinbase_prime_example.py',
+
 ]
 
 @pytest.mark.parametrize('path', SCRIPTS)

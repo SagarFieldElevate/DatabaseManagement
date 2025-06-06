@@ -50,6 +50,10 @@ workflows:
 * `COINGECKO_API_KEY` – API key for CoinGecko cryptocurrency data. (legacy)
 * `COINBASE_API_KEY_ID` – Coinbase API key identifier used as the `iss` claim.
 * `COINBASE_PRIVATE_KEY` – EC private key (PEM) used to sign JWT tokens.
+
+  Install PyJWT with cryptography support (`pip install 'pyjwt[crypto]'`) so
+  ES256 signing works correctly.
+
 * `COINBASE_PASSPHRASE` – *(legacy)* passphrase for HMAC auth.
 * `CB_ACCOUNT_ID` – Account identifier used when fetching transactions.
 * `CB_PRODUCT_ID` – *(optional)* default product when querying order books or trades.
@@ -85,5 +89,9 @@ use JWT authentication generated from `COINBASE_API_KEY_ID` and
 in Airtable as **Coinbase Analytics**. Both Coinbase scripts are executed by the
 intraday and daily GitHub Actions workflows so new data appears automatically in
 their respective Airtable tables.
+
+To manually verify your credentials, run `code/coinbase_prime_example.py` after
+setting `COINBASE_API_KEY_ID` and `COINBASE_PRIVATE_KEY`. The script generates
+an ES256 JWT, calls the `/accounts` endpoint and prints the JSON response.
 
 
