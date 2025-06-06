@@ -17,7 +17,6 @@ jobs:
           - "code/event_driven/[BTC] UTXO Age Distribution.py"
           - "code/event_driven/data_upload_utils.py"
           - "code/event_driven/fetch_monetary_policy_decisions.py"
-          - "code/event_driven/fetch_refugee_crises.py"
           - "code/event_driven/GoogleTrending.py"
           - "code/event_driven/Etherscan Token Events.py"
     env:
