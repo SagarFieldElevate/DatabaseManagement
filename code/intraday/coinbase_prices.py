@@ -1,5 +1,19 @@
 import os
+import time
+import importlib
 import requests
+
+try:
+    jwt = importlib.import_module('jwt')
+    if not getattr(getattr(jwt, 'algorithms', None), 'has_crypto', False):
+        raise ImportError
+except Exception:
+    class _DummyJWT:
+        algorithms = type('alg', (), {'has_crypto': False})()
+        def encode(self, *a, **k):
+            raise RuntimeError('PyJWT with cryptography is required')
+    jwt = _DummyJWT()
+
 from datetime import datetime
 
 # === Coinbase Prime config ===
@@ -17,13 +31,50 @@ UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 
+def cb_headers() -> dict:
+    """Return JWT Authorization headers for Coinbase Prime."""
+    if not getattr(jwt, 'algorithms', None) or not jwt.algorithms.has_crypto:
+        raise RuntimeError("PyJWT with cryptography backend is required")
+
+    api_key = os.getenv("COINBASE_API_KEY_ID")
+    private_key = os.getenv("COINBASE_PRIVATE_KEY")
+    if not api_key or not private_key:
+        raise EnvironmentError("Missing Coinbase API credentials")
+
+    try:
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import ec
+        key_obj = serialization.load_pem_private_key(private_key.encode(), password=None)
+        if not isinstance(key_obj, ec.EllipticCurvePrivateKey):
+            raise ValueError("COINBASE_PRIVATE_KEY must be an EC key")
+    except ImportError as exc:
+        raise RuntimeError("cryptography package is required") from exc
+    except Exception as exc:
+        raise ValueError("Invalid COINBASE_PRIVATE_KEY") from exc
+
+    now = int(time.time())
+    payload = {
+        "iss": api_key,
+        "sub": api_key,
+        "aud": API_BASE,
+        "iat": now,
+        "exp": now + 300,
+    }
+    token = jwt.encode(payload, private_key, algorithm="ES256")
+    return {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+  
 def fetch_candles(product_id: str, granularity: int):
     """Fetch historical candle data from Coinbase Exchange."""
     import pandas as pd
     path = f"/products/{product_id}/candles"
     params = {"granularity": granularity}
     url = f"{API_BASE}{path}"
-    r = requests.get(url, params=params)
+
+    r = requests.get(url, params=params, headers=cb_headers())
+
     r.raise_for_status()
     data = r.json()
     records = []

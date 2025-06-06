@@ -1,7 +1,19 @@
 import os
 import time
-import jwt
+import importlib
 import requests
+import jwt
+
+try:
+    jwt = importlib.import_module('jwt')
+    if not getattr(getattr(jwt, 'algorithms', None), 'has_crypto', False):
+        raise ImportError
+except Exception:
+    class _DummyJWT:
+        algorithms = type('alg', (), {'has_crypto': False})()
+        def encode(self, *a, **k):
+            raise RuntimeError('PyJWT with cryptography is required')
+    jwt = _DummyJWT()
 
 API_BASE = "https://api.prime.coinbase.com"
 ACCOUNT_ID = os.getenv("CB_ACCOUNT_ID")
@@ -20,10 +32,30 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 def cb_headers() -> dict:
     """Return Authorization header for Coinbase Prime using JWT."""
+
+    if not getattr(jwt, 'algorithms', None) or not jwt.algorithms.has_crypto:
+        raise RuntimeError(
+            "PyJWT with cryptography backend is required for ES256"
+        )
+
     api_key = os.getenv("COINBASE_API_KEY_ID")
     private_key = os.getenv("COINBASE_PRIVATE_KEY")
     if not api_key or not private_key:
         raise EnvironmentError("Missing Coinbase API credentials")
+
+    # validate EC private key
+    try:
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import ec
+
+        key_obj = serialization.load_pem_private_key(private_key.encode(), password=None)
+        if not isinstance(key_obj, ec.EllipticCurvePrivateKey):
+            raise ValueError("COINBASE_PRIVATE_KEY must be an EC key")
+    except ImportError as exc:
+        raise RuntimeError("cryptography package is required") from exc
+    except Exception as exc:
+        raise ValueError("Invalid COINBASE_PRIVATE_KEY") from exc
+
 
     now = int(time.time())
     payload = {
