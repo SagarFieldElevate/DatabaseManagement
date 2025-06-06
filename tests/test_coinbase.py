@@ -56,6 +56,7 @@ def test_fetch_candles(monkeypatch):
     monkeypatch.setattr(coinbase_prices.requests, 'get', lambda *a, **k: Resp())
     monkeypatch.setattr(coinbase_prices, 'cb_headers', lambda: {})
 
+
     df = coinbase_prices.fetch_candles('BTC-USD', 60)
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 2

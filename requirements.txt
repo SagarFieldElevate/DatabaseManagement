@@ -14,3 +14,5 @@ beautifulsoup4
 pandas-datareader
 pyjwt[crypto]
 cryptography
+PyJWT
+

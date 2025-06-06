@@ -13,6 +13,7 @@ except Exception:
         def encode(self, *a, **k):
             raise RuntimeError('PyJWT with cryptography is required')
     jwt = _DummyJWT()
+
 from datetime import datetime
 
 # === Coinbase Prime config ===
@@ -64,15 +65,16 @@ def cb_headers() -> dict:
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",
     }
-
-
+  
 def fetch_candles(product_id: str, granularity: int):
     """Fetch historical candle data from Coinbase Exchange."""
     import pandas as pd
     path = f"/products/{product_id}/candles"
     params = {"granularity": granularity}
     url = f"{API_BASE}{path}"
+
     r = requests.get(url, params=params, headers=cb_headers())
+
     r.raise_for_status()
     data = r.json()
     records = []

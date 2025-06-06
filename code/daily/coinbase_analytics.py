@@ -2,6 +2,7 @@ import os
 import time
 import importlib
 import requests
+import jwt
 
 try:
     jwt = importlib.import_module('jwt')
@@ -31,6 +32,7 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 def cb_headers() -> dict:
     """Return Authorization header for Coinbase Prime using JWT."""
+
     if not getattr(jwt, 'algorithms', None) or not jwt.algorithms.has_crypto:
         raise RuntimeError(
             "PyJWT with cryptography backend is required for ES256"
@@ -53,6 +55,7 @@ def cb_headers() -> dict:
         raise RuntimeError("cryptography package is required") from exc
     except Exception as exc:
         raise ValueError("Invalid COINBASE_PRIVATE_KEY") from exc
+
 
     now = int(time.time())
     payload = {
