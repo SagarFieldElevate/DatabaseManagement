@@ -16,22 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         script:
-          - "code/daily/5-Year TIPS Yield.py"
-          - "code/daily/10-Year TIPS Yield.py"
-          - "code/daily/20-Year TIPS Yield.py"
-          - "code/daily/30-Year TIPS Yield.py"
-          - "code/weekly/5-Year TIPS Yield.py"
-          - "code/weekly/10-Year TIPS Yield.py"
-          - "code/weekly/20-Year TIPS Yield.py"
-          - "code/weekly/30-Year TIPS Yield.py"
-          - "code/monthly/5-Year TIPS Yield.py"
-          - "code/monthly/10-Year TIPS Yield.py"
-          - "code/monthly/20-Year TIPS Yield.py"
-          - "code/monthly/30-Year TIPS Yield.py"
-          - "code/yearly/5-Year TIPS Yield.py"
-          - "code/yearly/10-Year TIPS Yield.py"
-          - "code/yearly/20-Year TIPS Yield.py"
-          - "code/yearly/30-Year TIPS Yield.py"
+          - "code/monthly/Inflation Rate (CPI).py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
