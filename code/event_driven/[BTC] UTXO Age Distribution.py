@@ -12,7 +12,7 @@ from data_upload_utils import (
 )
 
 # === Secrets & Config ===
-dune = DuneClient("6dTWCBeP4XNtdH9YMQBT3Ad4AK57ZcOk")
+dune = DuneClient("nPN4lc4LO9fuYoJiat8IeLrUn2N0NZFj")
 
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
