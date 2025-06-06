@@ -16,7 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         script:
-          - "code/monthly/Inflation Rate (CPI).py"
+          - "code/daily/BTC ETF Net Flow.py"
+          - "code/daily/fetch_gold_prices.py"
+          - "code/monthly/fetch_coal_prices.py"
+          - "code/monthly/Purchasing Managers' Index (PMI).py"
+          - "code/monthly/Business Confidence Index.py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
