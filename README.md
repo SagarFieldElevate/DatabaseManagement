@@ -82,5 +82,8 @@ Additional analytics are gathered by
 endpoints including account data, order book depth and trade history. Requests
 use JWT authentication generated from `COINBASE_API_KEY_ID` and
 `COINBASE_PRIVATE_KEY` with the `ES256` algorithm. The resulting data is stored
-in Airtable as **Coinbase Analytics**.
+in Airtable as **Coinbase Analytics**. Both Coinbase scripts are executed by the
+intraday and daily GitHub Actions workflows so new data appears automatically in
+their respective Airtable tables.
+
 
