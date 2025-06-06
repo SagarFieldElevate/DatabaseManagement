@@ -47,7 +47,12 @@ workflows:
 
 * `AIRTABLE_API_KEY` – API key with access to the target Airtable base.
 * `GH_TOKEN` – GitHub token used for uploading intermediate files.
-* `COINGECKO_API_KEY` – API key for CoinGecko cryptocurrency data.
+* `COINGECKO_API_KEY` – API key for CoinGecko cryptocurrency data. (legacy)
+* `COINBASE_API_KEY_ID` – Coinbase API key identifier used as the `iss` claim.
+* `COINBASE_PRIVATE_KEY` – EC private key (PEM) used to sign JWT tokens.
+* `COINBASE_PASSPHRASE` – *(legacy)* passphrase for HMAC auth.
+* `CB_ACCOUNT_ID` – Account identifier used when fetching transactions.
+* `CB_PRODUCT_ID` – *(optional)* default product when querying order books or trades.
 * `AIRTABLE_ATTACHMENT_FIELD` – *(optional)* name of the Airtable field that
   stores uploaded files. If not provided, the utilities default to a field
   named `Attachments`.
@@ -63,3 +68,19 @@ parse object or string columns as datetimes. If a column originally used a
 timezone other than UTC, the timezone name is placed in a new column named
 `<column>_timezone`. Simply import one of these utilities and call
 `df.to_excel(...)` as usual.
+
+## Coinbase Integration
+
+Coinbase Prime data can now be pulled alongside the existing price scripts.
+The file `code/intraday/coinbase_prices.py` fetches 1m, 5m, 15m and 1h
+candles for BTC‑USD, ETH‑USD and SOL‑USD using the
+`/products/{product_id}/candles` endpoint. Results are uploaded to Airtable
+under the name **Coinbase Prices**.
+
+Additional analytics are gathered by
+`code/daily/coinbase_analytics.py`. This script hits several Coinbase
+endpoints including account data, order book depth and trade history. Requests
+use JWT authentication generated from `COINBASE_API_KEY_ID` and
+`COINBASE_PRIVATE_KEY` with the `ES256` algorithm. The resulting data is stored
+in Airtable as **Coinbase Analytics**.
+
