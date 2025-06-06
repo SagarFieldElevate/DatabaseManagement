@@ -12,3 +12,5 @@ pandas_ta
 fredapi
 beautifulsoup4
 pandas-datareader
+pyjwt[crypto]
+cryptography

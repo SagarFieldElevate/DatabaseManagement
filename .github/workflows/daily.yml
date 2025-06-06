@@ -16,6 +16,8 @@ jobs:
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
       COINMETRICS_API_KEY: ${{ secrets.COINMETRICS_API_KEY }}
+      COINBASE_API_KEY_ID: ${{ secrets.COINBASE_API_KEY_ID }}
+      COINBASE_PRIVATE_KEY: ${{ secrets.COINBASE_PRIVATE_KEY }}
     strategy:
       fail-fast: false
       max-parallel: 10
@@ -76,6 +78,7 @@ jobs:
           - "code/daily/Etherscan Token Events.py"
           - "code/daily/Mempool Stats.py"
           - "code/daily/CoinMetrics Indicators.py"
+          - "code/daily/coinbase_analytics.py"
           - "code/daily/Binance Funding Rate.py"
           - "code/daily/OpenSea NFT Stats.py"
           - "code/daily/OpenSea NFT Transfers.py"
