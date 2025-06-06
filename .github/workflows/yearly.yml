@@ -16,7 +16,6 @@ jobs:
       matrix:
         script:
           - "code/yearly/GlobalGDP.py"
-          - "code/yearly/Public Debt Levels (IMF).py"
           - "code/yearly/data_upload_utils.py"
           - "code/yearly/fetch_education_attainment_levels.py"
           - "code/yearly/fetch_gvc_participation.py"
