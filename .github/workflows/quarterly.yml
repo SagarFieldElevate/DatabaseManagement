@@ -16,19 +16,14 @@ jobs:
       matrix:
         script:
           - "code/quarterly/Current Account Balance (OECD).py"
-          - "code/quarterly/Foreign Direct Investment (FDI) (UNCTAD).py"
           - "code/quarterly/GDP Growth Rate.py"
           - "code/quarterly/Government Budget Balance (OECD).py"
           - "code/quarterly/Gross Domestic Product.py"
           - "code/quarterly/data_upload_utils.py"
-          - "code/quarterly/fetch_bank_capital_adequacy_ratios.py"
-          - "code/quarterly/fetch_capital_flows.py"
           - "code/quarterly/fetch_corporate_debt_levels.py"
           - "code/quarterly/fetch_household_debt_levels.py"
           - "code/quarterly/fetch_labor_productivity.py"
-          - "code/quarterly/fetch_loan_to_deposit_ratios.py"
           - "code/quarterly/fetch_mortgage_default_rates.py"
-          - "code/quarterly/fetch_stock_buybacks.py"
     env:
       AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
