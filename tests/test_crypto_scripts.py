@@ -13,6 +13,7 @@ SCRIPTS = [
     'code/intraday/coinbase_prices.py',
     'code/daily/coinbase_analytics.py',
     'code/coinbase_prime_example.py',
+    'code/coinbase_wallet_example.py',
 
 ]
 
