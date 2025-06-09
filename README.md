@@ -95,3 +95,15 @@ setting `COINBASE_API_KEY_ID` and `COINBASE_PRIVATE_KEY`. The script generates
 an ES256 JWT, calls the `/accounts` endpoint and prints the JSON response.
 
 
+
+## Coinbase Wallet API Example
+
+For a regular Coinbase account, run `code/coinbase_wallet_example.py`. It uses
+`COINBASE_API_KEY_ID` and `COINBASE_PRIVATE_KEY` to generate an ES256 JWT with
+`https://api.coinbase.com` as the audience. The script fetches `/v2/accounts`
+and prints the JSON response. It also demonstrates calling
+`/v2/wallet/balances` as another wallet endpoint.
+
+### Quick Script Workflow
+
+Use `.github/workflows/run_single_script.yml` to run any script on demand. Trigger the workflow manually and set the `script` input to the path of the file you want to execute. This skips the full daily matrix for faster testing.
