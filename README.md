@@ -90,11 +90,12 @@ in Airtable as **Coinbase Analytics**.
 
 Historical OHLCV data for **all** online USD spot markets is collected by
 `code/daily/coinbase_spot_history.py`. The script calls `/products` to discover
-every available pair, then downloads one year of daily candles via
-`/products/{product_id}/candles`. Each dataset is sorted chronologically and
-saved as `<product_id>_1y.csv`. Files are uploaded to Airtable as records named
-"Coinbase `<product_id>` Spot History". Perpetual futures such as
-`COIN50-PERP` are skipped because they require Advanced access.
+every available pair, then downloads all available daily candles (starting from
+2015) via `/products/{product_id}/candles`. Each dataset is sorted
+chronologically and saved as `<product_id>_fullhistory.csv`. Files are uploaded
+to Airtable as records named "Coinbase `<product_id>` Spot History". Perpetual
+futures such as `COIN50-PERP` are skipped because they require Advanced
+access.
 
 All Coinbase scripts are executed by the intraday and daily GitHub Actions
 workflows.

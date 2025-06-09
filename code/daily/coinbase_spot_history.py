@@ -1,4 +1,4 @@
-"""Download Coinbase spot history for all USD pairs and upload to Airtable."""
+"""Download full Coinbase spot history for all USD pairs and upload to Airtable."""
 
 import os
 import requests
@@ -46,8 +46,8 @@ def fetch_available_pairs():
     return sorted(pairs)
 
 
-def fetch_history_1y(product_id: str):
-    """Return one year of daily candles for the given product."""
+def fetch_full_history(product_id: str):
+    """Return all available daily candles for the given product."""
     if product_id == "COIN50-PERP":
         print(
             "COIN50-PERP is not accessible via the public API. Requires Advanced or Institutional access."
@@ -56,7 +56,7 @@ def fetch_history_1y(product_id: str):
 
     granularity = 86400
     end = datetime.now(timezone.utc).replace(microsecond=0)
-    start = end - timedelta(days=365)
+    start = datetime(2015, 1, 1, tzinfo=timezone.utc)
     step = timedelta(seconds=granularity * 300)
     data = []
     current = start
@@ -90,7 +90,7 @@ def main():
     existing_records = response.json().get("records", [])
 
     for product_id in available_pairs:
-        candles = fetch_history_1y(product_id)
+        candles = fetch_full_history(product_id)
         if not candles:
             continue
 
@@ -99,7 +99,7 @@ def main():
         df.sort_values("time", inplace=True)
         df = ensure_utc(df)
 
-        filename = f"{product_id}_1y.csv"
+        filename = f"{product_id}_fullhistory.csv"
         out_file = Path(__file__).parent / filename
         df.to_csv(out_file, index=False)
         indicator_name = f"Coinbase {product_id} Spot History"
