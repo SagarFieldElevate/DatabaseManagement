@@ -109,7 +109,7 @@ def main():
         df.to_csv(out_file, index=False)
         indicator_name = f"Coinbase {product_id} Spot History"
 
-        github_resp = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
+        github_resp = upload_to_github(str(out_file), GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
         raw_url = github_resp["content"]["raw_url"]
         file_sha = github_resp["content"]["sha"]
 
