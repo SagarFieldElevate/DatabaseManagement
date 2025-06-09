@@ -88,6 +88,7 @@ use JWT authentication generated from `COINBASE_API_KEY_ID` and
 `COINBASE_PRIVATE_KEY` with the `ES256` algorithm. The resulting data is stored
 in Airtable as **Coinbase Analytics**.
 
+
 Historical OHLCV data for **all** online USD spot markets is collected by
 `code/daily/coinbase_spot_history.py`. The script calls `/products` to discover
 every available pair, then downloads all available daily candles (starting from

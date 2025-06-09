@@ -1,11 +1,13 @@
 """Download full Coinbase spot history for all USD pairs and upload to Airtable."""
 
+
 import os
 import requests
 import pandas as pd
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
 
 from data_upload_utils import (
     upload_to_github,
@@ -17,7 +19,9 @@ from data_upload_utils import (
 
 API_BASE = "https://api.exchange.coinbase.com"
 
+
 # === Airtable & GitHub configuration ===
+
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "daily"
@@ -81,6 +85,7 @@ def fetch_full_history(product_id: str):
 
 def main():
     available_pairs = fetch_available_pairs()
+
     airtable_headers = {
         "Authorization": f"Bearer {AIRTABLE_API_KEY}",
         "Content-Type": "application/json",
@@ -109,6 +114,7 @@ def main():
         file_sha = github_resp["content"]["sha"]
 
         match = [r for r in existing_records if r["fields"].get("Name") == indicator_name]
+
         record_id = match[0]["id"] if match else None
 
         if record_id:
@@ -118,6 +124,7 @@ def main():
 
         delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
         print(f"✅ Uploaded {product_id}")
+
 
 
 if __name__ == "__main__":
