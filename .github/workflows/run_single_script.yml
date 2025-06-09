@@ -1,0 +1,33 @@
+name: Run Single Script
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: 'Path to the Python script to run'
+        required: true
+        default: 'code/coinbase_wallet_example.py'
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+      COINMETRICS_API_KEY: ${{ secrets.COINMETRICS_API_KEY }}
+      COINBASE_API_KEY_ID: ${{ secrets.COINBASE_API_KEY_ID }}
+      COINBASE_PRIVATE_KEY: ${{ secrets.COINBASE_PRIVATE_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        run: python "${{ github.event.inputs.script }}"

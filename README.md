@@ -103,3 +103,7 @@ For a regular Coinbase account, run `code/coinbase_wallet_example.py`. It uses
 `https://api.coinbase.com` as the audience. The script fetches `/v2/accounts`
 and prints the JSON response. It also demonstrates calling
 `/v2/wallet/balances` as another wallet endpoint.
+
+### Quick Script Workflow
+
+Use `.github/workflows/run_single_script.yml` to run any script on demand. Trigger the workflow manually and set the `script` input to the path of the file you want to execute. This skips the full daily matrix for faster testing.
