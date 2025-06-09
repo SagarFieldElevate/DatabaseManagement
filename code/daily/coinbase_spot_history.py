@@ -54,6 +54,7 @@ def fetch_daily_candles(product_id: str, days: int = 365):
         return []
 
     end = datetime.now(timezone.utc).replace(microsecond=0)
+
     start = end - timedelta(days=days)
     granularity = 86400
     step = timedelta(seconds=granularity * 300)
@@ -96,6 +97,7 @@ def main():
         )
         df["time"] = pd.to_datetime(df["time"], unit="s", utc=True)
         df.sort_values("time", inplace=True)
+
         df = ensure_utc(df)
         filename = f"{pid}_1y.csv"
         df.to_csv(filename, index=False)
@@ -117,6 +119,7 @@ def main():
 
         delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
         os.remove(filename)
+
         time.sleep(0.34)  # pacing between product requests
 
 
