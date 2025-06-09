@@ -12,6 +12,7 @@ SCRIPTS = [
     'code/daily/CoinMetrics Indicators.py',
     'code/intraday/coinbase_prices.py',
     'code/daily/coinbase_analytics.py',
+    'code/daily/coinbase_spot_history.py',
     'code/coinbase_prime_example.py',
     'code/coinbase_wallet_example.py',
 
