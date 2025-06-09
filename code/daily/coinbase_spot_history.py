@@ -1,9 +1,28 @@
+import os
 import requests
 import pandas as pd
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from data_upload_utils import (
+    upload_to_github,
+    create_airtable_record,
+    update_airtable,
+    delete_file_from_github,
+    ensure_utc,
+)
 
 API_BASE = "https://api.exchange.coinbase.com"
+
+# === Airtable & GitHub Config ===
+AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
+BASE_ID = "appnssPRD9yeYJJe5"
+TABLE_NAME = "daily"
+airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+
+GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"
+BRANCH = "main"
+UPLOAD_PATH = "Uploads"
+GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
 # This script uses only public endpoints. No authentication is required.
 # Perpetual futures like COIN50-PERP are not accessible via the public API.
@@ -34,7 +53,8 @@ def fetch_daily_candles(product_id: str, days: int = 365):
         )
         return []
 
-    end = datetime.utcnow()
+    end = datetime.now(timezone.utc).replace(microsecond=0)
+
     start = end - timedelta(days=days)
     granularity = 86400
     step = timedelta(seconds=granularity * 300)
@@ -60,6 +80,14 @@ def fetch_daily_candles(product_id: str, days: int = 365):
 
 def main():
     products = fetch_products()
+    airtable_headers = {
+        "Authorization": f"Bearer {AIRTABLE_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    response = requests.get(airtable_url, headers=airtable_headers)
+    response.raise_for_status()
+    existing_records = response.json().get("records", [])
+
     for pid in products:
         data = fetch_daily_candles(pid, days=365)
         if not data:
@@ -69,7 +97,29 @@ def main():
         )
         df["time"] = pd.to_datetime(df["time"], unit="s", utc=True)
         df.sort_values("time", inplace=True)
-        df.to_csv(f"{pid}_1y.csv", index=False)
+
+        df = ensure_utc(df)
+        filename = f"{pid}_1y.csv"
+        df.to_csv(filename, index=False)
+
+        github_resp = upload_to_github(
+            filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN
+        )
+        raw_url = github_resp["content"]["raw_url"]
+        file_sha = github_resp["content"]["sha"]
+
+        name = f"Coinbase {pid} Spot History"
+        match = [r for r in existing_records if r["fields"].get("Name") == name]
+        record_id = match[0]["id"] if match else None
+
+        if record_id:
+            update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+        else:
+            create_airtable_record(name, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+
+        delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
+        os.remove(filename)
+
         time.sleep(0.34)  # pacing between product requests
 
 

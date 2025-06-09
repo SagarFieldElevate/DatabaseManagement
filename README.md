@@ -86,9 +86,18 @@ Additional analytics are gathered by
 endpoints including account data, order book depth and trade history. Requests
 use JWT authentication generated from `COINBASE_API_KEY_ID` and
 `COINBASE_PRIVATE_KEY` with the `ES256` algorithm. The resulting data is stored
-in Airtable as **Coinbase Analytics**. Both Coinbase scripts are executed by the
-intraday and daily GitHub Actions workflows so new data appears automatically in
-their respective Airtable tables.
+in Airtable as **Coinbase Analytics**.
+
+Daily OHLCV history for every USD spot product is collected by
+`code/daily/coinbase_spot_history.py`. It uses the public
+`/products/{product_id}/candles` endpoint with a one-year lookback and skips
+perpetual futures such as `COIN50-PERP`. All requests are rate limited to three
+per second. The output CSVs are uploaded to GitHub and Airtable. Each dataset is
+stored in the `daily` table under a record named `Coinbase {product_id} Spot
+History`.
+
+All Coinbase scripts are executed by the intraday and daily GitHub Actions
+workflows so new data appears automatically in their respective Airtable tables.
 
 To manually verify your credentials, run `code/coinbase_prime_example.py` after
 setting `COINBASE_API_KEY_ID` and `COINBASE_PRIVATE_KEY`. The script generates
