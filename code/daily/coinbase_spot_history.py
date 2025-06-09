@@ -2,7 +2,7 @@ import os
 import requests
 import pandas as pd
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from data_upload_utils import (
     upload_to_github,
     create_airtable_record,
@@ -53,7 +53,7 @@ def fetch_daily_candles(product_id: str, days: int = 365):
         )
         return []
 
-    end = datetime.utcnow()
+    end = datetime.now(timezone.utc).replace(microsecond=0)
     start = end - timedelta(days=days)
     granularity = 86400
     step = timedelta(seconds=granularity * 300)
