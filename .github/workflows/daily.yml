@@ -79,6 +79,7 @@ jobs:
           - "code/daily/Mempool Stats.py"
           - "code/daily/CoinMetrics Indicators.py"
           - "code/daily/coinbase_analytics.py"
+          - "code/coinbase_wallet_example.py"
           - "code/daily/Binance Funding Rate.py"
           - "code/daily/OpenSea NFT Stats.py"
           - "code/daily/OpenSea NFT Transfers.py"
