@@ -48,7 +48,9 @@ MEMECOINS = [
     "ZORA", "SLP", "BABYDOGE",  # added to make 25
 ]
 
+
 COINS = set(LARGE_CAP + MID_CAP + MEMECOINS)
+
 
 
 def fetch_products():
@@ -120,9 +122,13 @@ def main():
         df = pd.DataFrame(
             data, columns=["time", "low", "high", "open", "close", "volume"]
         )
-        df["time"] = pd.to_datetime(df["time"], unit="s", utc=True)
-        df.sort_values("time", inplace=True)
+        df["Date"] = pd.to_datetime(df["time"], unit="s", utc=True)
+        df = df.sort_values("Date")
+        df = df[["Date", "close", "volume"]].rename(
+            columns={"close": "Close", "volume": "Volume"}
+        )
         df = ensure_utc(df)
+        df["Date"] = df["Date"].dt.strftime("%Y-%m-%d")
         filename = f"{pid}_1y.xlsx"
         df.to_excel(filename, index=False)
 
