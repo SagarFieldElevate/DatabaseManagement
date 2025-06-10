@@ -63,6 +63,7 @@ __all__ = [
     "create_airtable_record",
     "update_airtable",
     "delete_file_from_github",
+    "delete_airtable_record",
 ]
 
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
@@ -207,3 +208,18 @@ def delete_file_from_github(filename, repo_name, branch, upload_path, token, sha
         raise Exception(
             f"❌ GitHub file deletion failed: {delete_resp.status_code} - {delete_resp.text}"
         )
+
+
+def delete_airtable_record(record_id, airtable_url, airtable_token):
+    """Delete an Airtable record by ID."""
+    airtable_headers = {
+        "Authorization": f"Bearer {airtable_token}",
+        "Content-Type": "application/json",
+    }
+    url = f"{airtable_url}/{record_id}"
+    response = requests.delete(url, headers=airtable_headers)
+    if response.status_code != 200:
+        raise Exception(
+            f"❌ Airtable deletion failed: {response.status_code} - {response.text}"
+        )
+    return response.json()
