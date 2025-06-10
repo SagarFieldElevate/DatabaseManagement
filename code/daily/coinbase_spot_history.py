@@ -106,9 +106,12 @@ def main():
         "Authorization": f"Bearer {AIRTABLE_API_KEY}",
         "Content-Type": "application/json",
     }
-    response = requests.get(airtable_url, headers=airtable_headers)
-    response.raise_for_status()
-    existing_records = response.json().get("records", [])
+    def get_record_id(name: str):
+        params = {"filterByFormula": f"Name='{name}'", "maxRecords": 1}
+        resp = requests.get(airtable_url, headers=airtable_headers, params=params)
+        resp.raise_for_status()
+        records = resp.json().get("records", [])
+        return records[0]["id"] if records else None
 
     for pid in products:
         data = fetch_daily_candles(pid, days=365)
@@ -120,8 +123,9 @@ def main():
         df["time"] = pd.to_datetime(df["time"], unit="s", utc=True)
         df.sort_values("time", inplace=True)
         df = ensure_utc(df)
-        filename = f"{pid}_1y.csv"
-        df.to_csv(filename, index=False)
+        filename = f"{pid}_1y.xlsx"
+        df.to_excel(filename, index=False)
+
 
         github_resp = upload_to_github(
             filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN
@@ -130,8 +134,8 @@ def main():
         file_sha = github_resp["content"]["sha"]
 
         name = f"Coinbase {pid} Spot History"
-        match = [r for r in existing_records if r["fields"].get("Name") == name]
-        record_id = match[0]["id"] if match else None
+        record_id = get_record_id(name)
+
 
         if record_id:
             update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
