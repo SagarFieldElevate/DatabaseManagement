@@ -1,0 +1,24 @@
+name: Airtable Duplicate Cleaner
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+
+jobs:
+  clean-duplicates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Remove duplicates
+        run: python code/remove_airtable_duplicates.py
