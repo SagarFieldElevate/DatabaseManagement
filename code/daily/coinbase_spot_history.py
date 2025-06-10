@@ -49,6 +49,7 @@ MEMECOINS = [
     "ZORA", "SLP", "BABYDOGE",  # added to make 25
 ]
 
+
 COINS = set(LARGE_CAP + MID_CAP + MEMECOINS)
 
 
@@ -107,11 +108,13 @@ def main():
         "Authorization": f"Bearer {AIRTABLE_API_KEY}",
         "Content-Type": "application/json",
     }
+
     def get_records(name: str):
         params = {"filterByFormula": f"Name='{name}'"}
         resp = requests.get(airtable_url, headers=airtable_headers, params=params)
         resp.raise_for_status()
         return resp.json().get("records", [])
+
 
     for pid in products:
         data = fetch_daily_candles(pid, days=365)
@@ -130,6 +133,7 @@ def main():
         filename = f"{pid}_1y.xlsx"
         df.to_excel(filename, index=False)
 
+
         github_resp = upload_to_github(
             filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN
         )
@@ -137,12 +141,14 @@ def main():
         file_sha = github_resp["content"]["sha"]
 
         name = f"Coinbase {pid} Spot History"
+
         records = get_records(name)
         if records:
             primary_id = records[0]["id"]
             update_airtable(primary_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
             for extra in records[1:]:
                 delete_airtable_record(extra["id"], airtable_url, AIRTABLE_API_KEY)
+
         else:
             create_airtable_record(name, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
