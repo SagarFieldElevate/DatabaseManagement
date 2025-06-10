@@ -1,14 +1,8 @@
-"""Download full Coinbase spot history for all USD pairs and upload to Airtable."""
-
-
 import os
 import requests
 import pandas as pd
 import time
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
-
-
+from datetime import datetime, timedelta
 from data_upload_utils import (
     upload_to_github,
     create_airtable_record,
@@ -19,9 +13,7 @@ from data_upload_utils import (
 
 API_BASE = "https://api.exchange.coinbase.com"
 
-
-# === Airtable & GitHub configuration ===
-
+# === Airtable & GitHub Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
 BASE_ID = "appnssPRD9yeYJJe5"
 TABLE_NAME = "daily"
@@ -32,99 +24,125 @@ BRANCH = "main"
 UPLOAD_PATH = "Uploads"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
 
+# This script uses only public endpoints. No authentication is required.
 # Perpetual futures like COIN50-PERP are not accessible via the public API.
-# If requested explicitly, we print a helpful message and skip the download.
+# If requested explicitly, we print a helpful message instead of attempting the call.
 
-def fetch_available_pairs():
-    """Return the list of online USD spot product IDs."""
+# === Coin Lists ===
+LARGE_CAP = [
+    "BTC", "ETH", "USDT", "XRP", "BNB", "SOL", "USDC", "ADA", "TRX", "DOGE",
+    "DOT", "AVAX", "MATIC", "SHIB", "LTC", "LINK", "WBTC", "UNI", "BCH", "XLM",
+    "ETC", "FIL", "NEAR", "APT", "APE",
+]
+
+MID_CAP = [
+    "MKR", "COMP", "AAVE", "SUSHI", "ALGO", "ATOM", "SAND", "CRV", "SNX",
+    "BAL", "ZRX", "CELR", "BAT", "ENJ", "BNT", "RUNE", "GRT", "CHZ", "OCEAN",
+    "PAXG", "UMA", "ALICE", "AMP", "AXS", "MKR",  # duplicate filler
+]
+
+MEMECOINS = [
+    "DOGE", "SHIB", "PEPE", "BONK", "FLOKI", "PNUT", "POPCAT", "WIF",
+    "TRUMP", "PENGU", "FARTCOIN", "DOGWIFHAT", "SOLX", "SNORT", "BONE",
+    "PBTCBULL", "GIGA", "SUPER", "TURBO", "COOKIE", "GFI", "ZRO",
+    "ZORA", "SLP", "BABYDOGE",  # added to make 25
+]
+
+COINS = set(LARGE_CAP + MID_CAP + MEMECOINS)
+
+
+def fetch_products():
+    """Return list of product IDs for USD spot markets that are online."""
     resp = requests.get(f"{API_BASE}/products")
     resp.raise_for_status()
     products = resp.json()
-    pairs = [
-        p["id"]
-        for p in products
-        if p.get("quote_currency") == "USD"
-        and p.get("status") == "online"
-        and not p.get("id", "").endswith("-PERP")
-    ]
-    return sorted(pairs)
+    ids = []
+    for p in products:
+        if (
+            p.get("quote_currency") == "USD"
+            and p.get("status") == "online"
+            and not p.get("id", "").endswith("-PERP")
+            and p.get("base_currency") in COINS
+        ):
+            ids.append(p["id"])
+    return ids
 
 
-def fetch_full_history(product_id: str):
-    """Return all available daily candles for the given product."""
+def fetch_daily_candles(product_id: str, days: int = 365):
+    """Fetch daily OHLCV candles for the past `days` days."""
     if product_id == "COIN50-PERP":
         print(
             "COIN50-PERP is not accessible via the public API. Requires Advanced or Institutional access."
         )
         return []
 
+    end = datetime.utcnow()
+    start = end - timedelta(days=days)
     granularity = 86400
-    end = datetime.now(timezone.utc).replace(microsecond=0)
-    start = datetime(2015, 1, 1, tzinfo=timezone.utc)
     step = timedelta(seconds=granularity * 300)
-    data = []
-    current = start
-    while current < end:
-        chunk_end = min(current + step, end)
+    all_data = []
+    current_start = start
+    while current_start < end:
+        current_end = min(current_start + step, end)
         params = {
-            "start": current.isoformat(),
-            "end": chunk_end.isoformat(),
+            "start": current_start.isoformat(),
+            "end": current_end.isoformat(),
             "granularity": granularity,
         }
         url = f"{API_BASE}/products/{product_id}/candles"
-        resp = requests.get(url, params=params)
-        if resp.status_code == 404:
-            print(f"{product_id} returned 404")
+        r = requests.get(url, params=params)
+        if r.status_code == 404:
             break
-        resp.raise_for_status()
-        data.extend(resp.json())
-        time.sleep(0.34)  # respect 3 requests/second
-        current = chunk_end
-    return data
+        r.raise_for_status()
+        all_data.extend(r.json())
+        time.sleep(0.34)  # rate limit: max 3 requests/second
+        current_start = current_end
+    return all_data
 
 
 def main():
-    available_pairs = fetch_available_pairs()
-
+    products = fetch_products()
     airtable_headers = {
         "Authorization": f"Bearer {AIRTABLE_API_KEY}",
         "Content-Type": "application/json",
     }
-    response = requests.get(airtable_url, headers=airtable_headers)
-    response.raise_for_status()
-    existing_records = response.json().get("records", [])
+    def get_record_id(name: str):
+        params = {"filterByFormula": f"Name='{name}'", "maxRecords": 1}
+        resp = requests.get(airtable_url, headers=airtable_headers, params=params)
+        resp.raise_for_status()
+        records = resp.json().get("records", [])
+        return records[0]["id"] if records else None
 
-    for product_id in available_pairs:
-        candles = fetch_full_history(product_id)
-        if not candles:
+    for pid in products:
+        data = fetch_daily_candles(pid, days=365)
+        if not data:
             continue
-
-        df = pd.DataFrame(candles, columns=["time", "low", "high", "open", "close", "volume"])
+        df = pd.DataFrame(
+            data, columns=["time", "low", "high", "open", "close", "volume"]
+        )
         df["time"] = pd.to_datetime(df["time"], unit="s", utc=True)
         df.sort_values("time", inplace=True)
         df = ensure_utc(df)
+        filename = f"{pid}_1y.xlsx"
+        df.to_excel(filename, index=False)
 
-        filename = f"{product_id}_fullhistory.csv"
-        out_file = Path(__file__).parent / filename
-        df.to_csv(out_file, index=False)
-        indicator_name = f"Coinbase {product_id} Spot History"
-
-        github_resp = upload_to_github(str(out_file), GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
+        github_resp = upload_to_github(
+            filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN
+        )
         raw_url = github_resp["content"]["raw_url"]
         file_sha = github_resp["content"]["sha"]
 
-        match = [r for r in existing_records if r["fields"].get("Name") == indicator_name]
-
-        record_id = match[0]["id"] if match else None
+        name = f"Coinbase {pid} Spot History"
+        record_id = get_record_id(name)
 
         if record_id:
             update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
         else:
-            create_airtable_record(indicator_name, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+            create_airtable_record(name, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
         delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
-        print(f"✅ Uploaded {product_id}")
-
+        os.remove(filename)
+        time.sleep(0.34)  # pacing between product requests
 
 
 if __name__ == "__main__":
