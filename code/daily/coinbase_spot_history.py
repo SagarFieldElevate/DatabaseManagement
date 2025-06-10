@@ -8,6 +8,7 @@ from data_upload_utils import (
     create_airtable_record,
     update_airtable,
     delete_file_from_github,
+    delete_airtable_record,
     ensure_utc,
 )
 
@@ -50,7 +51,6 @@ MEMECOINS = [
 
 
 COINS = set(LARGE_CAP + MID_CAP + MEMECOINS)
-
 
 
 def fetch_products():
@@ -108,12 +108,13 @@ def main():
         "Authorization": f"Bearer {AIRTABLE_API_KEY}",
         "Content-Type": "application/json",
     }
-    def get_record_id(name: str):
-        params = {"filterByFormula": f"Name='{name}'", "maxRecords": 1}
+
+    def get_records(name: str):
+        params = {"filterByFormula": f"Name='{name}'"}
         resp = requests.get(airtable_url, headers=airtable_headers, params=params)
         resp.raise_for_status()
-        records = resp.json().get("records", [])
-        return records[0]["id"] if records else None
+        return resp.json().get("records", [])
+
 
     for pid in products:
         data = fetch_daily_candles(pid, days=365)
@@ -140,11 +141,14 @@ def main():
         file_sha = github_resp["content"]["sha"]
 
         name = f"Coinbase {pid} Spot History"
-        record_id = get_record_id(name)
 
+        records = get_records(name)
+        if records:
+            primary_id = records[0]["id"]
+            update_airtable(primary_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+            for extra in records[1:]:
+                delete_airtable_record(extra["id"], airtable_url, AIRTABLE_API_KEY)
 
-        if record_id:
-            update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
         else:
             create_airtable_record(name, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
