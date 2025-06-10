@@ -48,7 +48,9 @@ MEMECOINS = [
     "ZORA", "SLP", "BABYDOGE",  # added to make 25
 ]
 
+
 COINS = set(LARGE_CAP + MID_CAP + MEMECOINS)
+
 
 
 def fetch_products():
@@ -130,6 +132,7 @@ def main():
         filename = f"{pid}_1y.xlsx"
         df.to_excel(filename, index=False)
 
+
         github_resp = upload_to_github(
             filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN
         )
@@ -138,6 +141,7 @@ def main():
 
         name = f"Coinbase {pid} Spot History"
         record_id = get_record_id(name)
+
 
         if record_id:
             update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
