@@ -48,7 +48,9 @@ MEMECOINS = [
     "ZORA", "SLP", "BABYDOGE",  # added to make 25
 ]
 
+
 COINS = set(LARGE_CAP + MID_CAP + MEMECOINS)
+
 
 
 def fetch_products():
@@ -120,11 +122,16 @@ def main():
         df = pd.DataFrame(
             data, columns=["time", "low", "high", "open", "close", "volume"]
         )
-        df["time"] = pd.to_datetime(df["time"], unit="s", utc=True)
-        df.sort_values("time", inplace=True)
+        df["Date"] = pd.to_datetime(df["time"], unit="s", utc=True)
+        df = df.sort_values("Date")
+        df = df[["Date", "close", "volume"]].rename(
+            columns={"close": "Close", "volume": "Volume"}
+        )
         df = ensure_utc(df)
-        filename = f"{pid}_1y.csv"
-        df.to_csv(filename, index=False)
+        df["Date"] = df["Date"].dt.strftime("%Y-%m-%d")
+        filename = f"{pid}_1y.xlsx"
+        df.to_excel(filename, index=False)
+
 
         github_resp = upload_to_github(
             filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN
@@ -134,6 +141,7 @@ def main():
 
         name = f"Coinbase {pid} Spot History"
         record_id = get_record_id(name)
+
 
         if record_id:
             update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
