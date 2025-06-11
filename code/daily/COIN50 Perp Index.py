@@ -122,70 +122,96 @@ SYMBOL_TO_ID = {
 
 def get_historical_data_since_date(coin_id: str, start_date: datetime) -> pd.DataFrame | None:
     """Fetch daily price data for a coin from CoinGecko starting at start_date."""
-    days = (datetime.utcnow() - start_date).days + 1
+    # Calculate days since start date - using datetime.now() like the working code
+    current_date = datetime.now()
+    days_diff = (current_date - start_date).days + 1
+    
     url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart"
     params = {
         'vs_currency': 'usd',
-        'days': days,
+        'days': days_diff,
         'interval': 'daily',
     }
     try:
         resp = requests.get(url, params=params, timeout=10)
         resp.raise_for_status()
         data = resp.json()
-        df = pd.DataFrame(data['prices'], columns=['timestamp', 'price'])
-        df['Date'] = pd.to_datetime(df['timestamp'], unit='ms', utc=True)
-        df.set_index('Date', inplace=True)
-        df.drop(columns=['timestamp'], inplace=True)
-        return df[df.index >= start_date]
-    except Exception:
+        
+        # Convert to DataFrame
+        prices_data = data['prices']
+        df = pd.DataFrame(prices_data, columns=['timestamp', 'price'])
+        df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+        df.set_index('timestamp', inplace=True)
+        
+        # Filter to only include data from start_date onwards
+        df = df[df.index >= start_date]
+        
+        return df
+    except:
         return None
 
 
 def calculate_historical_index() -> pd.DataFrame:
     """Calculate COIN50 index values from January 1, 2025 to today."""
     start_date = datetime(2025, 1, 1)
-    historical = {}
-    for symbol in COIN50_WEIGHTS:
-        coin_id = SYMBOL_TO_ID.get(symbol)
-        if not coin_id:
-            continue
-        df = get_historical_data_since_date(coin_id, start_date)
-        if df is not None:
-            historical[symbol] = df
-        time.sleep(0.5)
+    
+    # Dictionary to store historical data for each coin
+    historical_data = {}
+    
+    # Fetch historical data for each coin
+    for symbol, weight in COIN50_WEIGHTS.items():
+        if symbol in SYMBOL_TO_ID:
+            coin_id = SYMBOL_TO_ID[symbol]
+            df = get_historical_data_since_date(coin_id, start_date)
+            if df is not None:
+                historical_data[symbol] = df
+            # Delay to avoid rate limiting
+            time.sleep(0.5)
 
+    # Find common dates across all coins
     all_dates = None
-    for df in historical.values():
+    for symbol, df in historical_data.items():
         if all_dates is None:
             all_dates = set(df.index.date)
         else:
-            all_dates &= set(df.index.date)
-    if not all_dates:
-        return pd.DataFrame(columns=['Date', 'COIN50 Perp Index Value'])
-
-    dates = sorted(all_dates)
-    records = []
-    for date in dates:
-        weighted_sum = 0
+            all_dates = all_dates.intersection(set(df.index.date))
+    
+    # Convert to sorted list
+    common_dates = sorted(list(all_dates))
+    
+    # Calculate index value for each date
+    index_values = []
+    dates = []
+    
+    for date in common_dates:
+        daily_weighted_sum = 0
         total_weight = 0
+        
         for symbol, weight in COIN50_WEIGHTS.items():
-            df = historical.get(symbol)
-            if df is None:
-                continue
-            day_data = df[df.index.date == date]
-            if not day_data.empty:
-                price = day_data['price'].iloc[0]
-                weighted_sum += weight * price
-                total_weight += weight
-        if total_weight > 0:
-            records.append({
-                'Date': pd.to_datetime(date, utc=True),
-                'COIN50 Perp Index Value': weighted_sum / 131.37,
-            })
-
-    index_df = pd.DataFrame(records).sort_values('Date')
-    return index_df
+            if symbol in historical_data:
+                df = historical_data[symbol]
+                # Get price for this date
+                date_data = df[df.index.date == date]
+                if not date_data.empty:
+                    price = date_data['price'].iloc[0]
+                    daily_weighted_sum += weight * price
+                    total_weight += weight
+        
+        # Only add if we have data for most of the index
+        if total_weight > 0.8:  # At least 80% of weights represented
+            # Apply your exact calculation: divide by 131.37
+            final_value = daily_weighted_sum / 131.37
+            index_values.append(final_value)
+            dates.append(date)
+    
+    # Create DataFrame
+    index_df = pd.DataFrame({
+        'Date': dates,
+        'COIN50 Perp Index Value': index_values
+    })
+    index_df['Date'] = pd.to_datetime(index_df['Date'])
+    
+    return index_df.sort_values('Date')
 
 
 # === Generate index values ===
