@@ -13,206 +13,88 @@ from data_upload_utils import (
 
 # === COIN50 Index Weights ===
 COIN50_WEIGHTS = {
-    'BTC': 0.5085,
-    'ETH': 0.2220,
-    'XRP': 0.0961,
-    'SOL': 0.0583,
-    'DOGE': 0.0200,
-    'ADA': 0.0172,
-    'LINK': 0.0066,
-    'AVAX': 0.0064,
-    'BCH': 0.0060,
-    'XLM': 0.0060,
-    'SHIB': 0.0054,
-    'LTC': 0.0048,
-    'DOT': 0.0046,
-    'PEPE': 0.0036,
-    'UNI': 0.0030,
-    'AAVE': 0.0029,
-    'ICP': 0.0023,
-    'APT': 0.0022,
-    'NEAR': 0.0022,
-    'ETC': 0.0019,
-    'RNDR': 0.0015,
-    'FET': 0.0015,
-    'POL': 0.0014,
-    'QNT': 0.0013,
-    'ATOM': 0.0012,
-    'ALGO': 0.0012,
-    'MKR': 0.0011,
-    'INJ': 0.0010,
-    'TIA': 0.0009,
-    'BONK': 0.0009,
-    'STX': 0.0007,
-    'CVX': 0.0007,
-    'GRT': 0.0007,
-    'CRV': 0.0007,
-    'LDO': 0.0005,
-    'JASMY': 0.0005,
-    'SAND': 0.0005,
-    'XTZ': 0.0004,
-    'MANA': 0.0004,
-    'HNT': 0.0004,
-    'APE': 0.0004,
-    'AERO': 0.0003,
-    'COMP': 0.0003,
-    'AXS': 0.0003,
-    'CHZ': 0.0003,
-    'AKT': 0.0002,
-    'LPT': 0.0002,
-    '1INCH': 0.0002,
-    'SNX': 0.0002,
-    'ROSE': 0.0001,
+    'BTC': 0.5085, 'ETH': 0.2220, 'XRP': 0.0961, 'SOL': 0.0583, 'DOGE': 0.0200, 'ADA': 0.0172,
+    'LINK': 0.0066, 'AVAX': 0.0064, 'BCH': 0.0060, 'XLM': 0.0060, 'SHIB': 0.0054, 'LTC': 0.0048,
+    'DOT': 0.0046, 'PEPE': 0.0036, 'UNI': 0.0030, 'AAVE': 0.0029, 'ICP': 0.0023, 'APT': 0.0022,
+    'NEAR': 0.0022, 'ETC': 0.0019, 'RNDR': 0.0015, 'FET': 0.0015, 'POL': 0.0014, 'QNT': 0.0013,
+    'ATOM': 0.0012, 'ALGO': 0.0012, 'MKR': 0.0011, 'INJ': 0.0010, 'TIA': 0.0009, 'BONK': 0.0009,
+    'STX': 0.0007, 'CVX': 0.0007, 'GRT': 0.0007, 'CRV': 0.0007, 'LDO': 0.0005, 'JASMY': 0.0005,
+    'SAND': 0.0005, 'XTZ': 0.0004, 'MANA': 0.0004, 'HNT': 0.0004, 'APE': 0.0004, 'AERO': 0.0003,
+    'COMP': 0.0003, 'AXS': 0.0003, 'CHZ': 0.0003, 'AKT': 0.0002, 'LPT': 0.0002, '1INCH': 0.0002,
+    'SNX': 0.0002, 'ROSE': 0.0001,
 }
 
-# === Symbol to CoinGecko ID mapping ===
 SYMBOL_TO_ID = {
-    'BTC': 'bitcoin',
-    'ETH': 'ethereum',
-    'XRP': 'ripple',
-    'SOL': 'solana',
-    'DOGE': 'dogecoin',
-    'ADA': 'cardano',
-    'LINK': 'chainlink',
-    'AVAX': 'avalanche-2',
-    'BCH': 'bitcoin-cash',
-    'XLM': 'stellar',
-    'SHIB': 'shiba-inu',
-    'LTC': 'litecoin',
-    'DOT': 'polkadot',
-    'PEPE': 'pepe',
-    'UNI': 'uniswap',
-    'AAVE': 'aave',
-    'ICP': 'internet-computer',
-    'APT': 'aptos',
-    'NEAR': 'near',
-    'ETC': 'ethereum-classic',
-    'RNDR': 'render-token',
-    'FET': 'fetch-ai',
-    'POL': 'matic-network',
-    'QNT': 'quant-network',
-    'ATOM': 'cosmos',
-    'ALGO': 'algorand',
-    'MKR': 'maker',
-    'INJ': 'injective-protocol',
-    'TIA': 'celestia',
-    'BONK': 'bonk',
-    'STX': 'blockstack',
-    'CVX': 'convex-finance',
-    'GRT': 'the-graph',
-    'CRV': 'curve-dao-token',
-    'LDO': 'lido-dao',
-    'JASMY': 'jasmycoin',
-    'SAND': 'the-sandbox',
-    'XTZ': 'tezos',
-    'MANA': 'decentraland',
-    'HNT': 'helium',
-    'APE': 'apecoin',
-    'AERO': 'aerodrome-finance',
-    'COMP': 'compound-governance-token',
-    'AXS': 'axie-infinity',
-    'CHZ': 'chiliz',
-    'AKT': 'akash-network',
-    'LPT': 'livepeer',
-    '1INCH': '1inch',
-    'SNX': 'havven',
-    'ROSE': 'oasis-network',
+    'BTC': 'bitcoin', 'ETH': 'ethereum', 'XRP': 'ripple', 'SOL': 'solana', 'DOGE': 'dogecoin',
+    'ADA': 'cardano', 'LINK': 'chainlink', 'AVAX': 'avalanche-2', 'BCH': 'bitcoin-cash', 'XLM': 'stellar',
+    'SHIB': 'shiba-inu', 'LTC': 'litecoin', 'DOT': 'polkadot', 'PEPE': 'pepe', 'UNI': 'uniswap',
+    'AAVE': 'aave', 'ICP': 'internet-computer', 'APT': 'aptos', 'NEAR': 'near', 'ETC': 'ethereum-classic',
+    'RNDR': 'render-token', 'FET': 'fetch-ai', 'POL': 'matic-network', 'QNT': 'quant-network',
+    'ATOM': 'cosmos', 'ALGO': 'algorand', 'MKR': 'maker', 'INJ': 'injective-protocol', 'TIA': 'celestia',
+    'BONK': 'bonk', 'STX': 'blockstack', 'CVX': 'convex-finance', 'GRT': 'the-graph', 'CRV': 'curve-dao-token',
+    'LDO': 'lido-dao', 'JASMY': 'jasmycoin', 'SAND': 'the-sandbox', 'XTZ': 'tezos', 'MANA': 'decentraland',
+    'HNT': 'helium', 'APE': 'apecoin', 'AERO': 'aerodrome-finance', 'COMP': 'compound-governance-token',
+    'AXS': 'axie-infinity', 'CHZ': 'chiliz', 'AKT': 'akash-network', 'LPT': 'livepeer', '1INCH': '1inch',
+    'SNX': 'havven', 'ROSE': 'oasis-network',
 }
-
 
 def get_historical_data_since_date(coin_id: str, start_date: datetime) -> pd.DataFrame | None:
-    """Fetch daily price data for a coin from CoinGecko starting at start_date."""
-    # Calculate days since start date - using datetime.now() like the working code
     current_date = datetime.now()
     days_diff = (current_date - start_date).days + 1
-    
     url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart"
-    params = {
-        'vs_currency': 'usd',
-        'days': days_diff,
-        'interval': 'daily',
-    }
+    params = {'vs_currency': 'usd', 'days': days_diff, 'interval': 'daily'}
     try:
         resp = requests.get(url, params=params, timeout=10)
         resp.raise_for_status()
         data = resp.json()
-        
-        # Convert to DataFrame
         prices_data = data['prices']
         df = pd.DataFrame(prices_data, columns=['timestamp', 'price'])
         df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
         df.set_index('timestamp', inplace=True)
-        
-        # Filter to only include data from start_date onwards
         df = df[df.index >= start_date]
-        
         return df
-    except:
+    except Exception as e:
+        print(f"Error fetching {coin_id}: {e}")
         return None
 
-
 def calculate_historical_index() -> pd.DataFrame:
-    """Calculate COIN50 index values from January 1, 2025 to today."""
     start_date = datetime(2025, 1, 1)
-    
-    # Dictionary to store historical data for each coin
     historical_data = {}
-    
-    # Fetch historical data for each coin
     for symbol, weight in COIN50_WEIGHTS.items():
         if symbol in SYMBOL_TO_ID:
             coin_id = SYMBOL_TO_ID[symbol]
             df = get_historical_data_since_date(coin_id, start_date)
             if df is not None:
                 historical_data[symbol] = df
-            # Delay to avoid rate limiting
             time.sleep(0.5)
-
-    # Find common dates across all coins
     all_dates = None
     for symbol, df in historical_data.items():
         if all_dates is None:
             all_dates = set(df.index.date)
         else:
             all_dates = all_dates.intersection(set(df.index.date))
-    
-    # Convert to sorted list
+    if not all_dates:
+        raise Exception("No overlapping dates found across symbols. Check data integrity.")
     common_dates = sorted(list(all_dates))
-    
-    # Calculate index value for each date
-    index_values = []
-    dates = []
-    
+    index_values, dates = [], []
     for date in common_dates:
         daily_weighted_sum = 0
         total_weight = 0
-        
         for symbol, weight in COIN50_WEIGHTS.items():
             if symbol in historical_data:
                 df = historical_data[symbol]
-                # Get price for this date
                 date_data = df[df.index.date == date]
                 if not date_data.empty:
                     price = date_data['price'].iloc[0]
                     daily_weighted_sum += weight * price
                     total_weight += weight
-        
-        # Only add if we have data for most of the index
         if total_weight > 0.8:  # At least 80% of weights represented
-            # Apply your exact calculation: divide by 131.37
             final_value = daily_weighted_sum / 131.37
             index_values.append(final_value)
             dates.append(date)
-    
-    # Create DataFrame
-    index_df = pd.DataFrame({
-        'Date': dates,
-        'COIN50 Perp Index Value': index_values
-    })
+    index_df = pd.DataFrame({'Date': dates, 'COIN50 Perp Index Value': index_values})
     index_df['Date'] = pd.to_datetime(index_df['Date'])
-    
     return index_df.sort_values('Date')
-
 
 # === Generate index values ===
 index_df = calculate_historical_index()
@@ -227,21 +109,14 @@ AIRTABLE_API_KEY = os.getenv('AIRTABLE_API_KEY')
 BASE_ID = 'appnssPRD9yeYJJe5'
 TABLE_NAME = 'daily'
 airtable_url = f'https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}'
-
 GITHUB_REPO = 'SagarFieldElevate/DatabaseManagement'
 BRANCH = 'main'
 UPLOAD_PATH = 'Uploads'
 GITHUB_TOKEN = os.getenv('GH_TOKEN')
 
 # === Upload to GitHub ===
-github_response = upload_to_github(
-    filename,
-    GITHUB_REPO,
-    BRANCH,
-    UPLOAD_PATH,
-    GITHUB_TOKEN,
-)
-raw_url = github_response["content"]["download_url"]
+github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
+raw_url = github_response["content"]["raw_url"]  # <-- FIXED: Use 'raw_url' not 'download_url'
 file_sha = github_response["content"]["sha"]
 
 # === Check Airtable for existing record ===
@@ -252,7 +127,6 @@ airtable_headers = {
 response = requests.get(airtable_url, headers=airtable_headers)
 response.raise_for_status()
 records = response.json().get('records', [])
-
 existing = [rec for rec in records if rec['fields'].get('Name') == 'COIN50 Perp Index Daily']
 record_id = existing[0]['id'] if existing else None
 
