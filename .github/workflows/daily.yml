@@ -35,6 +35,7 @@ jobs:
           - "code/daily/GoldDailyPrice.py"
           - "code/daily/Interest Rates (Federal Funds Rate).py"
           - "code/daily/InterestRate.py"
+          - "code/daily/COIN50 Perp Index.py"
           - "code/daily/MarketCap.py"
           - "code/daily/PricesScript.py"
           - "code/daily/QQQData.py"
