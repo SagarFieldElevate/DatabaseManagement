@@ -234,9 +234,15 @@ UPLOAD_PATH = 'Uploads'
 GITHUB_TOKEN = os.getenv('GH_TOKEN')
 
 # === Upload to GitHub ===
-github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN)
-raw_url = github_response['content']['raw_url']
-file_sha = github_response['content']['sha']
+github_response = upload_to_github(
+    filename,
+    GITHUB_REPO,
+    BRANCH,
+    UPLOAD_PATH,
+    GITHUB_TOKEN,
+)
+raw_url = github_response["content"]["download_url"]
+file_sha = github_response["content"]["sha"]
 
 # === Check Airtable for existing record ===
 airtable_headers = {
