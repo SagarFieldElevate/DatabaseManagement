@@ -16,15 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         script:
-          - "code/daily/Active Addresses.py"
-          - "code/daily/BTC ETF Net Flow.py"
-          - "code/daily/Bitcoin Coin Day Destroyed - Historical Trend.py"
-          - "code/daily/Centralized Stablecoins Market Cap.py"
-          - "code/daily/Miner Revenue.py"
-          - "code/daily/SOPR 3.0.py"
-          - "code/daily/Transaction Count and Active User.py"
-          - "code/daily/US Gov - BTC Balance and USD Value.py"
-          - "code/event_driven/[BTC] UTXO Age Distribution.py"
+          - "code/daily/COIN50 Perp Index.py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
