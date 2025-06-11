@@ -116,46 +116,51 @@ SYMBOL_TO_ID = {
     'ROSE': 'oasis-network'
 }
 
-# === Calculate days since May 29, 2025 ===
-start_date = datetime(2025, 1, 1)
+# === Set date range ===
+start_date = datetime(2015, 1, 1)
 current_date = datetime.now()
 days_since_start = (current_date - start_date).days + 1
 
-# === Fetch historical data for all COIN50 components ===
-print("Fetching historical data for COIN50 components...")
+# === Fetch only recent data (last 365 days) for faster processing ===
+print("Fetching COIN50 historical data for the last 365 days...")
 historical_data = {}
 
-for symbol, weight in COIN50_WEIGHTS.items():
-    if symbol in SYMBOL_TO_ID:
-        coin_id = SYMBOL_TO_ID[symbol]
-        print(f"Fetching data for {symbol}...")
-        
-        try:
-            # Fetch market data for the specified period
-            market_data = cg.get_coin_market_chart_by_id(
-                id=coin_id, 
-                vs_currency='usd', 
-                days=days_since_start,
-                interval='daily'
-            )
+# Process coins in batches to reduce API calls
+batch_size = 10
+symbols_list = list(COIN50_WEIGHTS.keys())
+
+for i in range(0, len(symbols_list), batch_size):
+    batch_symbols = symbols_list[i:i + batch_size]
+    
+    for symbol in batch_symbols:
+        if symbol in SYMBOL_TO_ID:
+            coin_id = SYMBOL_TO_ID[symbol]
+            print(f"Fetching data for {symbol}...")
             
-            # Convert to DataFrame
-            price_data = market_data['prices']
-            df = pd.DataFrame(price_data, columns=['timestamp', 'price'])
-            df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
-            df.set_index('timestamp', inplace=True)
-            
-            # Filter to only include data from start_date onwards
-            df = df[df.index >= start_date]
-            
-            historical_data[symbol] = df
-            
-            # Delay to avoid rate limiting
-            time.sleep(0.1)
-            
-        except Exception as e:
-            print(f"Error fetching data for {symbol}: {e}")
-            continue
+            try:
+                # Fetch only last 365 days to reduce processing time
+                market_data = cg.get_coin_market_chart_by_id(
+                    id=coin_id, 
+                    vs_currency='usd', 
+                    days=365,
+                    interval='daily'
+                )
+                
+                # Convert to DataFrame
+                price_data = market_data['prices']
+                df = pd.DataFrame(price_data, columns=['timestamp', 'price'])
+                df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+                df.set_index('timestamp', inplace=True)
+                
+                historical_data[symbol] = df
+                
+            except Exception as e:
+                print(f"Error fetching data for {symbol}: {e}")
+                continue
+    
+    # Small delay between batches
+    if i + batch_size < len(symbols_list):
+        time.sleep(0.5)
 
 # === Calculate COIN50 index values ===
 print("Calculating COIN50 index values...")
@@ -195,12 +200,10 @@ for date in common_dates:
         
         index_data.append({
             'Date': date.strftime('%Y-%m-%d'),
-            'COIN50 Index Value': round(index_value, 2),
-            'Weighted Sum': round(daily_weighted_sum, 2),
-            'Total Weight Represented': round(total_weight, 4)
+            'COIN50 Index Value': round(index_value, 2)
         })
 
-# === Create DataFrame ===
+# === Create DataFrame with only Date and Index Value ===
 index_df = pd.DataFrame(index_data)
 
 # === Calculate current index value ===
@@ -208,16 +211,22 @@ print("Calculating current COIN50 index value...")
 current_prices = {}
 coin_ids = list(SYMBOL_TO_ID.values())
 
-# Get current prices in batches
-batch_size = 50
-for i in range(0, len(coin_ids), batch_size):
-    batch_ids = coin_ids[i:i + batch_size]
-    try:
-        prices_data = cg.get_price(ids=batch_ids, vs_currencies='usd')
-        current_prices.update(prices_data)
-        time.sleep(0.1)
-    except Exception as e:
-        print(f"Error fetching current prices: {e}")
+# Get current prices in one batch call
+try:
+    # CoinGecko allows up to 250 IDs per call
+    ids_string = ','.join(coin_ids)
+    prices_data = cg.get_price(ids=ids_string, vs_currencies='usd')
+    current_prices = prices_data
+except Exception as e:
+    print(f"Error fetching current prices: {e}")
+    # Fallback to batch approach if single call fails
+    for i in range(0, len(coin_ids), 50):
+        batch_ids = coin_ids[i:i + 50]
+        try:
+            prices_data = cg.get_price(ids=','.join(batch_ids), vs_currencies='usd')
+            current_prices.update(prices_data)
+        except:
+            pass
 
 # Calculate current index
 current_weighted_sum = 0
@@ -230,42 +239,24 @@ for symbol, weight in COIN50_WEIGHTS.items():
 
 current_index_value = current_weighted_sum / 131.37
 
-# Add current value to DataFrame
-current_data = {
-    'Date': datetime.now().strftime('%Y-%m-%d'),
-    'COIN50 Index Value': round(current_index_value, 2),
-    'Weighted Sum': round(current_weighted_sum, 2),
-    'Total Weight Represented': 1.0000
-}
-index_df = pd.concat([index_df, pd.DataFrame([current_data])], ignore_index=True)
-
-# === Calculate statistics ===
-start_value = index_df['COIN50 Index Value'].iloc[0]
-end_value = index_df['COIN50 Index Value'].iloc[-1]
-total_return = ((end_value / start_value) - 1) * 100
-max_value = index_df['COIN50 Index Value'].max()
-min_value = index_df['COIN50 Index Value'].min()
-
-# Add summary sheet
-summary_data = {
-    'Metric': ['Start Date', 'End Date', 'Starting Value', 'Current Value', 
-               'Total Return (%)', 'Maximum Value', 'Minimum Value', 'Data Points'],
-    'Value': [index_df['Date'].iloc[0], index_df['Date'].iloc[-1], 
-              start_value, end_value, round(total_return, 2), 
-              max_value, min_value, len(index_df)]
-}
-summary_df = pd.DataFrame(summary_data)
+# Add current value to DataFrame if not already included
+current_date_str = datetime.now().strftime('%Y-%m-%d')
+if index_df.empty or index_df['Date'].iloc[-1] != current_date_str:
+    current_data = {
+        'Date': current_date_str,
+        'COIN50 Index Value': round(current_index_value, 2)
+    }
+    index_df = pd.concat([index_df, pd.DataFrame([current_data])], ignore_index=True)
 
 # === Save to Excel ===
 filename = "coin50_index_historical.xlsx"
 index_df = ensure_utc(index_df)
-summary_df = ensure_utc(summary_df)
-
-with pd.ExcelWriter(filename, engine='openpyxl') as writer:
-    index_df.to_excel(writer, sheet_name='Index Values', index=False)
-    summary_df.to_excel(writer, sheet_name='Summary', index=False)
+index_df.to_excel(filename, index=False)
 
 print(f"✅ COIN50 Index data saved to {filename}")
+print(f"Total data points: {len(index_df)}")
+print(f"Date range: {index_df['Date'].iloc[0]} to {index_df['Date'].iloc[-1]}")
+print(f"Current index value: {current_index_value:.2f}")
 
 # === Config for Airtable + GitHub ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
@@ -294,7 +285,7 @@ records = response.json().get('records', [])
 
 existing_records = [
     rec for rec in records
-    if rec['fields'].get('Name') == "COIN50 Perpetual Index Historical Data"
+    if rec['fields'].get('Name') == "COIN50 Perpetual Index (365 Days)"
 ]
 record_id = existing_records[0]['id'] if existing_records else None
 
@@ -302,7 +293,7 @@ record_id = existing_records[0]['id'] if existing_records else None
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 else:
-    create_airtable_record("COIN50 Perpetual Index Historical Data", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
+    create_airtable_record("COIN50 Perpetual Index (365 Days)", raw_url, filename, airtable_url, AIRTABLE_API_KEY)
 
 # === Clean-up ===
 delete_file_from_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, GITHUB_TOKEN, file_sha)
