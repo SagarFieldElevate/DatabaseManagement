@@ -19,6 +19,11 @@ jobs:
           - "code/event_driven/fetch_monetary_policy_decisions.py"
           - "code/event_driven/GoogleTrending.py"
           - "code/event_driven/Etherscan Token Events.py"
+          - "code/event_driven/Alternative.me Fear and Greed Index.py"
+          - "code/event_driven/CoinMetrics Indicators.py"
+          - "code/event_driven/Mempool Stats.py"
+          - "code/event_driven/DefiLlama Stats.py"
+          - "code/event_driven/coinbase_analytics.py"
     env:
       AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
