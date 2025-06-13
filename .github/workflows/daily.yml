@@ -41,7 +41,6 @@ jobs:
           - "code/daily/QQQData.py"
           - "code/daily/SPYData.py"
           - "code/daily/StableCoinSupply.py"
-          - "code/daily/Technicals.py"
           - "code/daily/USDollarIndex.py"
           - "code/daily/VolumeTraded.py"
           - "code/daily/data_upload_utils.py"
