@@ -82,7 +82,7 @@ candles for BTC‑USD, ETH‑USD and SOL‑USD using the
 under the name **Coinbase Prices**.
 
 Additional analytics are gathered by
-`code/daily/coinbase_analytics.py`. This script hits several Coinbase
+`code/event_driven/coinbase_analytics.py`. This script hits several Coinbase
 endpoints including account data, order book depth and trade history. Requests
 use JWT authentication generated from `COINBASE_API_KEY_ID` and
 `COINBASE_PRIVATE_KEY` with the `ES256` algorithm. The resulting data is stored
@@ -98,7 +98,7 @@ to Airtable as records named "Coinbase `<product_id>` Spot History". Perpetual
 futures such as `COIN50-PERP` are skipped because they require Advanced
 access.
 
-All Coinbase scripts are executed by the intraday and daily GitHub Actions
+All Coinbase scripts are executed by the intraday and event-driven GitHub Actions
 workflows.
 
 To manually verify your credentials, run `code/coinbase_prime_example.py` after

@@ -59,6 +59,7 @@ __all__ = [
     "create_airtable_record",
     "update_airtable",
     "delete_file_from_github",
+    "find_record_id_by_name",
 ]
 
 def upload_to_github(filename, repo_name, branch, upload_path, token, max_retries=3):
@@ -190,3 +191,16 @@ def delete_file_from_github(filename, repo_name, branch, upload_path, token, sha
             return
 
         raise Exception(f"❌ GitHub file deletion failed: {delete_resp.status_code} - {delete_resp.text}")
+
+
+def find_record_id_by_name(name, airtable_url, airtable_token):
+    """Return the Airtable record ID with the given Name."""
+    headers = {
+        "Authorization": f"Bearer {airtable_token}",
+        "Content-Type": "application/json",
+    }
+    params = {"filterByFormula": f"{{Name}}='{name}'", "maxRecords": 1}
+    resp = requests.get(airtable_url, headers=headers, params=params)
+    resp.raise_for_status()
+    records = resp.json().get("records", [])
+    return records[0]["id"] if records else None

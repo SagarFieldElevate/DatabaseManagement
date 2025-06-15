@@ -2,7 +2,7 @@ from importlib.machinery import SourceFileLoader
 from unittest import mock
 import pandas as pd
 
-coinbase_analytics = SourceFileLoader('coinbase_analytics', 'code/daily/coinbase_analytics.py').load_module()
+coinbase_analytics = SourceFileLoader('coinbase_analytics', 'code/event_driven/coinbase_analytics.py').load_module()
 coinbase_prices = SourceFileLoader('coinbase_prices', 'code/intraday/coinbase_prices.py').load_module()
 
 def test_cb_headers(monkeypatch):
