@@ -15,8 +15,10 @@ API_BASE = "https://api.exchange.coinbase.com"
 
 # === Airtable & GitHub Config ===
 AIRTABLE_API_KEY = os.getenv("AIRTABLE_API_KEY")
-BASE_ID = "appnssPRD9yeYJJe5"
-TABLE_NAME = "daily"
+# Allow overriding the Airtable base used for price history so these
+# records don't crowd the standard daily table.
+BASE_ID = os.getenv("COINBASE_PRICE_BASE_ID", "appnssPRD9yeYJJe5")
+TABLE_NAME = "Coinbase_Price"
 airtable_url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
 
 GITHUB_REPO = "SagarFieldElevate/DatabaseManagement"

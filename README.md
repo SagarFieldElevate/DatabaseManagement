@@ -94,9 +94,9 @@ Historical OHLCV data for **all** online USD spot markets is collected by
 every available pair, then downloads all available daily candles (starting from
 2015) via `/products/{product_id}/candles`. Each dataset is sorted
 chronologically and saved as `<product_id>_fullhistory.csv`. Files are uploaded
-to Airtable as records named "Coinbase `<product_id>` Spot History". Perpetual
-futures such as `COIN50-PERP` are skipped because they require Advanced
-access.
+to the **Coinbase_Price** table as records named "Coinbase `<product_id>` Spot
+History". Perpetual futures such as `COIN50-PERP` are skipped because they
+require Advanced access.
 
 All Coinbase scripts are executed by the intraday and event-driven GitHub Actions
 workflows.
