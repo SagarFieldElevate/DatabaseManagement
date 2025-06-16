@@ -4,20 +4,18 @@ on:
   push:
     paths:
       - 'code/daily/AlphaVantage DXY.py'
-      - 'code/daily/Alternative.me Fear and Greed Index.py'
-      - 'code/daily/Blockchair Stats.py'
-      - 'code/daily/DefiLlama Stats.py'
+      - 'code/event_driven/Alternative.me Fear and Greed Index.py'
+      - 'code/event_driven/DefiLlama Stats.py'
       - 'code/daily/Etherscan Gas Prices.py'
-      - 'code/daily/Mempool Stats.py'
+      - 'code/event_driven/Mempool Stats.py'
       - 'tests/**'
   pull_request:
     paths:
       - 'code/daily/AlphaVantage DXY.py'
-      - 'code/daily/Alternative.me Fear and Greed Index.py'
-      - 'code/daily/Blockchair Stats.py'
-      - 'code/daily/DefiLlama Stats.py'
+      - 'code/event_driven/Alternative.me Fear and Greed Index.py'
+      - 'code/event_driven/DefiLlama Stats.py'
       - 'code/daily/Etherscan Gas Prices.py'
-      - 'code/daily/Mempool Stats.py'
+      - 'code/event_driven/Mempool Stats.py'
       - 'tests/**'
 
 jobs:
