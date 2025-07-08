@@ -16,7 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         script:
-          - "code/daily/COIN50 Perp Index.py"
+          - "code/daily/AGGData.py"
+          - "code/daily/VNQData.py"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
