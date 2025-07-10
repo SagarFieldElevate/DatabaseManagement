@@ -4,7 +4,14 @@ import os
 import requests
 import time
 from fredapi import Fred
-from data_upload_utils import upload_to_github, create_airtable_record, update_airtable, delete_file_from_github, ensure_utc
+from data_upload_utils import (
+    upload_to_github,
+    create_airtable_record,
+    update_airtable,
+    delete_file_from_github,
+    ensure_utc,
+    find_record_id_by_name,
+)
 
 # === Secrets & Config ===
 FRED_API_KEY = os.getenv("FRED_API_KEY")
@@ -56,19 +63,9 @@ github_response = upload_to_github(filename, GITHUB_REPO, BRANCH, UPLOAD_PATH, G
 raw_url = github_response['content']['raw_url']
 file_sha = github_response['content']['sha']
 
-airtable_headers = {
-    "Authorization": f"Bearer {AIRTABLE_API_KEY}",
-    "Content-Type": "application/json"
-}
-response = requests.get(airtable_url, headers=airtable_headers)
-response.raise_for_status()
-data_airtable = response.json()
-
-existing_records = [
-    rec for rec in data_airtable['records']
-    if rec['fields'].get('Name') == "10-Year TIPS Yield (%)"
-]
-record_id = existing_records[0]['id'] if existing_records else None
+record_id = find_record_id_by_name(
+    "10-Year TIPS Yield (%)", airtable_url, AIRTABLE_API_KEY
+)
 
 if record_id:
     update_airtable(record_id, raw_url, filename, airtable_url, AIRTABLE_API_KEY)

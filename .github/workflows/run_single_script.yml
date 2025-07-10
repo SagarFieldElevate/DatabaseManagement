@@ -6,7 +6,7 @@ on:
       script:
         description: 'Path to the Python script to run'
         required: true
-        default: 'code/coinbase_wallet_example.py'
+        default: 'code/daily/coinbase_spot_history.py'
 
 jobs:
   execute:
